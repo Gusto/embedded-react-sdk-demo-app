@@ -1,6 +1,8 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
+import dotenv from "dotenv";
+import express, { Request, Response } from "express";
+import cors from "cors";
+
+dotenv.config();
 
 const app = express();
 const port = 3001;
@@ -9,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Proxy all requests to Gusto API
-app.all("*", async (req, res) => {
+app.all("*", async (req: Request, res: Response) => {
   try {
     // Get the path and query parameters from the original request
     const path = req.path;
@@ -25,15 +27,17 @@ app.all("*", async (req, res) => {
 
     console.log("Proxying request to:", targetUrl);
 
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${process.env.GUSTO_API_TOKEN}`,
+      "X-Gusto-API-Version": "2024-04-01",
+      "x-gusto-client-ip": clientIp || "",
+      accept: "application/json",
+      host: "api.gusto-demo.com",
+    };
+
     const response = await fetch(targetUrl, {
       method: req.method,
-      headers: {
-        Authorization: `Bearer ${process.env.GUSTO_API_TOKEN}`,
-        "X-Gusto-API-Version": "2024-04-01",
-        "x-gusto-client-ip": clientIp,
-        accept: "application/json",
-        host: "api.gusto-demo.com",
-      },
+      headers,
       body: req.method !== "GET" ? JSON.stringify(req.body) : undefined,
     });
 
@@ -50,10 +54,13 @@ app.all("*", async (req, res) => {
       res.status(response.status).send(text);
     }
   } catch (error) {
-    console.error("Proxy error:", error.message);
+    console.error(
+      "Proxy error:",
+      error instanceof Error ? error.message : String(error)
+    );
     res.status(500).json({
       error: "Failed to proxy request to Gusto API",
-      details: error.message,
+      details: error instanceof Error ? error.message : String(error),
     });
   }
 });

@@ -11,6 +11,12 @@ This repository contains a demo application showcasing the integration of Gusto'
 
 ### Backend Setup
 
+#### Environment variables
+
+You must have a valid API token set in your .env file in the `backend` directory. Copy paste .env.example as .env and add the API token.
+
+- `GUSTO_API_TOKEN` - Your Gusto API token (required)
+
 1. Navigate to the backend directory:
 
 ```bash
@@ -65,15 +71,4 @@ npm run dev
 
 The frontend will run on `http://localhost:3002`
 
-## Development
-
-- Backend proxy server forwards requests to `https://api.gusto-demo.com`
-- All requests include necessary Gusto API headers and client IP addresses
-- Frontend is built with React + TypeScript + Vite
-- Uses Gusto's Embedded React SDK for integration
-
-## Environment Variables
-
-### Backend
-
-- `GUSTO_API_TOKEN` - Your Gusto API token (required)
+NOTE: You will need to supply any entity IDs (ex. companyId, employeeId etc.) to the SDK components.
