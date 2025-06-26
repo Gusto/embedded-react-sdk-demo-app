@@ -71,4 +71,4 @@ npm run dev
 
 The frontend will run on `http://localhost:3002`
 
-NOTE: You will need to supply any entity IDs (ex. companyId, employeeId etc.) to the SDK components.
+[Gusto Embedded React SDK components are located in the App.tsx file here](./frontend/src/App.tsx). Note: You will need to supply any entity IDs (ex. companyId, employeeId etc.) to the SDK components.
