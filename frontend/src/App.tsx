@@ -7,7 +7,7 @@ function App() {
     <GustoProvider config={{ baseUrl: "http://localhost:3001" }}>
       {/* Place any SDK components inside of the GustoProvider here */}
       <Company.OnboardingFlow
-        companyId="{{companyId}}" // Replace with your company ID
+        companyId="your-company-id-here" // Replace with your company ID
         onEvent={(eventType, eventPayload) => {
           console.log("eventType", eventType);
           console.log("eventPayload", eventPayload);
@@ -15,7 +15,7 @@ function App() {
       />
       {/* Usage for employee onboarding flow, uncomment and replace companyId with your company ID to use */}
       {/* <Employee.OnboardingFlow
-        companyId="{{companyId}}" // Replace with your company ID
+        companyId="your-company-id-here" // Replace with your company ID
         onEvent={(eventType, eventPayload) => {
           console.log("eventType", eventType);
           console.log("eventPayload", eventPayload);
