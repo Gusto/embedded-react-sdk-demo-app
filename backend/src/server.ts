@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import cors from "cors";
+import { tokenManager } from "./tokenManager";
 
 dotenv.config();
 
@@ -27,9 +28,12 @@ app.all("*", async (req: Request, res: Response) => {
 
     console.log("Proxying request to:", targetUrl);
 
+    // Get a valid access token (will auto-refresh if needed)
+    const accessToken = await tokenManager.getAccessToken();
+
     const headers: Record<string, string> = {
-      Authorization: `Bearer ${process.env.GUSTO_API_TOKEN}`,
-      "X-Gusto-API-Version": "2024-04-01",
+      Authorization: `Bearer ${accessToken}`,
+      "X-Gusto-API-Version": "2025-06-15",
       "x-gusto-client-ip": clientIp || "",
       accept: "application/json",
       host: "api.gusto-demo.com",

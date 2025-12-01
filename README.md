@@ -72,18 +72,24 @@ curl --request POST
 The response will include:
 
 - `company_id` - Use this in the frontend [App.tsx](./frontend/src/App.tsx) component
-- `access_token` - Use this as your `GUSTO_API_TOKEN` in the backend .env file
-- `refresh_token` - Can be used to refresh your access token when it expires, [see refresh access token endpoint](https://docs.gusto.com/embedded-payroll/reference/refresh-access-token)
+- `access_token` - Not needed for the backend (tokens are auto-refreshed)
+- `refresh_token` - Use this in the backend `tokens.json` file for automatic token refresh
 
 ## App Setup Instructions
 
 ### Backend Setup
 
-#### Environment variables
+The backend uses automatic token refresh to handle token expiration. You'll need to configure:
 
-You must have a valid company access token set in your .env file in the `backend` directory. Copy paste .env.example as .env and add the company access token obtained from creating a partner managed company in the previous steps.
+**Environment variables** (`.env`):
+- `CLIENT_ID` - Your app's Client ID from the Gusto developer dashboard (required)
+- `CLIENT_SECRET` - Your app's Client Secret from the Gusto developer dashboard (required)
+- `GUSTO_API_BASE_URL` - Optional, defaults to `https://api.gusto-demo.com`
 
-- `GUSTO_API_TOKEN` - Your company access token obtained in the steps above (required)
+**Token storage** (`tokens.json`):
+- `refresh_token` - The refresh token obtained from creating a partner managed company (required)
+
+The refresh token is stored separately because it gets automatically updated each time it's used. The backend saves the new refresh token to `tokens.json` on every refresh, so it persists across server restarts.
 
 1. Navigate to the backend directory:
 
@@ -103,13 +109,30 @@ npm install
 cp .env.example .env
 ```
 
-4. Edit `.env` and add your company access token:
+4. Edit `.env` and add your OAuth credentials:
 
 ```
-GUSTO_API_TOKEN=your_company_access_token_here
+CLIENT_ID=your_client_id_here
+CLIENT_SECRET=your_client_secret_here
 ```
 
-5. Start the server:
+5. Set up token storage:
+
+```bash
+cp tokens.example.json tokens.json
+```
+
+6. Edit `tokens.json` and add your refresh token:
+
+```json
+{
+  "refresh_token": "your_refresh_token_here"
+}
+```
+
+The backend will automatically refresh the access token when it expires (every 2 hours) and update `tokens.json` with the new refresh token. You don't need to manually update tokens anymore.
+
+7. Start the server:
 
 ```bash
 npm run dev
