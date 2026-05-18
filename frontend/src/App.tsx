@@ -7,7 +7,7 @@ function App() {
     <GustoProvider config={{ baseUrl: "http://localhost:3001" }}>
       {/* Place any SDK components inside of the GustoProvider here */}
       <Company.OnboardingFlow
-        companyId="cce1d173-6d18-458f-91e7-b0d77d52a1b4" // Replace with your company ID
+        companyId="91b95861-9a2b-4f3e-afe7-92d57056449c" // Replace with your company ID
         onEvent={(eventType, eventPayload) => {
           console.log("eventType", eventType);
           console.log("eventPayload", eventPayload);
