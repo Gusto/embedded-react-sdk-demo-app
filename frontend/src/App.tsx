@@ -1,16 +1,16 @@
-import { GustoProvider } from "@gusto/embedded-react-sdk";
 import "@gusto/embedded-react-sdk/style.css";
 import { BrowserRouter } from "react-router-dom";
 import { AppShell } from "./shell/AppShell";
+import { AdapterProvider } from "./sdk/adapterContext";
 import "./App.css";
 
 function App() {
   return (
-    <GustoProvider config={{ baseUrl: "http://localhost:3001" }}>
+    <AdapterProvider>
       <BrowserRouter>
         <AppShell />
       </BrowserRouter>
-    </GustoProvider>
+    </AdapterProvider>
   );
 }
 
