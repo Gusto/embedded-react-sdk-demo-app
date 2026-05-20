@@ -1,6 +1,6 @@
 import { Payroll } from "@gusto/embedded-react-sdk";
 
-export function Nav1Page() {
+export function RunPayrollPage() {
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
       <Payroll.PayrollFlow
