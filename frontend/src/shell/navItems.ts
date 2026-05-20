@@ -46,6 +46,4 @@ export const navItems: NavItem[] = [
       },
     ],
   },
-  { key: "nav-2", label: "Nav 2", path: "/nav-2" },
-  { key: "nav-3", label: "Nav 3", path: "/nav-3" },
 ];

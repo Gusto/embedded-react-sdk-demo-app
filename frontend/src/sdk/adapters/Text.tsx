@@ -21,8 +21,8 @@ const alignClasses = {
 } as const;
 
 const variantClasses = {
-  supporting: "text-neutral-500",
-  leading: "text-neutral-900 leading-relaxed",
+  supporting: "text-neutral-500 dark:text-neutral-400",
+  leading: "text-neutral-900 leading-relaxed dark:text-neutral-100",
 } as const;
 
 export function Text({
@@ -42,7 +42,7 @@ export function Text({
       className={`font-sans ${sizeClasses[size]} ${
         weightClasses[weight ?? "regular"]
       } ${textAlign ? alignClasses[textAlign] : ""} ${
-        variant ? variantClasses[variant] : "text-neutral-900"
+        variant ? variantClasses[variant] : "text-neutral-900 dark:text-neutral-100"
       } ${className ?? ""}`}
     >
       {children}

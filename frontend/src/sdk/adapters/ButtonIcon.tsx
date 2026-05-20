@@ -8,9 +8,9 @@ const variantClasses = {
   primary:
     "rounded-full border-blue-600 bg-blue-500 text-white hover:bg-blue-600",
   secondary:
-    "rounded-full border-neutral-200 bg-white text-neutral-900 hover:bg-neutral-100",
+    "rounded-full border-neutral-200 bg-white text-neutral-900 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800",
   tertiary:
-    "rounded-full border-neutral-200 bg-transparent text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900",
+    "rounded-full border-neutral-200 bg-transparent text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-100",
   error:
     "rounded-full border-red-600 bg-red-500 text-white hover:bg-red-600",
 } as const;

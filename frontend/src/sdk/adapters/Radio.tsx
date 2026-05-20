@@ -33,21 +33,29 @@ export function Radio({
             onChange={(e) => onChange?.(e.target.checked)}
             onBlur={onBlur}
             aria-invalid={isInvalid || undefined}
-            className={`peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 bg-white transition-colors checked:border-blue-500 disabled:cursor-not-allowed ${
-              isInvalid ? "border-red-500" : "border-neutral-300"
+            className={`peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 bg-white transition-colors checked:border-blue-500 disabled:cursor-not-allowed dark:bg-neutral-900 ${
+              isInvalid
+                ? "border-red-500"
+                : "border-neutral-300 dark:border-neutral-600"
             }`}
           />
           <span className="pointer-events-none absolute inset-0 m-auto h-2 w-2 rounded-full bg-blue-500 opacity-0 peer-checked:opacity-100" />
         </span>
         <span className="flex flex-col gap-0.5">
-          <span className="font-medium text-neutral-900">{label}</span>
+          <span className="font-medium text-neutral-900 dark:text-neutral-100">
+            {label}
+          </span>
           {description ? (
-            <span className="text-xs text-neutral-500">{description}</span>
+            <span className="text-xs text-neutral-500 dark:text-neutral-400">
+              {description}
+            </span>
           ) : null}
         </span>
       </label>
       {errorMessage ? (
-        <p className="ml-8 text-xs text-red-600">{errorMessage}</p>
+        <p className="ml-8 text-xs text-red-600 dark:text-red-400">
+          {errorMessage}
+        </p>
       ) : null}
     </div>
   );

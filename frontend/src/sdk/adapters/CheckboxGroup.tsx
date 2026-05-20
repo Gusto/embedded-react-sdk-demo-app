@@ -33,7 +33,7 @@ export function CheckboxGroup({
         className={
           shouldVisuallyHideLabel
             ? "sr-only"
-            : "mb-2 text-sm font-medium text-neutral-700"
+            : "mb-2 text-sm font-medium text-neutral-700 dark:text-neutral-300"
         }
       >
         {label}
@@ -60,7 +60,7 @@ export function CheckboxGroup({
                   checked={isChecked}
                   disabled={optionDisabled}
                   onChange={() => toggle(opt.value)}
-                  className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-neutral-300 bg-white transition-colors checked:border-blue-500 checked:bg-blue-500 disabled:cursor-not-allowed"
+                  className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-neutral-300 bg-white transition-colors checked:border-blue-500 checked:bg-blue-500 disabled:cursor-not-allowed dark:border-neutral-600 dark:bg-neutral-900"
                 />
                 <svg
                   aria-hidden
@@ -74,11 +74,11 @@ export function CheckboxGroup({
                 </svg>
               </span>
               <span className="flex flex-col gap-0.5">
-                <span className="font-medium text-neutral-900">
+                <span className="font-medium text-neutral-900 dark:text-neutral-100">
                   {opt.label}
                 </span>
                 {opt.description ? (
-                  <span className="text-xs text-neutral-500">
+                  <span className="text-xs text-neutral-500 dark:text-neutral-400">
                     {opt.description}
                   </span>
                 ) : null}
@@ -88,10 +88,14 @@ export function CheckboxGroup({
         })}
       </div>
       {description ? (
-        <p className="mt-1 text-xs text-neutral-500">{description}</p>
+        <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+          {description}
+        </p>
       ) : null}
       {errorMessage ? (
-        <p className="mt-1 text-xs text-red-600">{errorMessage}</p>
+        <p className="mt-1 text-xs text-red-600 dark:text-red-400">
+          {errorMessage}
+        </p>
       ) : null}
     </fieldset>
   );

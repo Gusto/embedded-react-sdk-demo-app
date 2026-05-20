@@ -28,7 +28,7 @@ export function Heading({
   return (
     <Tag
       id={id}
-      className={`font-sans text-neutral-900 ${sizeClasses[styleKey]} ${
+      className={`font-sans text-neutral-900 dark:text-neutral-100 ${sizeClasses[styleKey]} ${
         textAlign ? alignClasses[textAlign] : ""
       } ${className ?? ""}`}
     >

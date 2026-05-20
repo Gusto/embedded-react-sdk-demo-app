@@ -4,18 +4,16 @@ import { TopBar } from "./TopBar";
 import { ContractorsPage } from "../pages/ContractorsPage";
 import { EmployeesPage } from "../pages/EmployeesPage";
 import { HomePage } from "../pages/HomePage";
-import { Nav2Page } from "../pages/Nav2Page";
-import { Nav3Page } from "../pages/Nav3Page";
 import { PayContractorsPage } from "../pages/PayContractorsPage";
 import { RunPayrollPage } from "../pages/RunPayrollPage";
 
 export function AppShell() {
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
       <TopBar />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="flex-1 overflow-auto bg-white p-6">
+        <main className="flex-1 overflow-auto bg-white p-6 dark:bg-neutral-950">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route
@@ -29,8 +27,6 @@ export function AppShell() {
             />
             <Route path="/payroll/employees" element={<EmployeesPage />} />
             <Route path="/payroll/contractors" element={<ContractorsPage />} />
-            <Route path="/nav-2" element={<Nav2Page />} />
-            <Route path="/nav-3" element={<Nav3Page />} />
           </Routes>
         </main>
       </div>

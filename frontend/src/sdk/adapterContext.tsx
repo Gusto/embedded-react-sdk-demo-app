@@ -14,6 +14,7 @@ const AdapterContext = createContext<AdapterContextValue | null>(null);
 
 export function AdapterProvider({ children }: { children: ReactNode }) {
   const [adaptersEnabled, setAdaptersEnabled] = useState(false);
+
   return (
     <AdapterContext.Provider value={{ adaptersEnabled, setAdaptersEnabled }}>
       {children}

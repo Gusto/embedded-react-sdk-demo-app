@@ -16,7 +16,7 @@ export function Tabs({
         role="tablist"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
-        className="flex gap-6 border-b border-neutral-200"
+        className="flex gap-6 border-b border-neutral-200 dark:border-neutral-800"
       >
         {tabs.map((tab) => {
           const isActive = tab.id === activeTab?.id;
@@ -35,7 +35,7 @@ export function Tabs({
                 "-mb-px cursor-pointer border-b-2 px-1 py-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40",
                 isActive
                   ? "border-blue-500 text-blue-500"
-                  : "border-transparent text-neutral-500 hover:text-neutral-900",
+                  : "border-transparent text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100",
               ].join(" ")}
             >
               {tab.label}
