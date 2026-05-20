@@ -1,5 +1,5 @@
 import { Payroll } from "@gusto/embedded-react-sdk";
-import { SdkBoundary } from "../sdk/SdkBoundary";
+import { SdkBoundary } from "../../../sdk/SdkBoundary";
 
 export function RunPayrollPage() {
   return (

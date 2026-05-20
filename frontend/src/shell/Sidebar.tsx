@@ -1,5 +1,9 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { navItems, type NavItem } from "./navItems";
+import type { NavItem } from "../modes/navItemTypes";
+
+interface SidebarProps {
+  items: NavItem[];
+}
 
 function isWithin(pathname: string, path: string) {
   if (path === "/") return pathname === "/";
@@ -24,13 +28,13 @@ function childClasses(isActive: boolean) {
   ].join(" ");
 }
 
-export function Sidebar() {
+export function Sidebar({ items }: SidebarProps) {
   const { pathname } = useLocation();
 
   return (
     <aside className="w-64 shrink-0 border-r border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
       <nav className="flex flex-col gap-1 p-3">
-        {navItems.map((item) => (
+        {items.map((item) => (
           <SidebarItem key={item.key} item={item} pathname={pathname} />
         ))}
       </nav>
@@ -39,16 +43,15 @@ export function Sidebar() {
 }
 
 function SidebarItem({ item, pathname }: { item: NavItem; pathname: string }) {
-  const isParentActive = isWithin(pathname, item.path);
   const hasChildren = !!item.childGroups?.length;
-  const showChildren = hasChildren && isParentActive;
+  const showChildren = hasChildren && isWithin(pathname, item.path);
 
   return (
     <div className="flex flex-col gap-1">
       <NavLink
         to={item.path}
-        end={item.path === "/" && !hasChildren}
-        className={() => itemClasses(isParentActive)}
+        end={!hasChildren}
+        className={({ isActive }) => itemClasses(isActive)}
       >
         {item.label}
       </NavLink>

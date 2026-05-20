@@ -38,23 +38,36 @@ app.all("*", async (req: Request, res: Response) => {
       accept: "application/json",
       host: "api.gusto-demo.com",
     };
+    if (req.method !== "GET" && req.method !== "HEAD") {
+      headers["content-type"] = "application/json";
+    }
 
     const response = await fetch(targetUrl, {
       method: req.method,
       headers,
-      body: req.method !== "GET" ? JSON.stringify(req.body) : undefined,
+      body:
+        req.method !== "GET" && req.method !== "HEAD"
+          ? JSON.stringify(req.body)
+          : undefined,
     });
 
-    // Get the content type
+    // Read the body as text first so we can safely handle empty responses
+    // (e.g. 204 No Content from successful submits/updates).
     const contentType = response.headers.get("content-type");
+    const text = await response.text();
 
-    // Handle different response types
+    if (text.length === 0) {
+      res.status(response.status).end();
+      return;
+    }
+
     if (contentType && contentType.includes("application/json")) {
-      const data = await response.json();
-      res.status(response.status).json(data);
+      try {
+        res.status(response.status).json(JSON.parse(text));
+      } catch {
+        res.status(response.status).type("text/plain").send(text);
+      }
     } else {
-      // For non-JSON responses, send the raw text
-      const text = await response.text();
       res.status(response.status).send(text);
     }
   } catch (error) {

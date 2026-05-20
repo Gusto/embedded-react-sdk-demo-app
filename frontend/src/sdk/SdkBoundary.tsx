@@ -9,15 +9,15 @@ interface SdkBoundaryProps {
 }
 
 /**
- * GustoProvider accepts a `theme` prop that overrides the SDK's color tokens
- * (e.g. `colorBody`, `colorPrimary`, `colorBorderPrimary`). Internally the SDK
- * exposes each token as a CSS custom property (`var(--g-colorBody)`, etc.) that
- * every default SDK component reads, so passing a new palette here re-skins the
- * whole SDK without touching individual components.
- *
- * Below is the dark palette we hand to GustoProvider when the host app is in
- * dark mode. Passing `undefined` (light mode) lets the SDK fall back to its
- * built-in defaults.
+GustoProvider accepts a `theme` prop that overrides the SDK's color tokens
+(e.g. `colorBody`, `colorPrimary`, `colorBorderPrimary`). Internally the SDK
+exposes each token as a CSS custom property (`var(--g-colorBody)`, etc.) that
+every default SDK component reads, so passing a new palette here re-skins the
+whole SDK without touching individual components.
+ 
+ Below is the dark palette we hand to GustoProvider when the host app is in
+ dark mode. Passing `undefined` (light mode) lets the SDK fall back to its
+ built-in defaults.
  */
 const darkTheme = {
   colorBody: "#0a0a0a",

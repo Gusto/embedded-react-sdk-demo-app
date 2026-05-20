@@ -1,4 +1,5 @@
 import { useAdapters } from "../sdk/adapterContext";
+import { ModeSwitcher } from "./ModeSwitcher";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function TopBar() {
@@ -30,6 +31,7 @@ export function TopBar() {
             />
           </button>
         </label>
+        <ModeSwitcher />
         <ThemeSwitcher />
       </div>
     </header>
