@@ -115,17 +115,30 @@ function Toast({ item, onRemove }: ToastProps) {
     }
   }, []);
 
+  // Keep a stable ref to the latest startDismissTimer so the mount effect
+  // can have empty deps. Without this, the effect's cleanup would run every
+  // time isLeaving flips, clearing removeTimerRef before the toast finished
+  // its exit animation — leaving an invisible pointer-events-auto toast in
+  // the DOM that intercepts clicks and wheel events.
+  const startDismissTimerRef = useRef(startDismissTimer);
+  startDismissTimerRef.current = startDismissTimer;
+
   // Mount → trigger enter transition, then start the dismiss timer.
+  // Cleanup only runs on real unmount, where clearing all timers is correct.
   useEffect(() => {
     const showFrame = requestAnimationFrame(() => setIsVisible(true));
-    const startTimerFrame = window.setTimeout(startDismissTimer, ENTER_MS);
+    const startTimerFrame = window.setTimeout(
+      () => startDismissTimerRef.current(),
+      ENTER_MS
+    );
     return () => {
       cancelAnimationFrame(showFrame);
       window.clearTimeout(startTimerFrame);
       if (dismissTimerRef.current) window.clearTimeout(dismissTimerRef.current);
       if (removeTimerRef.current) window.clearTimeout(removeTimerRef.current);
     };
-  }, [startDismissTimer]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isShown = isVisible && !isLeaving;
 

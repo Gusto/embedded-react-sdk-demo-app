@@ -1,12 +1,10 @@
 import type { BadgeProps } from "@gusto/embedded-react-sdk";
 
 const statusClasses = {
-  success:
-    "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
-  warning:
-    "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
-  info: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
-  error: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
+  success: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
+  warning: "bg-amber-100 text-amber-800",
+  info: "bg-blue-100 text-blue-800",
+  error: "bg-red-100 text-red-800",
 } as const;
 
 export function Badge({
@@ -23,7 +21,7 @@ export function Badge({
     <span
       id={id}
       aria-label={ariaLabel}
-      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 font-sans text-xs font-medium ${statusClasses[status]} ${className ?? ""}`}
+      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 font-sans text-xs font-semibold **:font-semibold! ${statusClasses[status]} ${className ?? ""}`}
     >
       {children}
       {onDismiss ? (

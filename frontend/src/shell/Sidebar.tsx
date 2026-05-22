@@ -44,38 +44,60 @@ export function Sidebar({ items }: SidebarProps) {
 
 function SidebarItem({ item, pathname }: { item: NavItem; pathname: string }) {
   const hasChildren = !!item.childGroups?.length;
-  const showChildren = hasChildren && isWithin(pathname, item.path);
+  const showChildren =
+    hasChildren && (item.asSection || isWithin(pathname, item.path ?? "/"));
+
+  if (item.asSection) {
+    // Section header: not a link, children always visible. Render the heading
+    // with a top margin so it sits clearly below the previous nav block.
+    return (
+      <div className="mt-4 flex flex-col gap-1">
+        <span className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+          {item.label}
+        </span>
+        {showChildren ? renderChildGroups(item) : null}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-1">
-      <NavLink
-        to={item.path}
-        end={!hasChildren}
-        className={({ isActive }) => itemClasses(isActive)}
-      >
-        {item.label}
-      </NavLink>
-      {showChildren ? (
-        <div className="ml-3 flex flex-col gap-5 border-l border-neutral-200 pl-3 pt-1 dark:border-neutral-800">
-          {item.childGroups!.map((group) => (
-            <div key={group.key} className="flex flex-col">
-              <span className="px-3 mb-2 text-xs font-semibold text-gray-500 dark:text-neutral-500">
-                {group.label}
-              </span>
-              {group.items.map((child) => (
-                <NavLink
-                  key={child.key}
-                  to={child.path}
-                  end
-                  className={({ isActive }) => childClasses(isActive)}
-                >
-                  {child.label}
-                </NavLink>
-              ))}
-            </div>
+      {item.path ? (
+        <NavLink
+          to={item.path}
+          end={!hasChildren}
+          className={({ isActive }) => itemClasses(isActive)}
+        >
+          {item.label}
+        </NavLink>
+      ) : null}
+      {showChildren ? renderChildGroups(item) : null}
+    </div>
+  );
+}
+
+function renderChildGroups(item: NavItem) {
+  return (
+    <div className="ml-3 flex flex-col gap-5 border-l border-neutral-200 pl-3 pt-1 dark:border-neutral-800">
+      {item.childGroups!.map((group) => (
+        <div key={group.key} className="flex flex-col">
+          {group.label ? (
+            <span className="mb-2 px-3 text-xs font-semibold text-gray-500 dark:text-neutral-500">
+              {group.label}
+            </span>
+          ) : null}
+          {group.items.map((child) => (
+            <NavLink
+              key={child.key}
+              to={child.path}
+              end
+              className={({ isActive }) => childClasses(isActive)}
+            >
+              {child.label}
+            </NavLink>
           ))}
         </div>
-      ) : null}
+      ))}
     </div>
   );
 }

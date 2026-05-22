@@ -1,10 +1,22 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Poppins", sans-serif;
+  --font-sans: "Google Sans", sans-serif;
+  --animate-card-in: card-in 500ms ease-out backwards;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 html,
@@ -23,4 +35,69 @@ body,
 
 body {
   margin: 0;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.dark .glass-shine {
+  position: relative;
+  isolation: isolate;
+}
+
+.dark .glass-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0) 18%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0) 55%
+    );
+  mix-blend-mode: overlay;
+  transition: opacity 200ms ease;
+}
+
+.dark .home-bg {
+  background-color: rgb(10 10 10);
+  background-image:
+    radial-gradient(
+      ellipse 70% 50% at 12% -10%,
+      rgba(225, 90, 67, 0.5),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 55% 45% at 90% 5%,
+      rgba(255, 130, 95, 0.32),
+      transparent 65%
+    ),
+    radial-gradient(
+      ellipse 60% 60% at 105% 65%,
+      rgba(225, 90, 67, 0.26),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 80% 50% at -10% 110%,
+      rgba(180, 55, 40, 0.22),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 100% 60% at 50% 100%,
+      rgba(225, 90, 67, 0.1),
+      transparent 70%
+    );
+  background-attachment: fixed;
 }

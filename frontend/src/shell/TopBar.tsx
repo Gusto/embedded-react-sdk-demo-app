@@ -8,7 +8,7 @@ export function TopBar() {
   return (
     <header className="flex h-14 items-center justify-between border-b border-neutral-200 bg-white px-6 dark:border-neutral-800 dark:bg-neutral-900">
       <h2 className="m-0 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-        Acme Pay
+        Demo
       </h2>
       <div className="flex items-center gap-6">
         <label className="flex cursor-pointer items-center gap-3 text-sm font-medium text-neutral-700 select-none dark:text-neutral-300">
