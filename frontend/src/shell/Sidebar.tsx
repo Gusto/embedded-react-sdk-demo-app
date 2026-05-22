@@ -12,19 +12,19 @@ function isWithin(pathname: string, path: string) {
 
 function itemClasses(isActive: boolean) {
   return [
-    "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+    "relative px-3 py-2 text-sm font-medium transition-colors before:absolute before:left-0 before:top-1/2 before:h-4 before:w-0.5 before:-translate-y-1/2 before:rounded-full",
     isActive
-      ? "bg-blue-500 text-white dark:bg-[#E15A43]"
-      : "text-neutral-700 hover:bg-neutral-200 dark:text-neutral-300 dark:hover:bg-neutral-800",
+      ? "text-blue-500 before:bg-blue-500 dark:text-[#E15A43] dark:before:bg-[#E15A43]"
+      : "text-neutral-700 hover:text-neutral-900 before:bg-transparent dark:text-neutral-300 dark:hover:text-neutral-100",
   ].join(" ");
 }
 
 function childClasses(isActive: boolean) {
   return [
-    "px-3 py-1.5 text-sm transition-colors",
+    "relative px-3 py-1.5 text-sm transition-colors before:absolute before:-left-[13px] before:top-1/2 before:h-4 before:w-0.5 before:-translate-y-1/2 before:rounded-full",
     isActive
-      ? "text-blue-500 font-medium dark:text-[#E15A43]"
-      : "text-neutral-600 hover:text-blue-500 dark:text-neutral-400 dark:hover:text-[#E15A43]",
+      ? "text-blue-500 font-medium before:bg-blue-500 dark:text-[#E15A43] dark:before:bg-[#E15A43]"
+      : "text-neutral-600 hover:text-blue-500 before:bg-transparent dark:text-neutral-400 dark:hover:text-[#E15A43]",
   ].join(" ");
 }
 
@@ -32,7 +32,7 @@ export function Sidebar({ items }: SidebarProps) {
   const { pathname } = useLocation();
 
   return (
-    <aside className="w-64 shrink-0 border-r border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+    <aside className="w-64 shrink-0 border-r border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
       <nav className="flex flex-col gap-1 p-3">
         {items.map((item) => (
           <SidebarItem key={item.key} item={item} pathname={pathname} />

@@ -98,3 +98,51 @@ For every `componentEvents.*` value, either:
 Right now you can hit the SDK source to figure this out, but it shouldn't
 require that. A demo developer's first read of `onEvent` should be
 self-explanatory.
+
+## Pattern: theme tokens referenced in CSS but not defined in the default palette
+
+The SDK's stylesheet reads CSS custom properties that aren't always defined
+by the default palette. When a host doesn't pass a partner theme (or passes
+only a partial override), those `var(--g-...)` references resolve to the
+"guaranteed-invalid value" and the property falls back to its CSS default,
+which can be very different from what the design intends.
+
+### Hit list
+
+#### `colorBodyHover` — used by the popover's selected list item, missing from the default palette
+
+- **Selector:**
+  `._popover_1s9ch_68 .react-aria-ListBoxItem[data-selected]` →
+  `background: var(--g-colorBodyHover); color: var(--g-colorBodyContent)`.
+- **Symptom:** In light mode (no partner theme passed) the selected option
+  in a `Select` dropdown rendered with a near-black background and dark
+  text — effectively unreadable. Looked like a dark-mode style leak.
+- **Cause:** The SDK's default palette (`createTheme` / the base `i`
+  object in
+  `dist/contexts/ThemeProvider/theme.js`) defines `colorBody`,
+  `colorBodyAccent`, `colorBodyContent`, `colorBodySubContent` — but not
+  `colorBodyHover`. The stylesheet still references
+  `var(--g-colorBodyHover)`, so when a host passes `theme={undefined}` the
+  variable is never set and the background falls through to whatever the
+  browser computes.
+- **Workaround:**
+  [`frontend/src/sdk/SdkBoundary.tsx`](frontend/src/sdk/SdkBoundary.tsx)
+  now passes a light-mode override `{ colorBodyHover: "#f5f5f5" }` so the
+  popover selected state is legible. Hosts shouldn't have to know this
+  variable exists to get the light theme to render correctly.
+
+### Recommendation for the SDK
+
+For every CSS custom property referenced by the SDK's stylesheet, either:
+
+1. **Define a default in the base palette** so passing `theme={undefined}`
+   produces a complete, consistent look without partner intervention, OR
+2. **Always include a fallback** in the stylesheet
+   (`var(--g-colorBodyHover, var(--g-colorBodyAccent))`) so a missing token
+   degrades to a sensible neighbor instead of the browser default, OR
+3. **Surface the token list** in docs/types so partners know which
+   variables exist and which ones need to be set for a complete theme.
+
+The general principle: a host that passes no theme should never see a
+broken / incongruous color anywhere in the SDK — the defaults should be
+self-sufficient.

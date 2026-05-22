@@ -43,8 +43,22 @@ const darkTheme = {
   colorSuccessAccent: "#166534",
   colorSuccessContent: "#bbf7d0",
   colorBorderPrimary: "#262626",
-  colorBorderSecondary: "#404040",
+  colorBorderSecondary: "#262626",
   colorButtonIcon: "#a3a3a3",
+  colorBodyHover: "#171717",
+  inputBorderColor: "#262626",
+  inputBackgroundColor: "#0a0a0a",
+};
+
+/**
+ * The SDK's default light palette does not define `colorBodyHover`, so some
+ * components (e.g. the Select popover's selected ListBoxItem) read an
+ * undefined CSS variable and the browser falls back to an unrelated value
+ * (often a near-black). We provide a light-mode value to keep the popover
+ * selected state legible.
+ */
+const lightTheme = {
+  colorBodyHover: "#f5f5f5",
 };
 
 export function SdkBoundary({ children }: SdkBoundaryProps) {
@@ -54,7 +68,7 @@ export function SdkBoundary({ children }: SdkBoundaryProps) {
     <GustoProvider
       config={{ baseUrl: "http://localhost:3001" }}
       components={adaptersEnabled ? adapters : undefined}
-      theme={resolvedTheme === "dark" ? darkTheme : undefined}
+      theme={resolvedTheme === "dark" ? darkTheme : lightTheme}
     >
       {children}
     </GustoProvider>

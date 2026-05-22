@@ -71,8 +71,18 @@ body {
   transition: opacity 200ms ease;
 }
 
-.dark .home-bg {
+.home-bg {
+  position: relative;
+  isolation: isolate;
   background-color: rgb(10 10 10);
+}
+
+.home-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-image:
     radial-gradient(
       ellipse 70% 50% at 12% -10%,
@@ -100,4 +110,14 @@ body {
       transparent 70%
     );
   background-attachment: fixed;
+  animation: home-bg-fade 1400ms ease-out backwards;
+}
+
+@keyframes home-bg-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

@@ -15,7 +15,7 @@ const examples: Example[] = [
 ];
 
 const navItems: NavItem[] = [
-  { key: "home", label: "Home", path: basePath },
+  { key: "home", label: "Blocks", path: basePath },
   {
     key: "examples",
     label: "Examples",

@@ -20,8 +20,8 @@ const modeLabels: Record<Mode, string> = {
  */
 export function ExampleLayout({ mode, example, children }: ExampleLayoutProps) {
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-      <header className="flex flex-col gap-3">
+    <div className="flex flex-col gap-8">
+      <header className="mx-auto flex w-full max-w-6xl flex-col gap-3">
         <p className="m-0 text-xs font-semibold uppercase tracking-wider text-blue-500 dark:text-[#E15A43]">
           {modeLabels[mode]} · Example
         </p>
@@ -49,7 +49,13 @@ export function ExampleLayout({ mode, example, children }: ExampleLayoutProps) {
           </div>
         ) : null}
       </header>
-      <div>{children}</div>
+      <div className="-mx-6 border-t border-neutral-200 dark:border-neutral-800" />
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
+        <p className="m-0 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+          Preview
+        </p>
+        {children}
+      </div>
     </div>
   );
 }
