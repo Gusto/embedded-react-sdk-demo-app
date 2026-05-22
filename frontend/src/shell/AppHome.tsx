@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { blocksConfig } from "../modes/blocks";
 import { hooksConfig } from "../modes/hooks";
@@ -38,12 +38,26 @@ const features: { key: string; title: string; description: string }[] = [
 
 export function AppHome() {
   const [scrollEl, setScrollEl] = useState<HTMLElement | null>(null);
+
+  // Match the document background to the forced-dark home page so iOS
+  // Safari's rubber-band overscroll doesn't reveal a white strip below.
+  useEffect(() => {
+    const prevBg = document.body.style.backgroundColor;
+    const prevScheme = document.documentElement.style.colorScheme;
+    document.body.style.backgroundColor = "rgb(10 10 10)";
+    document.documentElement.style.colorScheme = "dark";
+    return () => {
+      document.body.style.backgroundColor = prevBg;
+      document.documentElement.style.colorScheme = prevScheme;
+    };
+  }, []);
+
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       <HomeTopBar scrollContainer={scrollEl} />
       <main
         ref={setScrollEl}
-        className="scrollbar-hide flex-1 overflow-auto bg-white p-6 pb-24 pt-24 dark:bg-transparent"
+        className="scrollbar-hide flex-1 overflow-auto overscroll-none bg-white p-6 pb-24 pt-24 dark:bg-transparent"
       >
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-20">
           <div className="relative flex flex-col">
