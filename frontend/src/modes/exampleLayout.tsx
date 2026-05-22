@@ -36,23 +36,21 @@ export function ExampleLayout({
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="mx-auto flex w-full max-w-6xl flex-col gap-3">
+      <header className="mx-auto flex w-full max-w-6xl flex-col gap-4">
         <p className="m-0 text-xs font-semibold uppercase tracking-wider text-blue-500 dark:text-[#E15A43]">
           {modeLabels[mode]} · Example
         </p>
-        <div className="flex flex-col gap-2">
-          <h1 className="m-0 text-3xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
-            {example.label}
-          </h1>
-          <p className="m-0 text-base text-neutral-600 dark:text-neutral-400">
-            {example.summary}
-          </p>
-        </div>
-        <p className="m-0 max-w-3xl text-sm text-neutral-600 dark:text-neutral-400">
+        <h1 className="m-0 text-5xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+          {example.label}
+        </h1>
+        <p className="m-0 max-w-3xl text-lg leading-relaxed text-neutral-600 dark:text-neutral-400">
+          {example.summary}
+        </p>
+        <p className="m-0 max-w-3xl text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
           {example.description}
         </p>
         {example.sdkPrimitives.length > 0 ? (
-          <div className="flex flex-wrap gap-2 pt-1">
+          <div className="flex flex-wrap gap-2 pt-2">
             {example.sdkPrimitives.map((primitive) => (
               <span
                 key={primitive}
@@ -160,7 +158,11 @@ function CodePanel({
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre
             className={`${className} rounded-xl border border-neutral-200 p-5 text-sm leading-relaxed whitespace-pre-wrap wrap-break-word dark:border-neutral-800`}
-            style={style}
+            style={
+              resolvedTheme === "dark"
+                ? { ...style, backgroundColor: "#171717" }
+                : style
+            }
           >
             {tokens.map((line, i) => {
               const lineProps = getLineProps({ line });
