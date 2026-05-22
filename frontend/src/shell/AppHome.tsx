@@ -47,7 +47,7 @@ export function AppHome() {
       >
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-20">
           <div className="relative flex flex-col">
-            <p className="pointer-events-none absolute -top-22 left-0 select-none md:text-[8rem] text-[4rem] font-black leading-none text-neutral-900/70 dark:text-white/6">
+            <p className="pointer-events-none absolute md:-top-22 -top-10 left-0 select-none md:text-[8rem] text-[4rem] font-black leading-none text-neutral-900/70 dark:text-white/6">
               Explore
             </p>
             <h1 className="relative text-neutral-900 dark:text-white text-5xl font-semibold tracking-tight">

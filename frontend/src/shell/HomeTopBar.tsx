@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const SCROLL_THRESHOLD = 24;
 
@@ -26,9 +27,12 @@ export function HomeTopBar({ scrollContainer }: HomeTopBarProps) {
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <h2 className="m-0 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+      <Link
+        to="/"
+        className="m-0 text-lg font-semibold text-neutral-900 transition-colors hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-400"
+      >
         Demo
-      </h2>
+      </Link>
     </header>
   );
 }

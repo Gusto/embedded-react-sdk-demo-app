@@ -14,7 +14,7 @@ function itemClasses(isActive: boolean) {
   return [
     "rounded-md px-3 py-2 text-sm font-medium transition-colors",
     isActive
-      ? "bg-blue-500 text-white"
+      ? "bg-blue-500 text-white dark:bg-[#E15A43]"
       : "text-neutral-700 hover:bg-neutral-200 dark:text-neutral-300 dark:hover:bg-neutral-800",
   ].join(" ");
 }
@@ -23,8 +23,8 @@ function childClasses(isActive: boolean) {
   return [
     "px-3 py-1.5 text-sm transition-colors",
     isActive
-      ? "text-blue-500 font-medium"
-      : "text-neutral-600 hover:text-blue-500 dark:text-neutral-400 dark:hover:text-blue-400",
+      ? "text-blue-500 font-medium dark:text-[#E15A43]"
+      : "text-neutral-600 hover:text-blue-500 dark:text-neutral-400 dark:hover:text-[#E15A43]",
   ].join(" ");
 }
 

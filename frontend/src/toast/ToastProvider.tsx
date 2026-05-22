@@ -165,7 +165,7 @@ function Toast({ item, onRemove }: ToastProps) {
       }}
       className="pointer-events-auto w-80 rounded-xl border border-neutral-200 bg-white p-4 shadow-lg shadow-black/5 dark:border-neutral-800 dark:bg-neutral-900 dark:shadow-black/40"
     >
-      <p className="m-0 font-mono text-[11px] font-semibold uppercase tracking-wide text-blue-500">
+      <p className="m-0 font-mono text-[11px] font-semibold uppercase tracking-wide text-blue-500 dark:text-[#E15A43]">
         {item.title}
       </p>
       {item.description ? (

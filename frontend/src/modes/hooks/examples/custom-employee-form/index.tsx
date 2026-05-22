@@ -58,7 +58,7 @@ function EmployeeForm() {
       <div className="flex justify-end pt-2">
         <button
           type="submit"
-          className="inline-flex items-center justify-center rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600"
+          className="inline-flex items-center justify-center rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600 dark:bg-[#E15A43] dark:hover:bg-[#c84d39]"
         >
           Save
         </button>

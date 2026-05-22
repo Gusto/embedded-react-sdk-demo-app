@@ -22,7 +22,7 @@ export function ExampleLayout({ mode, example, children }: ExampleLayoutProps) {
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
       <header className="flex flex-col gap-3">
-        <p className="m-0 text-xs font-semibold uppercase tracking-wider text-blue-500">
+        <p className="m-0 text-xs font-semibold uppercase tracking-wider text-blue-500 dark:text-[#E15A43]">
           {modeLabels[mode]} · Example
         </p>
         <div className="flex flex-col gap-2">

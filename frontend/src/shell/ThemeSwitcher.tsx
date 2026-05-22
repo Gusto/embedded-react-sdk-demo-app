@@ -81,7 +81,7 @@ export function ThemeSwitcher() {
             onClick={() => setMode(opt.id)}
             className={`inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-full transition-colors ${
               isActive
-                ? "bg-blue-500 text-white"
+                ? "bg-blue-500 text-white dark:bg-[#E15A43]"
                 : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
             }`}
           >

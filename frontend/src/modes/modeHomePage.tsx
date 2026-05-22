@@ -14,7 +14,7 @@ export function ModeHomePage({ config }: ModeHomePageProps) {
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-10">
       <header className="flex flex-col gap-2">
-        <p className="m-0 text-xs font-semibold uppercase tracking-wider text-blue-500">
+        <p className="m-0 text-xs font-semibold uppercase tracking-wider text-blue-500 dark:text-[#E15A43]">
           Build method
         </p>
         <h1 className="m-0 text-4xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">

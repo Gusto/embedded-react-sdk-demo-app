@@ -42,12 +42,12 @@ function EmployeeIdGate() {
           value={employeeId}
           onChange={(e) => setEmployeeId(e.target.value)}
           placeholder="employee uuid"
-          className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-blue-500 focus:outline-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-100"
+          className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-blue-500 dark:focus:border-[#E15A43] focus:outline-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-100"
         />
         <div className="flex justify-end">
           <button
             type="submit"
-            className="inline-flex items-center justify-center rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600 disabled:opacity-50"
+            className="inline-flex items-center justify-center rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600 dark:bg-[#E15A43] dark:hover:bg-[#c84d39] disabled:opacity-50"
             disabled={!employeeId.trim()}
           >
             Load forms
@@ -131,7 +131,7 @@ function ComposedForms({ employeeId }: { employeeId: string }) {
       <div className="flex justify-end">
         <button
           type="submit"
-          className="inline-flex items-center justify-center rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600"
+          className="inline-flex items-center justify-center rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600 dark:bg-[#E15A43] dark:hover:bg-[#c84d39]"
         >
           Save all
         </button>

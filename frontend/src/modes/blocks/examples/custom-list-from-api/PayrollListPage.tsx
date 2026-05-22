@@ -165,7 +165,7 @@ export function PayrollListPage() {
         <section className="relative overflow-hidden rounded-2xl border border-blue-200 bg-linear-to-br from-blue-50 via-white to-white p-5 shadow-sm sm:p-8 dark:border-blue-900 dark:from-blue-950/40 dark:via-neutral-900 dark:to-neutral-900">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div className="flex flex-col gap-3">
-              <p className="m-0 text-xs font-semibold uppercase tracking-wider text-blue-500">
+              <p className="m-0 text-xs font-semibold uppercase tracking-wider text-blue-500 dark:text-[#E15A43]">
                 Next payroll
               </p>
               <h2 className="m-0 text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl dark:text-neutral-100">
@@ -196,7 +196,7 @@ export function PayrollListPage() {
             <button
               type="button"
               onClick={() => handleRowClick(nextId)}
-              className="inline-flex w-full cursor-pointer items-center justify-center rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 md:w-auto"
+              className="inline-flex w-full cursor-pointer items-center justify-center rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 dark:bg-[#E15A43] dark:hover:bg-[#c84d39] md:w-auto"
             >
               Run payroll →
             </button>

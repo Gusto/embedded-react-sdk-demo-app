@@ -46,7 +46,7 @@ export function CustomDataPage() {
             required
             value={badgeId}
             onChange={(e) => setBadgeId(e.target.value)}
-            className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-blue-500 focus:outline-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-100"
+            className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-blue-500 dark:focus:border-[#E15A43] focus:outline-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-100"
             placeholder="e.g. A-1042"
           />
         </label>
@@ -57,14 +57,14 @@ export function CustomDataPage() {
             required
             value={lockerNumber}
             onChange={(e) => setLockerNumber(e.target.value)}
-            className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-blue-500 focus:outline-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-100"
+            className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:border-blue-500 dark:focus:border-[#E15A43] focus:outline-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-100"
             placeholder="e.g. 217"
           />
         </label>
         <div className="flex justify-end pt-2">
           <button
             type="submit"
-            className="inline-flex items-center justify-center rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600"
+            className="inline-flex items-center justify-center rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600 dark:bg-[#E15A43] dark:hover:bg-[#c84d39]"
           >
             Save and continue
           </button>

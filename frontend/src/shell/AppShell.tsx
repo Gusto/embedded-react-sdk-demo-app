@@ -21,7 +21,7 @@ export function AppShell() {
   return (
     <div
       className={`flex h-screen flex-col bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100 ${
-        isHome ? "home-bg" : ""
+        isHome ? "dark home-bg" : ""
       }`}
     >
       <Routes>
