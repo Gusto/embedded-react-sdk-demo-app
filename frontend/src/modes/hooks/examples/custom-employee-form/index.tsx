@@ -9,9 +9,49 @@ import type { Example } from "../../../types";
 
 const COMPANY_ID = "91b95861-9a2b-4f3e-afe7-92d57056449c";
 
+const snippet = `import {
+  SDKFormProvider,
+  useEmployeeDetailsForm,
+} from "@gusto/embedded-react-sdk";
+
+const COMPANY_ID = "${COMPANY_ID}";
+
+function EmployeeForm() {
+  const formResult = useEmployeeDetailsForm({ companyId: COMPANY_ID });
+  if (formResult.isLoading) return <p>Loading…</p>;
+
+  const { form, actions } = formResult;
+  const { Fields } = form;
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        actions.onSubmit({
+          onEmployeeCreated: (employee) => console.log(employee),
+        });
+      }}
+    >
+      <SDKFormProvider formHookResult={formResult}>
+        <Fields.FirstName />
+        <Fields.LastName />
+        <Fields.Email />
+        <Fields.DateOfBirth />
+        <Fields.Ssn />
+      </SDKFormProvider>
+      <button type="submit">Save</button>
+    </form>
+  );
+}
+`;
+
 function Page() {
   return (
-    <ExampleLayout mode="hooks" example={customEmployeeFormExample}>
+    <ExampleLayout
+      mode="hooks"
+      example={customEmployeeFormExample}
+      code={[{ name: "index.tsx", source: snippet }]}
+    >
       <SdkBoundary>
         <EmployeeForm />
       </SdkBoundary>

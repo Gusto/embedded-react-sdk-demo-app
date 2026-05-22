@@ -11,9 +11,51 @@ import { SdkBoundary } from "../../../../sdk/SdkBoundary";
 import { useToast } from "../../../../toast/ToastProvider";
 import type { Example } from "../../../types";
 
+const snippet = `import {
+  SDKFormProvider,
+  composeSubmitHandler,
+  useEmployeeDetailsForm,
+  useHomeAddressForm,
+} from "@gusto/embedded-react-sdk";
+
+function ComposedForms({ employeeId }: { employeeId: string }) {
+  const detailsForm = useEmployeeDetailsForm({ employeeId });
+  const addressForm = useHomeAddressForm({ employeeId });
+
+  const { handleSubmit } = composeSubmitHandler(
+    [detailsForm, addressForm],
+    async () => {
+      await detailsForm.actions.onSubmit();
+      await addressForm.actions.onSubmit();
+    }
+  );
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <SDKFormProvider formHookResult={detailsForm}>
+        <detailsForm.form.Fields.FirstName />
+        <detailsForm.form.Fields.LastName />
+        <detailsForm.form.Fields.Email />
+      </SDKFormProvider>
+      <SDKFormProvider formHookResult={addressForm}>
+        <addressForm.form.Fields.Street1 />
+        <addressForm.form.Fields.City />
+        <addressForm.form.Fields.State />
+        <addressForm.form.Fields.Zip />
+      </SDKFormProvider>
+      <button type="submit">Save all</button>
+    </form>
+  );
+}
+`;
+
 function Page() {
   return (
-    <ExampleLayout mode="hooks" example={composeMultipleFormsExample}>
+    <ExampleLayout
+      mode="hooks"
+      example={composeMultipleFormsExample}
+      code={[{ name: "index.tsx", source: snippet }]}
+    >
       <EmployeeIdGate />
     </ExampleLayout>
   );

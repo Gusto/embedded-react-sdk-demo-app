@@ -31,15 +31,17 @@ export function TopBar() {
 
   return (
     <header className="flex h-14 items-center justify-between border-b border-neutral-200 bg-white px-6 dark:border-neutral-800 dark:bg-neutral-900">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-8">
         <Link
           to="/"
           className="m-0 text-lg font-semibold text-neutral-900 transition-colors hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-400"
         >
           Demo
         </Link>
-        <NavDropdown label="Build methods" items={buildMethodItems} />
-        <NavDropdown label="Features" items={featureItems} />
+        <div className="flex gap-2">
+          <NavDropdown label="Build methods" items={buildMethodItems} />
+          <NavDropdown label="Features" items={featureItems} />
+        </div>
       </div>
       <div className="flex items-center gap-6">
         <label className="flex cursor-pointer items-center gap-3 text-sm font-medium text-neutral-700 select-none dark:text-neutral-300">

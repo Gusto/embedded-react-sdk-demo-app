@@ -6,9 +6,25 @@ import type { Example } from "../../../types";
 
 const COMPANY_ID = "91b95861-9a2b-4f3e-afe7-92d57056449c";
 
+const snippet = `import { Contractor } from "@gusto/embedded-react-sdk";
+
+const COMPANY_ID = "${COMPANY_ID}";
+
+<Contractor.OnboardingFlow
+  companyId={COMPANY_ID}
+  onEvent={(eventType, eventPayload) => {
+    console.log(eventType, eventPayload);
+  }}
+/>;
+`;
+
 function Page() {
   return (
-    <ExampleLayout mode="workflows" example={onboardContractorExample}>
+    <ExampleLayout
+      mode="workflows"
+      example={onboardContractorExample}
+      code={[{ name: "index.tsx", source: snippet }]}
+    >
       <SdkBoundary>
         <Contractor.OnboardingFlow
           companyId={COMPANY_ID}
