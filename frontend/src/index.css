@@ -145,3 +145,38 @@ body {
     opacity: 1;
   }
 }
+
+/* Showcase section spotlight animations */
+.showcase-spot-1 {
+  animation: spot1 10s ease-in-out infinite;
+}
+.showcase-spot-2 {
+  animation: spot2 13s ease-in-out infinite;
+}
+.showcase-spot-3 {
+  animation: spot3 8s ease-in-out infinite;
+}
+
+@keyframes spot1 {
+  0%   { transform: translate(0%,    0%);   }
+  25%  { transform: translate(55%,   30%);  }
+  50%  { transform: translate(35%,   60%);  }
+  75%  { transform: translate(-10%,  40%);  }
+  100% { transform: translate(0%,    0%);   }
+}
+
+@keyframes spot2 {
+  0%   { transform: translate(0%,   0%);   }
+  30%  { transform: translate(-50%, -30%); }
+  55%  { transform: translate(-20%, -55%); }
+  80%  { transform: translate(15%,  -25%); }
+  100% { transform: translate(0%,   0%);   }
+}
+
+@keyframes spot3 {
+  0%   { transform: translate(0%,   0%);  }
+  20%  { transform: translate(-30%, 20%); }
+  45%  { transform: translate(25%,  35%); }
+  70%  { transform: translate(30%,  -20%);}
+  100% { transform: translate(0%,   0%);  }
+}

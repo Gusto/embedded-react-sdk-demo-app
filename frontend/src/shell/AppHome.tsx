@@ -122,14 +122,42 @@ function ShowcaseSection() {
       style={{ animationDelay: "200ms" }}
       className="animate-card-in relative overflow-hidden rounded-3xl"
     >
-      {/* Layered background: deep base + coral/orange glows + grid */}
+      {/* Layered background: deep base + roaming spotlight glows + grid */}
       <div className="absolute inset-0 -z-10 bg-[#140a08]" />
+      {/* Spotlight 1 — large primary glow, slow drift */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10"
+        className="showcase-spot-1 absolute -z-10 h-[70%] w-[60%] rounded-full opacity-60"
         style={{
-          backgroundImage:
-            "radial-gradient(ellipse 60% 60% at 12% 0%, rgba(225,90,67,0.55), transparent 60%), radial-gradient(ellipse 55% 70% at 90% 100%, rgba(255,130,95,0.4), transparent 60%), radial-gradient(ellipse 80% 80% at 50% 50%, rgba(180,55,40,0.22), transparent 70%)",
+          background:
+            "radial-gradient(circle, rgba(225,90,67,0.7) 0%, transparent 70%)",
+          filter: "blur(40px)",
+          top: "-10%",
+          left: "-5%",
+        }}
+      />
+      {/* Spotlight 2 — warm secondary glow, medium drift, opposite phase */}
+      <div
+        aria-hidden
+        className="showcase-spot-2 absolute -z-10 h-[55%] w-[50%] rounded-full opacity-50"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,130,95,0.65) 0%, transparent 70%)",
+          filter: "blur(50px)",
+          bottom: "-15%",
+          right: "-5%",
+        }}
+      />
+      {/* Spotlight 3 — deep accent, slow cross-fade wander */}
+      <div
+        aria-hidden
+        className="showcase-spot-3 absolute -z-10 h-[45%] w-[45%] rounded-full opacity-35"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(180,55,40,0.8) 0%, transparent 70%)",
+          filter: "blur(60px)",
+          top: "30%",
+          left: "35%",
         }}
       />
       <div
