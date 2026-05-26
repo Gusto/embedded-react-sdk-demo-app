@@ -1,3 +1,4 @@
+import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -45,12 +46,10 @@ export function NavDropdown({ label, items }: NavDropdownProps) {
         className="inline-flex h-7 cursor-pointer items-center gap-1 rounded-full px-3 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
       >
         {label}
-        <span
+        <ChevronDown
           aria-hidden
-          className={`transition-transform ${open ? "rotate-180" : ""}`}
-        >
-          ▾
-        </span>
+          className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`}
+        />
       </button>
       {open ? (
         <div

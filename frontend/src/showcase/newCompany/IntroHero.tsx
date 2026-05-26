@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import type { Phase } from "./NewCompanyDemo";
 import { BRAND_NAME } from "./types";
 
@@ -37,9 +38,7 @@ export function IntroHero({ phase, onStart }: IntroHeroProps) {
         >
           {isCreating ? "Setting things up…" : "Get started"}
           {!isCreating ? (
-            <span className="ml-2" aria-hidden>
-              →
-            </span>
+            <ArrowRight aria-hidden className="ml-2 h-4 w-4" />
           ) : null}
         </button>
         {phase.status === "error" ? (

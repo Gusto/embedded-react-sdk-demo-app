@@ -1,4 +1,5 @@
 import { Contractor, componentEvents } from "@gusto/embedded-react-sdk";
+import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { PageHeader } from "../newCompany/ui";
 
@@ -14,7 +15,7 @@ export function PayContractorsCreate({ companyUuid }: Props) {
         to="/showcase/existing-company/payroll/pay-contractors"
         className="mb-3 inline-flex items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-neutral-900"
       >
-        ← Back to contractor payments
+        <ArrowLeft aria-hidden className="h-3.5 w-3.5" /> Back to contractor payments
       </Link>
       <PageHeader
         eyebrow="Pay contractors"

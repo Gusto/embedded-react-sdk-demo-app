@@ -5,9 +5,11 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import { AdapterProvider } from "../../sdk/adapterContext";
 import { DemoSdkBoundary } from "../DemoSdkBoundary";
 import { DemoSessionProvider } from "../DemoSession";
 import { DemoShell } from "../DemoShell";
+import { DemoSpinner } from "../DemoSpinner";
 import { AppLayout, buildSharedNav } from "./AppLayout";
 import { Dashboard } from "./Dashboard";
 import { DemoToastProvider } from "./demoToast";
@@ -29,6 +31,7 @@ import { BRAND_NAME, BRAND_TAGLINE } from "./types";
 
 export function NewCompanyDemo() {
   return (
+    <AdapterProvider>
     <DemoShell
       brandName={BRAND_NAME}
       brandTagline={BRAND_TAGLINE}
@@ -71,6 +74,7 @@ export function NewCompanyDemo() {
         </CompanyStateGate>
       </DemoToastProvider>
     </DemoShell>
+    </AdapterProvider>
   );
 }
 
@@ -222,9 +226,5 @@ function CreateNewDemoButton() {
 }
 
 function Loading() {
-  return (
-    <div className="flex min-h-full items-center justify-center">
-      <p className="m-0 text-sm text-neutral-500">Loading demo…</p>
-    </div>
-  );
+  return <DemoSpinner />;
 }

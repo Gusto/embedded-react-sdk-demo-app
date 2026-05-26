@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useDemoSession } from "../DemoSession";
@@ -163,9 +164,7 @@ function DocumentRow({
       <div className="flex items-center gap-3">
         <StatusPill color={status.color} label={status.label} />
         {form.requires_signing ? (
-          <span aria-hidden className="text-neutral-400">
-            →
-          </span>
+          <ArrowRight aria-hidden className="h-4 w-4 text-neutral-400" />
         ) : null}
       </div>
     </div>

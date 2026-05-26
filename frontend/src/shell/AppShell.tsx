@@ -1,4 +1,9 @@
 import { Outlet, Route, Routes, useLocation } from "react-router-dom";
+import {
+  FeaturesRoutes,
+  featuresBasePath,
+  featuresNavItems,
+} from "../features";
 import { blocksConfig } from "../modes/blocks";
 import { hooksConfig } from "../modes/hooks";
 import type { Mode, ModeConfig } from "../modes/types";
@@ -36,6 +41,12 @@ export function AppShell() {
         />
         <Route element={<ShowcaseLayout />}>
           <Route path="/showcase" element={<ShowcasePage />} />
+        </Route>
+        <Route element={<FeaturesLayout />}>
+          <Route
+            path={`${featuresBasePath}/*`}
+            element={<FeaturesRoutes />}
+          />
         </Route>
         <Route element={<ModeLayout />}>
           <Route
@@ -80,6 +91,20 @@ function ShowcaseLayout() {
       <main className="flex-1 overflow-auto bg-white p-6 dark:bg-neutral-950">
         <Outlet />
       </main>
+    </>
+  );
+}
+
+function FeaturesLayout() {
+  return (
+    <>
+      <TopBar />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar items={featuresNavItems} />
+        <main className="flex-1 overflow-auto bg-white p-6 dark:bg-neutral-950">
+          <Outlet />
+        </main>
+      </div>
     </>
   );
 }

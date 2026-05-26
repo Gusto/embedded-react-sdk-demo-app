@@ -1,8 +1,9 @@
+import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useDemoSession } from "../DemoSession";
 import { useCompanyState } from "./useCompanyState";
 import { DetailCard, DetailRow, PageHeader } from "./ui";
-import { Link } from "react-router-dom";
 
 interface PayrollSettingsProps {
   companyUuid: string;
@@ -84,9 +85,9 @@ export function PayrollSettings({ companyUuid }: PayrollSettingsProps) {
           footer={
             <button
               type="button"
-              className="cursor-pointer text-sm font-medium text-indigo-600 hover:text-indigo-700"
+              className="inline-flex cursor-pointer items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-700"
             >
-              Edit pay schedule →
+              Edit pay schedule <ArrowRight aria-hidden className="h-4 w-4" />
             </button>
           }
         >
@@ -127,9 +128,10 @@ export function PayrollSettings({ companyUuid }: PayrollSettingsProps) {
           footer={
             <Link
               to={`${basePath}/payroll/settings/signatory`}
-              className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+              className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-700"
             >
-              {signatory ? "Update signatory →" : "Assign a signatory →"}
+              {signatory ? "Update signatory" : "Assign a signatory"}
+              <ArrowRight aria-hidden className="h-4 w-4" />
             </Link>
           }
         >

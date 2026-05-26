@@ -43,6 +43,7 @@ import { PayrollRunConfiguration } from "./PayrollRunConfiguration";
 import { PayrollRunSummary } from "./PayrollRunSummary";
 import { CompanyStateProvider } from "../newCompany/useCompanyState";
 import { DemoToastProvider } from "../newCompany/demoToast";
+import { AdapterProvider } from "../../sdk/adapterContext";
 import { DemoSessionProvider } from "../DemoSession";
 import { DemoShell } from "../DemoShell";
 
@@ -57,6 +58,7 @@ const BRAND_TAGLINE = "Modern finance tools for people-first companies";
 
 export function ExistingCompanyDemo() {
   return (
+    <AdapterProvider>
     <DemoShell brandName={BRAND_NAME} brandTagline={BRAND_TAGLINE}>
       <DemoSessionProvider
         companyUuid={COMPANY_ID}
@@ -132,6 +134,7 @@ export function ExistingCompanyDemo() {
         </DemoToastProvider>
       </DemoSessionProvider>
     </DemoShell>
+    </AdapterProvider>
   );
 }
 

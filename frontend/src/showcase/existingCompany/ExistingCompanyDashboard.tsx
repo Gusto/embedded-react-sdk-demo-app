@@ -1,3 +1,4 @@
+import { ArrowDown, ArrowRight, ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDemoSession } from "../DemoSession";
@@ -332,7 +333,7 @@ function NextPayrollCard({ payroll }: { payroll: Payroll | null | undefined }) {
                   to={`/showcase/existing-company/payroll/pay-employees/${payroll.payroll_uuid}/configuration`}
                   className="inline-flex h-10 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-fuchsia-500 px-5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition hover:shadow-indigo-500/40"
                 >
-                  Run payroll →
+                  Run payroll <ArrowRight aria-hidden className="ml-1 h-4 w-4" />
                 </Link>
               ) : null}
             </div>
@@ -393,9 +394,9 @@ function ActivityFeed() {
         </h3>
         <button
           type="button"
-          className="text-sm font-medium text-indigo-600 transition-colors hover:text-indigo-700"
+          className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 transition-colors hover:text-indigo-700"
         >
-          See all →
+          See all <ArrowRight aria-hidden className="h-4 w-4" />
         </button>
       </header>
       <ul className="flex flex-col divide-y divide-neutral-100">
@@ -408,7 +409,11 @@ function ActivityFeed() {
                   : "bg-neutral-100 text-neutral-600"
               }`}
             >
-              {item.amount >= 0 ? "↑" : "↓"}
+              {item.amount >= 0 ? (
+                <ArrowUp aria-hidden className="h-3.5 w-3.5" />
+              ) : (
+                <ArrowDown aria-hidden className="h-3.5 w-3.5" />
+              )}
             </span>
             <div className="flex min-w-0 flex-1 flex-col">
               <p className="m-0 text-sm font-medium text-neutral-900">
@@ -510,9 +515,9 @@ function RecentPayrolls({ payrolls }: { payrolls: Payroll[] }) {
         </h3>
         <Link
           to="/showcase/existing-company/payroll/pay-employees"
-          className="text-sm font-medium text-indigo-600 transition-colors hover:text-indigo-700"
+          className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 transition-colors hover:text-indigo-700"
         >
-          All payrolls →
+          All payrolls <ArrowRight aria-hidden className="h-4 w-4" />
         </Link>
       </div>
       <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">

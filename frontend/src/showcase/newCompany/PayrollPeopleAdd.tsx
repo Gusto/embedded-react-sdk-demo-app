@@ -1,3 +1,4 @@
+import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDemoSession } from "../DemoSession";
 import { EmployeeOnboardingBlocks } from "./EmployeeOnboardingBlocks";
@@ -19,7 +20,7 @@ export function PayrollPeopleAdd({ companyUuid }: Props) {
         to={`${basePath}/payroll/people`}
         className="mb-3 inline-flex items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-neutral-900"
       >
-        ← Back to People
+        <ArrowLeft aria-hidden className="h-3.5 w-3.5" /> Back to People
       </Link>
       <PageHeader
         eyebrow="People"

@@ -1,4 +1,5 @@
 import { Company, componentEvents } from "@gusto/embedded-react-sdk";
+import { ArrowLeft } from "lucide-react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useDemoSession } from "../DemoSession";
 import { useCompanyState } from "./useCompanyState";
@@ -27,7 +28,7 @@ export function PayrollDocumentDetail({ companyUuid }: Props) {
         to={docsPath}
         className="mb-3 inline-flex items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-neutral-900"
       >
-        ← All documents
+        <ArrowLeft aria-hidden className="h-3.5 w-3.5" /> All documents
       </Link>
       <PageHeader
         eyebrow="Sign document"

@@ -1,4 +1,5 @@
 import type { AlertProps } from "@gusto/embedded-react-sdk";
+import { X } from "lucide-react";
 
 const statusClasses = {
   info: "bg-indigo-50 border-indigo-200 text-indigo-900 dark:bg-indigo-950/40 dark:border-indigo-900 dark:text-indigo-100",
@@ -46,7 +47,7 @@ export function Alert({
           aria-label="Dismiss"
           className="-mr-1 -mt-1 cursor-pointer rounded-md p-1 text-current opacity-60 transition hover:bg-black/5 hover:opacity-100"
         >
-          ×
+          <X aria-hidden className="h-3.5 w-3.5" />
         </button>
       ) : null}
     </div>

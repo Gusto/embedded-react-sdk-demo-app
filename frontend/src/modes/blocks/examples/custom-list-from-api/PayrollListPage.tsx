@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../../toast/ToastProvider";
@@ -196,9 +197,9 @@ export function PayrollListPage() {
             <button
               type="button"
               onClick={() => handleRowClick(nextId)}
-              className="inline-flex w-full cursor-pointer items-center justify-center rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 md:w-auto"
+              className="inline-flex w-full cursor-pointer items-center justify-center gap-1 rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 md:w-auto"
             >
-              Run payroll →
+              Run payroll <ArrowRight aria-hidden className="h-4 w-4" />
             </button>
           </div>
         </section>
@@ -248,8 +249,8 @@ export function PayrollListPage() {
                       </span>
                     </span>
                   </div>
-                  <span className="inline-flex shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-900 cursor-pointer transition hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800">
-                    Run payroll →
+                  <span className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800">
+                    Run payroll <ArrowRight aria-hidden className="h-4 w-4" />
                   </span>
                 </button>
               );

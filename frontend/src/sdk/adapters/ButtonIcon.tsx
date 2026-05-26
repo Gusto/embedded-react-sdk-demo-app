@@ -1,5 +1,6 @@
 import type { MouseEvent } from "react";
 import type { ButtonIconProps } from "@gusto/embedded-react-sdk";
+import { Loader2 } from "lucide-react";
 
 const base =
   "inline-flex shrink-0 h-9 w-9 items-center justify-center font-sans cursor-pointer transition border whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
@@ -60,7 +61,7 @@ export function ButtonIcon({
       className={`${base} ${variantClasses[variant]} ${className ?? ""}`}
     >
       {isLoading ? (
-        <span aria-hidden>…</span>
+        <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
       ) : (
         <span className="inline-flex">{icon ?? children}</span>
       )}

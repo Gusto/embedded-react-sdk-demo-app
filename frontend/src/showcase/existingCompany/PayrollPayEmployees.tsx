@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDemoSession } from "../DemoSession";
@@ -166,7 +167,7 @@ function NextPayrollCard({ payroll }: { payroll: UpcomingPayroll }) {
             to={`${payroll.payroll_uuid}/configuration`}
             className="inline-flex h-11 w-full items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-fuchsia-500 px-6 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition hover:shadow-indigo-500/40 md:w-auto"
           >
-            Run payroll →
+            Run payroll <ArrowRight aria-hidden className="ml-1 h-4 w-4" />
           </Link>
         ) : null}
       </div>

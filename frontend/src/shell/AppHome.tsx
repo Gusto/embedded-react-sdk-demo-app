@@ -1,3 +1,4 @@
+import { ArrowRight, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { blocksConfig } from "../modes/blocks";
@@ -9,30 +10,34 @@ import { HomeTopBar } from "./HomeTopBar";
 
 const buildMethods: ModeConfig[] = [workflowsConfig, blocksConfig, hooksConfig];
 
-const features: { key: string; title: string; description: string }[] = [
+const features: { key: string; title: string; description: string; path: string }[] = [
   {
     key: "component-adapters",
     title: "Component adapters",
     description:
       "Swap the SDK's default components for your own so every rendered control matches your design system.",
+    path: "/features/component-adapters",
   },
   {
     key: "theming",
     title: "Theming",
     description:
-      "Override SDK theme tokens to match brand colors, typography, and dark mode without forking components.",
+      "Re-skin every SDK component at once via theme tokens — colors, border radii, focus rings, fonts.",
+    path: "/features/theming",
   },
   {
     key: "translations",
     title: "Translations",
     description:
-      "Localize SDK copy and field labels across languages by supplying your own translation resources.",
+      "Override any SDK string — field labels, descriptions, validation messages — by passing a partial dictionary.",
+    path: "/features/translations",
   },
   {
-    key: "data",
-    title: "Data",
+    key: "bring-your-own-data",
+    title: "Bring your own data",
     description:
-      "Read and write Gusto data directly via the SDK's typed API client or your own backend proxy.",
+      "Pre-fill SDK forms with values you already have so users don't re-type information you collected elsewhere.",
+    path: "/features/bring-your-own-data",
   },
 ];
 
@@ -97,14 +102,150 @@ export function AppHome() {
                   key={feature.key}
                   title={feature.title}
                   description={feature.description}
+                  path={feature.path}
                   index={i}
                 />
               ))}
             </div>
           </section>
+
+          <ShowcaseSection />
         </div>
       </main>
     </div>
+  );
+}
+
+function ShowcaseSection() {
+  return (
+    <section
+      style={{ animationDelay: "200ms" }}
+      className="animate-card-in relative overflow-hidden rounded-3xl"
+    >
+      {/* Layered background: deep base + coral/orange glows + grid */}
+      <div className="absolute inset-0 -z-10 bg-[#140a08]" />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10"
+        style={{
+          backgroundImage:
+            "radial-gradient(ellipse 60% 60% at 12% 0%, rgba(225,90,67,0.55), transparent 60%), radial-gradient(ellipse 55% 70% at 90% 100%, rgba(255,130,95,0.4), transparent 60%), radial-gradient(ellipse 80% 80% at 50% 50%, rgba(180,55,40,0.22), transparent 70%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 opacity-[0.18]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
+          maskImage:
+            "radial-gradient(ellipse 70% 70% at 50% 40%, black 35%, transparent 80%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 70% 70% at 50% 40%, black 35%, transparent 80%)",
+        }}
+      />
+
+      <div className="flex flex-col gap-10 p-10 md:p-14">
+        <div className="flex flex-col gap-4 md:max-w-2xl">
+          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white/80 backdrop-blur">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inset-0 animate-ping rounded-full bg-[#E15A43]/70" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#E15A43]" />
+            </span>
+            Try it live
+          </span>
+          <h2 className="m-0 text-5xl font-semibold leading-[1.05] tracking-tight text-white md:text-6xl">
+            Step inside the{" "}
+            <span className="bg-linear-to-br from-[#FFB199] via-[#FF8266] to-[#E15A43] bg-clip-text text-transparent">
+              showcase
+            </span>
+            .
+          </h2>
+          <p className="m-0 text-lg leading-relaxed text-white/70">
+            Two end-to-end product environments built on the SDK — drop into
+            a fictional payroll app and see the same components you've been
+            reading about running in a believable host context.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <ShowcaseLaunchCard
+            to="/showcase/new-company"
+            eyebrow="Demo 01"
+            title="New company"
+            description="A first-time customer working through onboarding — locations, taxes, signatory, employees."
+          />
+          <ShowcaseLaunchCard
+            to="/showcase/existing-company"
+            eyebrow="Demo 02"
+            title="Existing company"
+            description="An established company managing live payroll, people, and documents."
+          />
+        </div>
+
+        <Link
+          to="/showcase"
+          className="group inline-flex w-fit items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
+        >
+          Or visit the showcase index
+          <ArrowRight
+            aria-hidden
+            className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+          />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function ShowcaseLaunchCard({
+  to,
+  eyebrow,
+  title,
+  description,
+}: {
+  to: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <Link
+      to={to}
+      className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md transition hover:border-white/25 hover:bg-white/10"
+    >
+      {/* Hover sheen */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(225,90,67,0.22), transparent 55%), linear-gradient(315deg, rgba(255,130,95,0.18), transparent 55%)",
+        }}
+      />
+      <div className="relative flex items-center justify-between">
+        <span className="font-mono text-[11px] uppercase tracking-wider text-white/50">
+          {eyebrow}
+        </span>
+        <span
+          aria-hidden
+          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-[#FF8266] to-[#E15A43] text-white shadow-lg shadow-[#E15A43]/30 transition-transform group-hover:scale-110"
+        >
+          <Play className="h-3.5 w-3.5 fill-current" strokeWidth={0} />
+        </span>
+      </div>
+      <h3 className="relative m-0 text-2xl font-semibold tracking-tight text-white">
+        {title}
+      </h3>
+      <p className="relative m-0 text-sm leading-relaxed text-white/65">
+        {description}
+      </p>
+      <span className="relative mt-2 inline-flex items-center gap-1 text-sm font-medium text-white/80 transition group-hover:gap-2">
+        Launch demo
+        <ArrowRight aria-hidden className="h-4 w-4" />
+      </span>
+    </Link>
   );
 }
 
@@ -130,7 +271,7 @@ function BuildMethodRow({
       </p>
       <span className="mt-auto pt-2 inline-flex items-center gap-1 text-sm font-medium text-blue-500 dark:text-[#E15A43] transition group-hover:gap-2">
         See examples
-        <span aria-hidden>→</span>
+        <ArrowRight aria-hidden className="h-4 w-4" />
       </span>
     </Link>
   );
@@ -139,19 +280,21 @@ function BuildMethodRow({
 function FeatureCard({
   title,
   description,
+  path,
   index,
 }: {
   title: string;
   description: string;
+  path: string;
   index: number;
 }) {
   return (
-    <div
+    <Link
+      to={path}
       style={{ animationDelay: `${(index + 3) * 70}ms` }}
       className="glass-shine flex animate-card-in flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white transition duration-200 group-hover/features:opacity-50 hover:scale-[1.03] hover:opacity-100! dark:border-0 dark:bg-white/3 dark:shadow-xl dark:shadow-black/40 dark:backdrop-blur-3xl cursor-pointer"
     >
-      <div className="aspect-16/10 w-full bg-white dark:bg-transparent" />
-      <div className="flex flex-col gap-2 border-t border-neutral-200 p-5 dark:border-t-0">
+      <div className="flex flex-col gap-2 p-5">
         <h3 className="m-0 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
           {title}
         </h3>
@@ -159,6 +302,6 @@ function FeatureCard({
           {description}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

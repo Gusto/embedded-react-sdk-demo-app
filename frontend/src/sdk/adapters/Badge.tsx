@@ -1,4 +1,5 @@
 import type { BadgeProps } from "@gusto/embedded-react-sdk";
+import { X } from "lucide-react";
 
 const statusClasses = {
   success:
@@ -35,7 +36,7 @@ export function Badge({
           aria-label={dismissAriaLabel ?? "Dismiss"}
           className="-mr-0.5 inline-flex h-4 w-4 cursor-pointer items-center justify-center rounded-full text-current opacity-70 hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          ×
+          <X aria-hidden className="h-3 w-3" />
         </button>
       ) : null}
     </span>

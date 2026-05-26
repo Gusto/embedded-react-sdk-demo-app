@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { DemoSpinner } from "../DemoSpinner";
 import { useDemoCompany } from "./useDemoCompany";
 
 const NEW_COMPANY_API_BASE = "http://localhost:3001";
@@ -67,11 +68,7 @@ export function Gate() {
   }, [status, companyUuid]);
 
   if (destination === "loading") {
-    return (
-      <div className="flex min-h-full items-center justify-center">
-        <p className="m-0 text-sm text-neutral-500">Loading demo…</p>
-      </div>
-    );
+    return <DemoSpinner />;
   }
 
   return <Navigate to={destination} replace />;

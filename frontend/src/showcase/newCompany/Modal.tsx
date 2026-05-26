@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 
 interface ModalProps {
@@ -39,7 +40,7 @@ export function Modal({ title, onClose, children }: ModalProps) {
             className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
             aria-label="Close"
           >
-            ×
+            <X aria-hidden className="h-4 w-4" />
           </button>
         </header>
         <div className="flex-1 overflow-auto p-6">{children}</div>

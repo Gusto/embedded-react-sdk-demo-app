@@ -1,4 +1,5 @@
 import { Payroll, componentEvents } from "@gusto/embedded-react-sdk";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { SdkBoundary } from "../../../../sdk/SdkBoundary";
 import { useToast } from "../../../../toast/ToastProvider";
@@ -21,7 +22,7 @@ export function ReviewPage() {
         onClick={() => navigate("/blocks/compose-payroll-flow")}
         className="inline-flex w-fit items-center gap-1 text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
       >
-        ← Back to payroll list
+        <ArrowLeft aria-hidden className="h-3.5 w-3.5" /> Back to payroll list
       </button>
       <SdkBoundary>
         <Payroll.PayrollOverview

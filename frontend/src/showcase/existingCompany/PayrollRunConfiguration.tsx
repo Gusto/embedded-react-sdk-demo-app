@@ -1,4 +1,5 @@
 import { Payroll, componentEvents } from "@gusto/embedded-react-sdk";
+import { ArrowLeft } from "lucide-react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { PageHeader } from "../newCompany/ui";
 
@@ -25,7 +26,7 @@ export function PayrollRunConfiguration({ companyUuid }: Props) {
         to="/showcase/existing-company/payroll/pay-employees"
         className="mb-3 inline-flex items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-neutral-900"
       >
-        ← Back to upcoming payrolls
+        <ArrowLeft aria-hidden className="h-3.5 w-3.5" /> Back to upcoming payrolls
       </Link>
       <PageHeader
         eyebrow="Run payroll"

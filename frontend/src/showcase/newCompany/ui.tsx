@@ -1,3 +1,4 @@
+import { Check, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
@@ -130,8 +131,8 @@ export function PageHeader({
 export function HatchwellToast({ message }: { message: string }) {
   return (
     <div className="pointer-events-none fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white px-4 py-3 shadow-lg shadow-emerald-500/10">
-      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-700">
-        ✓
+      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+        <Check aria-hidden className="h-4 w-4" strokeWidth={3} />
       </span>
       <p className="m-0 text-sm font-medium text-neutral-900">{message}</p>
     </div>
@@ -160,7 +161,7 @@ export function Drawer({
             className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
             aria-label="Close"
           >
-            ×
+            <X aria-hidden className="h-4 w-4" />
           </button>
         </header>
         <div className="flex-1 overflow-auto p-6">{children}</div>

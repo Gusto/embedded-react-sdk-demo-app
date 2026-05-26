@@ -1,3 +1,4 @@
+import { Check, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { useCompanyState } from "./useCompanyState";
 
@@ -85,14 +86,12 @@ export function OnboardingChecklist() {
         </div>
         <div className="flex items-center gap-2">
           <ProgressRing completed={completed} total={total} />
-          <span
+          <ChevronDown
             aria-hidden
-            className={`text-neutral-400 transition-transform ${
+            className={`h-4 w-4 text-neutral-400 transition-transform ${
               open ? "rotate-180" : ""
             }`}
-          >
-            ▾
-          </span>
+          />
         </div>
       </button>
       {open ? (
@@ -101,13 +100,15 @@ export function OnboardingChecklist() {
             <li key={item.key}>
               <div className="flex items-center gap-3 px-4 py-2.5">
                 <span
-                  className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+                  className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
                     item.complete
                       ? "bg-emerald-100 text-emerald-700"
                       : "border border-neutral-200 bg-white text-neutral-300"
                   }`}
                 >
-                  {item.complete ? "✓" : ""}
+                  {item.complete ? (
+                    <Check aria-hidden className="h-3 w-3" strokeWidth={3} />
+                  ) : null}
                 </span>
                 <span
                   className={`text-sm ${

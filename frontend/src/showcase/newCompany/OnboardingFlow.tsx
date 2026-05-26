@@ -1,5 +1,7 @@
 import { Company, componentEvents } from "@gusto/embedded-react-sdk";
+import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
+import { DemoSpinner } from "../DemoSpinner";
 import { EmployeesStep } from "./EmployeesStep";
 
 type StepKey =
@@ -101,11 +103,7 @@ export function OnboardingFlow({
   }, [companyUuid]);
 
   if (!bootstrap) {
-    return (
-      <div className="flex min-h-full items-center justify-center">
-        <p className="m-0 text-sm text-neutral-500">Loading onboarding…</p>
-      </div>
-    );
+    return <DemoSpinner />;
   }
 
   return (
@@ -289,9 +287,11 @@ function StepNav({
               ].join(" ")}
             >
               {isCompleted && !isCurrent ? (
-                <span aria-hidden className="text-emerald-500">
-                  ✓
-                </span>
+                <Check
+                  aria-hidden
+                  className="h-3.5 w-3.5 text-emerald-500"
+                  strokeWidth={3}
+                />
               ) : null}
               {step.label}
            

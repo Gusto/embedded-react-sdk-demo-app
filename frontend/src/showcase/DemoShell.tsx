@@ -1,6 +1,9 @@
-import { useEffect, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { X } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAdapters } from "../sdk/adapterContext";
+
+const EXIT_DURATION_MS = 240;
 
 interface DemoShellProps {
   /** The pretend product name shown in the demo top bar. */
@@ -24,6 +27,9 @@ export function DemoShell({
   headerAction,
   children,
 }: DemoShellProps) {
+  const navigate = useNavigate();
+  const [exiting, setExiting] = useState(false);
+
   // Demos always render in light mode regardless of the app theme switcher.
   // Strip `.dark` from <html> while the demo is mounted, restoring it
   // (and any prior color-scheme) on unmount so the rest of the app keeps
@@ -40,8 +46,18 @@ export function DemoShell({
     };
   }, []);
 
+  function handleExit(e: React.MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+    setExiting(true);
+    window.setTimeout(() => navigate("/showcase"), EXIT_DURATION_MS);
+  }
+
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-white font-sans text-neutral-900">
+    <div
+      className={`fixed inset-0 z-50 flex flex-col bg-white font-sans text-neutral-900 ${
+        exiting ? "animate-demo-out" : "animate-demo-in"
+      }`}
+    >
       <header className="flex h-16 items-center justify-between border-b border-neutral-200 bg-white/80 px-6 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-indigo-500 to-fuchsia-500 text-sm font-semibold text-white">
@@ -61,9 +77,10 @@ export function DemoShell({
           {headerAction}
           <Link
             to="/showcase"
+            onClick={handleExit}
             className="inline-flex h-8 items-center gap-1 rounded-full border border-neutral-200 bg-white px-3 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-100"
           >
-            <span aria-hidden>×</span>
+            <X aria-hidden className="h-3.5 w-3.5" />
             Exit demo
           </Link>
         </div>

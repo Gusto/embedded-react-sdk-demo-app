@@ -1,4 +1,5 @@
 import { Payroll, componentEvents } from "@gusto/embedded-react-sdk";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { PageHeader } from "../newCompany/ui";
@@ -25,8 +26,8 @@ export function PayrollRunSummary({ companyUuid }: Props) {
     ? "/showcase/existing-company/payroll/pay-employees"
     : `/showcase/existing-company/payroll/pay-employees/${payrollUuid}/configuration`;
   const backLabel = submitted
-    ? "← Back to upcoming payrolls"
-    : "← Back to configuration";
+    ? "Back to upcoming payrolls"
+    : "Back to configuration";
 
   return (
     <>
@@ -34,7 +35,7 @@ export function PayrollRunSummary({ companyUuid }: Props) {
         to={backTo}
         className="mb-3 inline-flex items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-neutral-900"
       >
-        {backLabel}
+        <ArrowLeft aria-hidden className="h-3.5 w-3.5" /> {backLabel}
       </Link>
       <PageHeader
         eyebrow="Run payroll"
