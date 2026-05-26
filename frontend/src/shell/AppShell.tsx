@@ -4,6 +4,9 @@ import { hooksConfig } from "../modes/hooks";
 import type { Mode, ModeConfig } from "../modes/types";
 import { useCurrentMode } from "../modes/useCurrentMode";
 import { workflowsConfig } from "../modes/workflows";
+import { ExistingCompanyDemo } from "../showcase/existingCompany/ExistingCompanyDemo";
+import { NewCompanyDemo } from "../showcase/newCompany/NewCompanyDemo";
+import { ShowcasePage } from "../showcase/ShowcasePage";
 import { AppHome } from "./AppHome";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";
@@ -26,6 +29,14 @@ export function AppShell() {
     >
       <Routes>
         <Route path="/" element={<AppHome />} />
+        <Route path="/showcase/new-company/*" element={<NewCompanyDemo />} />
+        <Route
+          path="/showcase/existing-company/*"
+          element={<ExistingCompanyDemo />}
+        />
+        <Route element={<ShowcaseLayout />}>
+          <Route path="/showcase" element={<ShowcasePage />} />
+        </Route>
         <Route element={<ModeLayout />}>
           <Route
             path={`${workflowsConfig.basePath}/*`}
@@ -58,6 +69,17 @@ function ModeLayout() {
           <Outlet />
         </main>
       </div>
+    </>
+  );
+}
+
+function ShowcaseLayout() {
+  return (
+    <>
+      <TopBar />
+      <main className="flex-1 overflow-auto bg-white p-6 dark:bg-neutral-950">
+        <Outlet />
+      </main>
     </>
   );
 }

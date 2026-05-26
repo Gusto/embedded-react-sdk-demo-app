@@ -38,9 +38,15 @@ export function TopBar() {
         >
           Demo
         </Link>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <NavDropdown label="Build methods" items={buildMethodItems} />
           <NavDropdown label="Features" items={featureItems} />
+          <Link
+            to="/showcase"
+            className="inline-flex h-7 cursor-pointer items-center rounded-full px-3 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+          >
+            Showcase
+          </Link>
         </div>
       </div>
       <div className="flex items-center gap-6">

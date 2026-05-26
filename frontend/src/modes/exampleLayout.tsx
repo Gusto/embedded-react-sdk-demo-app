@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 import { useTheme } from "../sdk/themeContext";
+import { useApiHealth } from "../sdk/useApiHealth";
 import type { Example, Mode } from "./types";
 
 export interface CodeFile {
@@ -33,6 +34,7 @@ export function ExampleLayout({
   const [activeTab, setActiveTab] = useState<ActiveTab>("preview");
   const [activeFile, setActiveFile] = useState(0);
   const hasCode = !!code?.length;
+  const health = useApiHealth();
 
   return (
     <div className="flex flex-col gap-8">
@@ -79,7 +81,14 @@ export function ExampleLayout({
           ) : null}
         </div>
         {activeTab === "preview" || !hasCode ? (
-          children
+          health.state === "ok" || health.state === "loading" ? (
+            children
+          ) : (
+            <ConfigReminder
+              state={health.state}
+              reason={health.reason}
+            />
+          )
         ) : (
           <CodePanel
             files={code!}
@@ -88,6 +97,72 @@ export function ExampleLayout({
           />
         )}
       </div>
+    </div>
+  );
+}
+
+function ConfigReminder({
+  state,
+  reason,
+}: {
+  state: "not-configured" | "unreachable";
+  reason?: string;
+}) {
+  const title =
+    state === "unreachable"
+      ? "Can't reach the backend"
+      : "Backend isn't configured yet";
+  const intro =
+    state === "unreachable"
+      ? "The frontend couldn't talk to the proxy at http://localhost:3001. Start it before you can run the SDK examples."
+      : "The proxy is running but missing credentials. Set these up and restart the backend.";
+
+  return (
+    <div className="flex flex-col gap-5 rounded-xl border border-amber-300 bg-amber-50 p-6 dark:border-amber-900/60 dark:bg-amber-950/30">
+      <div className="flex flex-col gap-2">
+        <p className="m-0 text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+          Setup required
+        </p>
+        <h3 className="m-0 text-xl font-semibold tracking-tight text-amber-900 dark:text-amber-100">
+          {title}
+        </h3>
+        <p className="m-0 text-sm leading-relaxed text-amber-900/80 dark:text-amber-200/80">
+          {intro}
+        </p>
+      </div>
+      <ol className="m-0 flex list-decimal flex-col gap-2 pl-5 text-sm text-amber-900/80 dark:text-amber-200/80">
+        <li>
+          Copy{" "}
+          <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-xs dark:bg-amber-900/40">
+            backend/.env.example
+          </code>{" "}
+          to{" "}
+          <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-xs dark:bg-amber-900/40">
+            backend/.env
+          </code>{" "}
+          and set <code className="font-mono text-xs">CLIENT_ID</code> +{" "}
+          <code className="font-mono text-xs">CLIENT_SECRET</code>.
+        </li>
+        <li>
+          Copy{" "}
+          <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-xs dark:bg-amber-900/40">
+            backend/tokens.example.json
+          </code>{" "}
+          to{" "}
+          <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-xs dark:bg-amber-900/40">
+            backend/tokens.json
+          </code>{" "}
+          and paste in your <code className="font-mono text-xs">refresh_token</code>.
+        </li>
+        <li>
+          Restart the backend (<code className="font-mono text-xs">cd backend && npm run dev</code>) and reload this page.
+        </li>
+      </ol>
+      {reason ? (
+        <p className="m-0 rounded-md bg-amber-100 px-3 py-2 font-mono text-xs text-amber-900 dark:bg-amber-900/40 dark:text-amber-200">
+          {reason}
+        </p>
+      ) : null}
     </div>
   );
 }
