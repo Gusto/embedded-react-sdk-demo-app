@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDemoSession } from "../DemoSession";
 import { useCompanyState } from "./useCompanyState";
 import { useDemoToast } from "./demoToast";
 import { ActionCard, Drawer, PageHeader } from "./ui";
@@ -12,6 +13,7 @@ type DrawerState = { kind: "none" } | { kind: "verifyBank" };
 
 export function Dashboard({ companyUuid }: DashboardProps) {
   const { toast } = useDemoToast();
+  const { basePath } = useDemoSession();
   const state = useCompanyState(companyUuid);
   const [drawer, setDrawer] = useState<DrawerState>({ kind: "none" });
 
@@ -53,7 +55,7 @@ export function Dashboard({ companyUuid }: DashboardProps) {
               title="Set up a pay schedule"
               body="Tell us how often you pay your team so we know when to run payroll."
               cta="Add pay schedule"
-              to="/showcase/new-company/payroll/settings"
+              to={`${basePath}/payroll/settings`}
             />
           ) : null}
           {!stateSetup ? (
@@ -62,7 +64,7 @@ export function Dashboard({ companyUuid }: DashboardProps) {
               title="Finish state tax setup"
               body="We need a few more state-specific details before we can file your taxes."
               cta="Set up state taxes"
-              to="/showcase/new-company/payroll/settings/taxes"
+              to={`${basePath}/payroll/settings/taxes`}
             />
           ) : null}
           {!signForms ? (
@@ -77,8 +79,8 @@ export function Dashboard({ companyUuid }: DashboardProps) {
               cta={state.hasSignatory ? "Review documents" : "Assign a signatory"}
               to={
                 state.hasSignatory
-                  ? "/showcase/new-company/payroll/documents"
-                  : "/showcase/new-company/payroll/settings/signatory"
+                  ? `${basePath}/payroll/documents`
+                  : `${basePath}/payroll/settings/signatory`
               }
             />
           ) : null}
@@ -88,7 +90,7 @@ export function Dashboard({ companyUuid }: DashboardProps) {
               title="Add your first employee"
               body="You need at least one onboarded employee before you can run payroll."
               cta="Add an employee"
-              to="/showcase/new-company/payroll/people/add"
+              to={`${basePath}/payroll/people/add`}
             />
           ) : null}
           {allDone ? (

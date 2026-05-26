@@ -33,7 +33,7 @@ export function Checkbox({
             onChange={(e) => onChange?.(e.target.checked)}
             onBlur={onBlur}
             aria-invalid={isInvalid || undefined}
-            className={`peer h-5 w-5 cursor-pointer appearance-none rounded-md border-2 bg-white transition-colors checked:border-blue-500 checked:bg-blue-500 disabled:cursor-not-allowed dark:bg-neutral-900 ${
+            className={`peer h-5 w-5 cursor-pointer appearance-none rounded-md border bg-white transition-colors checked:border-indigo-500 checked:bg-indigo-500 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-indigo-500/30 dark:bg-neutral-900 ${
               isInvalid
                 ? "border-red-500"
                 : "border-neutral-300 dark:border-neutral-600"

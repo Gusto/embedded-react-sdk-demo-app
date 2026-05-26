@@ -192,6 +192,7 @@ function CompanyStateGate({ children }: { children: React.ReactNode }) {
       companyUuid={companyUuid}
       apiBaseUrl={`http://localhost:3001/demo/${companyUuid}`}
       brandName={BRAND_NAME}
+      basePath="/showcase/new-company"
     >
       <CompanyStateProvider>{children}</CompanyStateProvider>
     </DemoSessionProvider>

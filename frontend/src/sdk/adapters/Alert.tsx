@@ -1,9 +1,9 @@
 import type { AlertProps } from "@gusto/embedded-react-sdk";
 
 const statusClasses = {
-  info: "bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-950/40 dark:border-blue-900 dark:text-blue-100",
+  info: "bg-indigo-50 border-indigo-200 text-indigo-900 dark:bg-indigo-950/40 dark:border-indigo-900 dark:text-indigo-100",
   success:
-    "bg-green-50 border-green-200 text-green-900 dark:bg-green-950/40 dark:border-green-900 dark:text-green-100",
+    "bg-emerald-50 border-emerald-200 text-emerald-900 dark:bg-emerald-950/40 dark:border-emerald-900 dark:text-emerald-100",
   warning:
     "bg-amber-50 border-amber-200 text-amber-900 dark:bg-amber-950/40 dark:border-amber-900 dark:text-amber-100",
   error:
@@ -11,8 +11,8 @@ const statusClasses = {
 } as const;
 
 const dotClasses = {
-  info: "bg-blue-500",
-  success: "bg-green-500",
+  info: "bg-indigo-500",
+  success: "bg-emerald-500",
   warning: "bg-amber-500",
   error: "bg-red-500",
 } as const;

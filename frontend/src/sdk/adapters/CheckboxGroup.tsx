@@ -60,7 +60,7 @@ export function CheckboxGroup({
                   checked={isChecked}
                   disabled={optionDisabled}
                   onChange={() => toggle(opt.value)}
-                  className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-neutral-300 bg-white transition-colors checked:border-blue-500 checked:bg-blue-500 disabled:cursor-not-allowed dark:border-neutral-600 dark:bg-neutral-900"
+                  className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-neutral-300 bg-white transition-colors checked:border-indigo-500 checked:bg-indigo-500 disabled:cursor-not-allowed dark:border-neutral-600 dark:bg-neutral-900"
                 />
                 <svg
                   aria-hidden

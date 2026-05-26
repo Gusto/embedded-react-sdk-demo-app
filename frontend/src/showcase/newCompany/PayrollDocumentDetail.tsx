@@ -1,5 +1,6 @@
 import { Company, componentEvents } from "@gusto/embedded-react-sdk";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { useDemoSession } from "../DemoSession";
 import { useCompanyState } from "./useCompanyState";
 import { useDemoToast } from "./demoToast";
 import { PageHeader } from "./ui";
@@ -13,15 +14,17 @@ export function PayrollDocumentDetail({ companyUuid }: Props) {
   const navigate = useNavigate();
   const state = useCompanyState(companyUuid);
   const { toast } = useDemoToast();
+  const { basePath } = useDemoSession();
+  const docsPath = `${basePath}/payroll/documents`;
 
   if (!formId) {
-    return <Navigate to="/showcase/new-company/payroll/documents" replace />;
+    return <Navigate to={docsPath} replace />;
   }
 
   return (
     <>
       <Link
-        to="/showcase/new-company/payroll/documents"
+        to={docsPath}
         className="mb-3 inline-flex items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-neutral-900"
       >
         ← All documents
@@ -39,10 +42,10 @@ export function PayrollDocumentDetail({ companyUuid }: Props) {
             if (eventType === componentEvents.COMPANY_SIGN_FORM_DONE) {
               toast("Document signed");
               state.refresh();
-              navigate("/showcase/new-company/payroll/documents");
+              navigate(docsPath);
             }
             if (eventType === componentEvents.COMPANY_SIGN_FORM_BACK) {
-              navigate("/showcase/new-company/payroll/documents");
+              navigate(docsPath);
             }
           }}
         />

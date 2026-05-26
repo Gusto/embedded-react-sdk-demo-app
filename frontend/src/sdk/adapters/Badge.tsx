@@ -1,10 +1,13 @@
 import type { BadgeProps } from "@gusto/embedded-react-sdk";
 
 const statusClasses = {
-  success: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
-  warning: "bg-amber-100 text-amber-800",
-  info: "bg-blue-100 text-blue-800",
-  error: "bg-red-100 text-red-800",
+  success:
+    "border border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300",
+  warning:
+    "border border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-300",
+  info: "border border-indigo-200 bg-indigo-50 text-indigo-800 dark:border-indigo-900 dark:bg-indigo-950/40 dark:text-indigo-300",
+  error:
+    "border border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300",
 } as const;
 
 export function Badge({

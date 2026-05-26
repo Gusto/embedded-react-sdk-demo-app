@@ -33,10 +33,10 @@ export function NumberInput({
   const endAdornment = adornmentEnd ?? formatDefaults?.end ?? null;
 
   const shellClasses = [
-    "flex w-full items-center gap-2 rounded-full border bg-white px-4 py-2 transition-colors dark:bg-neutral-900",
+    "flex w-full items-center gap-2 rounded-md border bg-white px-3 py-2 transition-colors dark:bg-neutral-900",
     isInvalid
       ? "border-red-500 focus-within:ring-2 focus-within:ring-red-500/20"
-      : "border-neutral-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 dark:border-neutral-700 dark:focus-within:border-blue-500",
+      : "border-neutral-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 dark:border-neutral-700 dark:focus-within:border-indigo-400",
     isDisabled
       ? "cursor-not-allowed bg-neutral-50 opacity-60 dark:bg-neutral-800"
       : "",
@@ -50,7 +50,7 @@ export function NumberInput({
           className={
             shouldVisuallyHideLabel
               ? "sr-only"
-              : "text-sm font-medium text-neutral-700 dark:text-neutral-300"
+              : "text-xs font-medium text-neutral-700 dark:text-neutral-300"
           }
         >
           {label}

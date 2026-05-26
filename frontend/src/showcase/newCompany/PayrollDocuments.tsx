@@ -21,7 +21,7 @@ interface CompanyForm {
 
 export function PayrollDocuments({ companyUuid }: Props) {
   const state = useCompanyState(companyUuid);
-  const { apiBaseUrl } = useDemoSession();
+  const { apiBaseUrl, basePath } = useDemoSession();
   const [forms, setForms] = useState<CompanyForm[] | null>(null);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export function PayrollDocuments({ companyUuid }: Props) {
   if (!state.hasSignatory) {
     return (
       <Navigate
-        to="/showcase/new-company/payroll/settings/signatory"
+        to={`${basePath}/payroll/settings/signatory`}
         replace
       />
     );

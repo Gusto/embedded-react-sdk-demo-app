@@ -1,5 +1,6 @@
 import { Company, componentEvents } from "@gusto/embedded-react-sdk";
 import { useNavigate } from "react-router-dom";
+import { useDemoSession } from "../DemoSession";
 import { useCompanyState } from "./useCompanyState";
 import { useDemoToast } from "./demoToast";
 import { PageHeader } from "./ui";
@@ -12,6 +13,7 @@ export function PayrollSettingsSignatory({ companyUuid }: Props) {
   const state = useCompanyState(companyUuid);
   const navigate = useNavigate();
   const { toast } = useDemoToast();
+  const { basePath } = useDemoSession();
 
   return (
     <>
@@ -34,7 +36,7 @@ export function PayrollSettingsSignatory({ companyUuid }: Props) {
             ) {
               state.refresh();
               toast("Signatory assigned");
-              navigate("/showcase/new-company/payroll/documents");
+              navigate(`${basePath}/payroll/documents`);
             }
           }}
         />

@@ -28,9 +28,14 @@ interface Signatory {
 
 export function PayrollSettings({ companyUuid }: PayrollSettingsProps) {
   const state = useCompanyState(companyUuid);
-  const { apiBaseUrl } = useDemoSession();
-  const [paySchedule, setPaySchedule] = useState<PaySchedule | null>(null);
-  const [signatory, setSignatory] = useState<Signatory | null>(null);
+  const { apiBaseUrl, basePath } = useDemoSession();
+  // undefined = still loading; null = loaded but no record on file.
+  const [paySchedule, setPaySchedule] = useState<PaySchedule | null | undefined>(
+    undefined
+  );
+  const [signatory, setSignatory] = useState<Signatory | null | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -77,15 +82,17 @@ export function PayrollSettings({ companyUuid }: PayrollSettingsProps) {
               : "No pay schedule set up yet."
           }
           footer={
-            <Link
-              to="/showcase/new-company/payroll/settings"
-              className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+            <button
+              type="button"
+              className="cursor-pointer text-sm font-medium text-indigo-600 hover:text-indigo-700"
             >
               Edit pay schedule →
-            </Link>
+            </button>
           }
         >
-          {paySchedule ? (
+          {paySchedule === undefined ? (
+            <p className="m-0 text-sm text-neutral-500">Loading…</p>
+          ) : paySchedule ? (
             <>
               <DetailRow
                 label="Frequency"
@@ -119,14 +126,16 @@ export function PayrollSettings({ companyUuid }: PayrollSettingsProps) {
           }
           footer={
             <Link
-              to="/showcase/new-company/payroll/settings/signatory"
+              to={`${basePath}/payroll/settings/signatory`}
               className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
             >
               {signatory ? "Update signatory →" : "Assign a signatory →"}
             </Link>
           }
         >
-          {signatory ? (
+          {signatory === undefined ? (
+            <p className="m-0 text-sm text-neutral-500">Loading…</p>
+          ) : signatory ? (
             <>
               <DetailRow
                 label="Name"

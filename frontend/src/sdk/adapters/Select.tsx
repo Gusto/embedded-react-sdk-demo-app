@@ -18,10 +18,10 @@ export function Select({
   className,
 }: SelectProps) {
   const shellClasses = [
-    "relative flex w-full items-center rounded-full border bg-white pl-4 pr-10 transition-colors dark:bg-neutral-900",
+    "relative flex w-full items-center rounded-md border bg-white pl-3 pr-10 transition-colors dark:bg-neutral-900",
     isInvalid
       ? "border-red-500 focus-within:ring-2 focus-within:ring-red-500/20"
-      : "border-neutral-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 dark:border-neutral-700 dark:focus-within:border-blue-500",
+      : "border-neutral-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 dark:border-neutral-700 dark:focus-within:border-indigo-400",
     isDisabled
       ? "cursor-not-allowed bg-neutral-50 opacity-60 dark:bg-neutral-800"
       : "",
@@ -35,7 +35,7 @@ export function Select({
           className={
             shouldVisuallyHideLabel
               ? "sr-only"
-              : "text-sm font-medium text-neutral-700 dark:text-neutral-300"
+              : "text-xs font-medium text-neutral-700 dark:text-neutral-300"
           }
         >
           {label}

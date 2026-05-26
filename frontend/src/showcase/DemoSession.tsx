@@ -10,6 +10,10 @@ interface DemoSessionValue {
   apiBaseUrl: string;
   /** Friendly brand name shown in the chrome. */
   brandName: string;
+  /** Route prefix for the active demo, e.g. "/showcase/new-company" or
+   * "/showcase/existing-company". Used by shared screens to build links
+   * inside whichever demo the user is in. */
+  basePath: string;
 }
 
 const Context = createContext<DemoSessionValue | null>(null);
@@ -18,10 +22,13 @@ export function DemoSessionProvider({
   companyUuid,
   apiBaseUrl,
   brandName,
+  basePath,
   children,
 }: DemoSessionValue & { children: ReactNode }) {
   return (
-    <Context.Provider value={{ companyUuid, apiBaseUrl, brandName }}>
+    <Context.Provider
+      value={{ companyUuid, apiBaseUrl, brandName, basePath }}
+    >
       {children}
     </Context.Provider>
   );

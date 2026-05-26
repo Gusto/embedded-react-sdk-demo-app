@@ -1,5 +1,6 @@
 import { Company, componentEvents } from "@gusto/embedded-react-sdk";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { useDemoSession } from "../DemoSession";
 import { useCompanyState } from "./useCompanyState";
 import { useDemoToast } from "./demoToast";
 import { PageHeader } from "./ui";
@@ -13,15 +14,17 @@ export function PayrollSettingsTaxesState({ companyUuid }: Props) {
   const navigate = useNavigate();
   const company = useCompanyState(companyUuid);
   const { toast } = useDemoToast();
+  const { basePath } = useDemoSession();
+  const taxesPath = `${basePath}/payroll/settings/taxes`;
 
   if (!stateCode) {
-    return <Navigate to="/showcase/new-company/payroll/settings/taxes" replace />;
+    return <Navigate to={taxesPath} replace />;
   }
 
   return (
     <>
       <Link
-        to="/showcase/new-company/payroll/settings/taxes"
+        to={taxesPath}
         className="mb-3 inline-flex items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-neutral-900"
       >
         ← All tax settings
@@ -39,7 +42,7 @@ export function PayrollSettingsTaxesState({ companyUuid }: Props) {
             if (eventType === componentEvents.COMPANY_STATE_TAX_UPDATED) {
               toast(`${stateCode} state taxes saved`);
               company.refresh();
-              navigate("/showcase/new-company/payroll/settings/taxes");
+              navigate(taxesPath);
             }
           }}
         />

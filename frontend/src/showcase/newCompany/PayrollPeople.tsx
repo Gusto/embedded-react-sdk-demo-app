@@ -69,7 +69,7 @@ function humanize(status?: string) {
 }
 
 export function PayrollPeople({ companyUuid }: Props) {
-  const { apiBaseUrl } = useDemoSession();
+  const { apiBaseUrl, basePath } = useDemoSession();
   const [employees, setEmployees] = useState<Employee[] | null>(null);
   const [contractors, setContractors] = useState<Contractor[] | null>(null);
   const [tab, setTab] = useState<Tab>("employees");
@@ -109,7 +109,7 @@ export function PayrollPeople({ companyUuid }: Props) {
         action={
           tab === "employees" ? (
             <Link
-              to="/showcase/new-company/payroll/people/add"
+              to={`${basePath}/payroll/people/add`}
               className="inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-fuchsia-500 px-5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition hover:shadow-indigo-500/40"
             >
               Add employee

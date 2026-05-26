@@ -32,9 +32,9 @@ export function Tabs({
               disabled={tab.isDisabled}
               onClick={() => onSelectionChange(tab.id)}
               className={[
-                "-mb-px cursor-pointer border-b-2 px-1 py-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40",
+                "-mb-px cursor-pointer border-b-2 px-1 py-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40",
                 isActive
-                  ? "border-blue-500 text-blue-500"
+                  ? "border-indigo-500 text-neutral-900 dark:text-neutral-100"
                   : "border-transparent text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100",
               ].join(" ")}
             >

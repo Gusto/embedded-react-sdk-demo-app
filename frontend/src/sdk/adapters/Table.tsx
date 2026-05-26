@@ -62,7 +62,7 @@ export function Table({
         >
           <span
             aria-hidden
-            className="absolute left-0 top-1/2 h-8 w-[3px] -translate-y-1/2 rounded-r-full bg-gradient-to-b from-blue-400 to-blue-600 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+            className="absolute left-0 top-1/2 h-8 w-[3px] -translate-y-1/2 rounded-r-full bg-linear-to-b from-indigo-400 to-fuchsia-500 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
           />
           {row.data.map((cell, cellIndex) => (
             <div

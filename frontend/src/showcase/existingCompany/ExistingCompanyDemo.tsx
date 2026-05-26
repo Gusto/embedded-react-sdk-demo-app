@@ -1,5 +1,5 @@
-import { GustoProvider } from "@gusto/embedded-react-sdk";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { ExistingCompanySdkBoundary } from "./ExistingCompanySdkBoundary";
 import { AppLayout, buildSharedNav, type NavGroup } from "../newCompany/AppLayout";
 
 const BASE = "/showcase/existing-company";
@@ -62,13 +62,11 @@ export function ExistingCompanyDemo() {
         companyUuid={COMPANY_ID}
         apiBaseUrl={API_BASE_URL}
         brandName={BRAND_NAME}
+        basePath="/showcase/existing-company"
       >
         <DemoToastProvider>
           <CompanyStateProvider>
-            <GustoProvider
-              config={{ baseUrl: API_BASE_URL }}
-              theme={{ colorBodyHover: "#f5f5f5" }}
-            >
+            <ExistingCompanySdkBoundary apiBaseUrl={API_BASE_URL}>
               <Routes>
                 <Route element={<AppLayout nav={buildNav()} />}>
                   <Route
@@ -129,7 +127,7 @@ export function ExistingCompanyDemo() {
                 </Route>
                 <Route path="*" element={<Navigate to="dashboard" replace />} />
               </Routes>
-            </GustoProvider>
+            </ExistingCompanySdkBoundary>
           </CompanyStateProvider>
         </DemoToastProvider>
       </DemoSessionProvider>

@@ -25,7 +25,7 @@ interface StateRequirement {
 
 export function PayrollSettingsTaxes({ companyUuid }: Props) {
   const state = useCompanyState(companyUuid);
-  const { apiBaseUrl } = useDemoSession();
+  const { apiBaseUrl, basePath } = useDemoSession();
   const [federal, setFederal] = useState<FederalTaxDetails | null>(null);
   const [states, setStates] = useState<StateRequirement[] | null>(null);
 
@@ -108,7 +108,7 @@ export function PayrollSettingsTaxes({ companyUuid }: Props) {
             <ul className="-mx-1 flex flex-col divide-y divide-neutral-100">
               {states.map((row) => (
                 <li key={row.state ?? Math.random()}>
-                  <StateRow row={row} />
+                  <StateRow row={row} basePath={basePath} />
                 </li>
               ))}
             </ul>
@@ -119,7 +119,13 @@ export function PayrollSettingsTaxes({ companyUuid }: Props) {
   );
 }
 
-function StateRow({ row }: { row: StateRequirement }) {
+function StateRow({
+  row,
+  basePath,
+}: {
+  row: StateRequirement;
+  basePath: string;
+}) {
   const code = row.state ?? "—";
   const status = row.status ?? (row.setup_complete ? "complete" : "not_started");
   const pill =
@@ -159,7 +165,7 @@ function StateRow({ row }: { row: StateRequirement }) {
 
   return needsAction ? (
     <Link
-      to={`/showcase/new-company/payroll/settings/taxes/${code}`}
+      to={`${basePath}/payroll/settings/taxes/${code}`}
       className="block"
     >
       {content}

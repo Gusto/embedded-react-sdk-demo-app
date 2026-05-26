@@ -2,17 +2,17 @@ import type { MouseEvent } from "react";
 import type { ButtonProps } from "@gusto/embedded-react-sdk";
 
 const base =
-  "inline-flex items-center justify-center gap-2 px-4 py-2 font-sans text-sm font-medium cursor-pointer transition border whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex h-10 items-center justify-center gap-2 px-5 font-sans text-sm font-semibold cursor-pointer transition border whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
 const variantClasses = {
   primary:
-    "rounded-full border-transparent bg-blue-500 text-white hover:bg-blue-600",
+    "rounded-full border-transparent bg-linear-to-br from-indigo-500 to-fuchsia-500 text-white shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/40",
   secondary:
-    "rounded-full border-neutral-200 bg-white text-neutral-900 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800",
+    "rounded-full border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800",
   tertiary:
-    "rounded-md border-transparent bg-transparent text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800",
+    "rounded-full border-transparent bg-transparent text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-neutral-800",
   error:
-    "rounded-full border-transparent bg-red-500 text-white hover:bg-red-600",
+    "rounded-full border-transparent bg-red-500 text-white shadow-md shadow-red-500/20 hover:bg-red-600",
 } as const;
 
 export function Button({

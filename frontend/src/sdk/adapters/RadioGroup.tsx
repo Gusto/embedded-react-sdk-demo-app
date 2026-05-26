@@ -54,9 +54,9 @@ export function RadioGroup({
                   checked={isChecked}
                   disabled={optionDisabled}
                   onChange={() => onChange?.(opt.value)}
-                  className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-neutral-300 bg-white transition-colors checked:border-blue-500 disabled:cursor-not-allowed dark:border-neutral-600 dark:bg-neutral-900"
+                  className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-neutral-300 bg-white transition-colors checked:border-indigo-500 disabled:cursor-not-allowed dark:border-neutral-600 dark:bg-neutral-900"
                 />
-                <span className="pointer-events-none absolute inset-0 m-auto h-2 w-2 rounded-full bg-blue-500 opacity-0 peer-checked:opacity-100" />
+                <span className="pointer-events-none absolute inset-0 m-auto h-2 w-2 rounded-full bg-indigo-500 opacity-0 peer-checked:opacity-100" />
               </span>
               <span className="flex flex-col gap-0.5">
                 <span className="font-medium text-neutral-900 dark:text-neutral-100">
