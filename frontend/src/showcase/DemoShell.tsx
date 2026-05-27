@@ -2,6 +2,7 @@ import { X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdapters } from "../sdk/adapterContext";
+import { useTheme } from "../sdk/themeContext";
 
 const EXIT_DURATION_MS = 240;
 
@@ -29,22 +30,14 @@ export function DemoShell({
 }: DemoShellProps) {
   const navigate = useNavigate();
   const [exiting, setExiting] = useState(false);
+  const { setForcedLight } = useTheme();
 
-  // Demos always render in light mode regardless of the app theme switcher.
-  // Strip `.dark` from <html> while the demo is mounted, restoring it
-  // (and any prior color-scheme) on unmount so the rest of the app keeps
-  // the user's preference.
+  // Demos always render in light mode. Tell ThemeProvider to lock to light
+  // while mounted so it doesn't re-add `.dark` after we remove it.
   useEffect(() => {
-    const html = document.documentElement;
-    const wasDark = html.classList.contains("dark");
-    const prevScheme = html.style.colorScheme;
-    if (wasDark) html.classList.remove("dark");
-    html.style.colorScheme = "light";
-    return () => {
-      if (wasDark) html.classList.add("dark");
-      html.style.colorScheme = prevScheme;
-    };
-  }, []);
+    setForcedLight(true);
+    return () => setForcedLight(false);
+  }, [setForcedLight]);
 
   function handleExit(e: React.MouseEvent<HTMLAnchorElement>) {
     e.preventDefault();

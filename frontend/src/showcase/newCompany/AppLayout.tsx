@@ -55,12 +55,9 @@ export function AppLayout({ nav, sidebarFooter }: AppLayoutProps) {
 
   return (
     <div className="flex min-h-full bg-neutral-50">
-      <aside className="sticky top-0 h-screen w-64 shrink-0 overflow-hidden border-r border-neutral-200 bg-white p-4">
-        <nav
-          className={`flex flex-col gap-1 ${
-            sidebarFooter ? "pb-72" : ""
-          }`}
-        >
+      <aside className="sticky top-0 flex h-[calc(100vh-4rem)] w-64 shrink-0 flex-col overflow-hidden border-r border-neutral-200 bg-white">
+        <nav className="flex-1 overflow-y-auto p-4">
+          <div className="flex flex-col gap-1">
           {nav.map((group) => {
             const groupActive = group.children
               ? group.children.some((c) => isWithin(c.to))
@@ -113,9 +110,10 @@ export function AppLayout({ nav, sidebarFooter }: AppLayoutProps) {
               </div>
             );
           })}
+          </div>
         </nav>
         {sidebarFooter ? (
-          <div className="absolute right-4 bottom-4 left-4">
+          <div className="shrink-0 border-t border-neutral-100 p-4">
             {sidebarFooter}
           </div>
         ) : null}

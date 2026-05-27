@@ -179,8 +179,7 @@ export function VerifyBankAccount({
           Confirm the deposit amounts
         </h3>
         <p className="m-0 text-sm leading-relaxed text-neutral-600">
-          We sent two small test deposits to your account. We've pre-filled
-          the amounts below — click Verify to confirm.
+          We sent two small test deposits to your account. Confirm the amounts sent to verify your bank account.
         </p>
         <div className="grid grid-cols-2 gap-3">
           <label className="flex flex-col gap-1 text-xs font-medium text-neutral-700">

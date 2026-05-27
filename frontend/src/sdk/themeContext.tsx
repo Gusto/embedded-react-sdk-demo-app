@@ -13,6 +13,9 @@ interface ThemeContextValue {
   mode: ThemeMode;
   setMode: (mode: ThemeMode) => void;
   resolvedTheme: ResolvedTheme;
+  /** Force the entire app into light mode without persisting the change.
+   *  Used by DemoShell so the demo always renders in light mode. */
+  setForcedLight: (forced: boolean) => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -36,6 +39,7 @@ function systemPrefersDark(): boolean {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>(readInitialMode);
+  const [forcedLight, setForcedLight] = useState(false);
   const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() =>
     mode === "dark" || (mode === "system" && systemPrefersDark())
       ? "dark"
@@ -46,8 +50,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const apply = () => {
       const isDark =
-        mode === "dark" || (mode === "system" && mq.matches);
+        !forcedLight &&
+        (mode === "dark" || (mode === "system" && mq.matches));
       document.documentElement.classList.toggle("dark", isDark);
+      document.documentElement.style.colorScheme = isDark ? "dark" : "light";
       setResolvedTheme(isDark ? "dark" : "light");
     };
     apply();
@@ -55,7 +61,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       mq.addEventListener("change", apply);
       return () => mq.removeEventListener("change", apply);
     }
-  }, [mode]);
+  }, [mode, forcedLight]);
 
   const setMode = (next: ThemeMode) => {
     window.localStorage.setItem(STORAGE_KEY, next);
@@ -63,7 +69,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ mode, setMode, resolvedTheme }}>
+    <ThemeContext.Provider value={{ mode, setMode, resolvedTheme, setForcedLight }}>
       {children}
     </ThemeContext.Provider>
   );

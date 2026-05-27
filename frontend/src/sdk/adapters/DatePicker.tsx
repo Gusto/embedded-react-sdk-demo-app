@@ -1,4 +1,5 @@
 import type { DatePickerProps } from "@gusto/embedded-react-sdk";
+import { useEffect, useState } from "react";
 
 function toIsoDate(d: Date | null | undefined): string {
   if (!d) return "";
@@ -27,6 +28,16 @@ export function DatePicker({
   maxDate,
   className,
 }: DatePickerProps) {
+  // Drive the input with local string state so the browser can manage its
+  // internal MM/DD/YYYY subfields freely while the user is typing. The prop
+  // `value` only syncs back in when it changes externally (e.g. a form reset).
+  const [localValue, setLocalValue] = useState(() => toIsoDate(value));
+  const propIso = toIsoDate(value);
+  useEffect(() => {
+    setLocalValue(propIso);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propIso]);
+
   const shellClasses = [
     "flex w-full items-center rounded-md border bg-white px-3 py-2 transition-colors dark:bg-neutral-900",
     isInvalid
@@ -60,7 +71,7 @@ export function DatePicker({
           id={id}
           name={name}
           type="date"
-          value={toIsoDate(value)}
+          value={localValue}
           placeholder={placeholder}
           disabled={isDisabled}
           required={isRequired}
@@ -69,7 +80,14 @@ export function DatePicker({
           aria-invalid={isInvalid || undefined}
           onChange={(e) => {
             const next = e.target.value;
-            onChange?.(next ? new Date(`${next}T00:00:00`) : null);
+            setLocalValue(next);
+            if (!next) { onChange?.(null); return; }
+            const date = new Date(`${next}T00:00:00`);
+            // Don't propagate until the year is fully typed (4 digits) —
+            // otherwise the SDK updates value, React resets the input, and
+            // the browser loses its in-progress subfield state.
+            if (date.getFullYear() < 1000) return;
+            onChange?.(date);
           }}
           onBlur={onBlur}
           className="min-w-0 flex-1 bg-transparent text-sm tabular-nums text-neutral-900 placeholder-neutral-400 focus:outline-none disabled:cursor-not-allowed dark:text-neutral-100 dark:placeholder-neutral-500 dark:scheme-dark"
