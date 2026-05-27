@@ -184,9 +184,9 @@ function ShowcaseSection() {
             Try it live
           </span>
           <h2 className="m-0 text-5xl font-semibold leading-[1.05] tracking-tight text-white md:text-6xl">
-            Step inside the{" "}
+            See the SDK{" "}
             <span className="bg-linear-to-br from-[#FFB199] via-[#FF8266] to-[#E15A43] bg-clip-text text-transparent">
-              showcase
+              in action
             </span>
             .
           </h2>
