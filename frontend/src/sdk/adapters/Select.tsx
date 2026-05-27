@@ -56,11 +56,13 @@ export function Select({
           onBlur={onBlur}
           className="min-w-0 flex-1 cursor-pointer appearance-none bg-transparent py-2 text-sm text-neutral-900 focus:outline-none disabled:cursor-not-allowed dark:text-neutral-100"
         >
-          {placeholder ? (
-            <option value="" disabled hidden>
-              {placeholder}
-            </option>
-          ) : null}
+          {/* Always render a blank placeholder so value="" has a matching
+              option. Without this, the browser shows the first real option
+              visually while React's controlled value stays "", meaning the
+              user's selection is never registered if they don't change it. */}
+          <option value="" disabled hidden>
+            {placeholder ?? ""}
+          </option>
           {options.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}

@@ -5,6 +5,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import { useEffect } from "react";
 import { AdapterProvider } from "../../sdk/adapterContext";
 import { DemoSdkBoundary } from "../DemoSdkBoundary";
 import { DemoSessionProvider } from "../DemoSession";
@@ -25,7 +26,7 @@ import { PayrollSettings } from "./PayrollSettings";
 import { PayrollSettingsSignatory } from "./PayrollSettingsSignatory";
 import { PayrollSettingsTaxes } from "./PayrollSettingsTaxes";
 import { PayrollSettingsTaxesState } from "./PayrollSettingsTaxesState";
-import { CompanyStateProvider } from "./useCompanyState";
+import { CompanyStateProvider, useCompanyState } from "./useCompanyState";
 import { useDemoCompany } from "./useDemoCompany";
 import { BRAND_NAME, BRAND_TAGLINE } from "./types";
 
@@ -80,6 +81,15 @@ export function NewCompanyDemo() {
 
 function AppShell() {
   const { companyUuid, status } = useDemoCompany();
+  const { refresh } = useCompanyState();
+
+  // AppShell is only mounted on dashboard routes (not during onboarding).
+  // Refreshing on mount ensures the checklist reflects steps completed
+  // during the onboarding flow when the user first arrives at the dashboard.
+  useEffect(() => {
+    refresh();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (status === "loading") return <Loading />;
   if (!companyUuid)
     return <Navigate to="/showcase/new-company/start" replace />;
