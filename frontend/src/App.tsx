@@ -1,26 +1,48 @@
-import { Employee, Company, GustoProvider } from "@gusto/embedded-react-sdk";
+import { useState } from "react";
+import { GustoProvider } from "@gusto/embedded-react-sdk";
 import "@gusto/embedded-react-sdk/style.css";
 import "./App.css";
+import { BASE_URL } from "./config";
+import EmployeeOnboarding from "./domains/EmployeeOnboarding";
+import Sidebar from "./Sidebar";
+import { exampleKey } from "./exampleKey";
+import type { Domain, Example } from "./domains/types";
+
+const domains: Domain[] = [EmployeeOnboarding];
+
+// Build a flat lookup of every example keyed by its sidebar key.
+const examplesByKey = new Map<string, Example>();
+for (const domain of domains) {
+  for (const entry of domain.examples) {
+    if ("children" in entry) {
+      for (const child of entry.children) {
+        examplesByKey.set(
+          exampleKey(domain.name, entry.name, child.name),
+          child
+        );
+      }
+    } else {
+      examplesByKey.set(exampleKey(domain.name, entry.name), entry);
+    }
+  }
+}
+
+const defaultKey = examplesByKey.keys().next().value!;
 
 function App() {
+  const [activeKey, setActiveKey] = useState<string>(defaultKey);
+  const ActiveExample = examplesByKey.get(activeKey)?.component;
+
   return (
-    <GustoProvider config={{ baseUrl: "http://localhost:3001" }}>
-      {/* Place any SDK components inside of the GustoProvider here */}
-      <Company.OnboardingFlow
-        companyId="cce1d173-6d18-458f-91e7-b0d77d52a1b4" // Replace with your company ID
-        onEvent={(eventType, eventPayload) => {
-          console.log("eventType", eventType);
-          console.log("eventPayload", eventPayload);
-        }}
-      />
-      {/* Usage for employee onboarding flow, uncomment and replace companyId with your company ID to use */}
-      {/* <Employee.OnboardingFlow
-        companyId="your-company-id-here" // Replace with your company ID
-        onEvent={(eventType, eventPayload) => {
-          console.log("eventType", eventType);
-          console.log("eventPayload", eventPayload);
-        }}
-      /> */}
+    <GustoProvider config={{ baseUrl: BASE_URL }}>
+      <div className="app">
+        <Sidebar
+          domains={domains}
+          activeKey={activeKey}
+          onSelect={setActiveKey}
+        />
+        <main className="canvas">{ActiveExample && <ActiveExample />}</main>
+      </div>
     </GustoProvider>
   );
 }

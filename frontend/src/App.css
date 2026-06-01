@@ -1,54 +1,82 @@
+/* App shell — sidebar on the left, full-bleed SDK canvas on the right.
+   Kept intentionally minimal so SDK output dominates the visual surface. */
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  margin: 0;
+  padding: 0;
 }
 
 .app {
-  padding: 20px;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
 }
 
-h1 {
-  color: #333;
+.sidebar {
+  border-right: 1px solid #e5e5e5;
+  padding: 1.5rem 1rem;
+  background: #fafafa;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-p {
+.sidebar-domain + .sidebar-domain {
+  margin-top: 1.5rem;
+}
+
+.sidebar-domain-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: #666;
-  font-size: 1.2em;
+  margin: 0 0 0.5rem 0;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-list-nested {
+  margin-left: 0.75rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.sidebar-group-name {
+  display: block;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.85rem;
+  color: #444;
+  font-weight: 500;
+}
+
+.sidebar-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.4rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.sidebar-link:hover {
+  background: #efefef;
+}
+
+.sidebar-link-active {
+  background: #e0e7ff;
+  color: #1e40af;
+  font-weight: 500;
+}
+
+.canvas {
+  padding: 2rem;
+  overflow: auto;
 }
