@@ -21,14 +21,6 @@ export function Sidebar() {
             </NavLink>
           </li>
         </ul>
-        <div className={styles.groupHeading}>Policies</div>
-        <ul className={styles.list}>
-          <li>
-            <NavLink to="/time-off" className={linkClass}>
-              Time off
-            </NavLink>
-          </li>
-        </ul>
         <div className={styles.groupHeading}>People</div>
         <ul className={styles.list}>
           <li>
@@ -72,6 +64,11 @@ export function Sidebar() {
           <li>
             <NavLink to="/documents" className={linkClass}>
               Documents
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/time-off" className={linkClass}>
+              Time off policies
             </NavLink>
           </li>
         </ul>
