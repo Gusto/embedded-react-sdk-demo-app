@@ -14,7 +14,7 @@ export const OnboardedCompanyRoutes = (
   <Route element={<AppShell />}>
     <Route path="/run-payroll" element={<RunPayroll />} />
     <Route path="/time-off" element={<TimeOff />} />
-    <Route path="/employees" element={<Employees />} />
+    <Route path="/employees/*" element={<Employees />} />
     <Route path="/bank-account" element={<BankAccount />} />
     <Route path="/locations" element={<Locations />} />
     <Route path="/federal-taxes" element={<FederalTaxes />} />
