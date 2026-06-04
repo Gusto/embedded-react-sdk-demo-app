@@ -7,7 +7,6 @@ import { Contractors } from "./pages/Contractors";
 import { Documents } from "./pages/Documents";
 import { Employees } from "./pages/Employees";
 import { FederalTaxes } from "./pages/FederalTaxes";
-import { Industry } from "./pages/Industry";
 import { Locations } from "./pages/Locations";
 import { PayContractors } from "./pages/PayContractors";
 import { PaySchedule } from "./pages/PaySchedule";
@@ -32,7 +31,6 @@ function App() {
             <Route path="/locations" element={<Locations />} />
             <Route path="/federal-taxes" element={<FederalTaxes />} />
             <Route path="/state-taxes" element={<StateTaxes />} />
-            <Route path="/industry" element={<Industry />} />
             <Route path="/pay-schedule" element={<PaySchedule />} />
             <Route path="/documents" element={<Documents />} />
           </Route>

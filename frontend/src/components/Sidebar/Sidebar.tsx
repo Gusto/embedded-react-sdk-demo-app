@@ -65,11 +65,6 @@ export function Sidebar() {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/industry" className={linkClass}>
-              Industry
-            </NavLink>
-          </li>
-          <li>
             <NavLink to="/pay-schedule" className={linkClass}>
               Pay Schedule
             </NavLink>
