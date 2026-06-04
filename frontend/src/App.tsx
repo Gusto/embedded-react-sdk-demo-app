@@ -1,26 +1,25 @@
-import { Employee, Company, GustoProvider } from "@gusto/embedded-react-sdk";
+import { GustoProvider } from "@gusto/embedded-react-sdk";
 import "@gusto/embedded-react-sdk/style.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { CompanyOnboardingRoutes } from "./demos/company-onboarding/routes";
+import { EmployeeSelfOnboardingRoutes } from "./demos/employee-self-onboarding/routes";
+import { OnboardedCompanyRoutes } from "./demos/onboarded-company/routes";
+import { Landing } from "./Landing";
+import { HomeButton } from "./shared/HomeButton/HomeButton";
 import "./App.css";
 
 function App() {
   return (
     <GustoProvider config={{ baseUrl: "http://localhost:3001" }}>
-      {/* Place any SDK components inside of the GustoProvider here */}
-      <Company.OnboardingFlow
-        companyId="cce1d173-6d18-458f-91e7-b0d77d52a1b4" // Replace with your company ID
-        onEvent={(eventType, eventPayload) => {
-          console.log("eventType", eventType);
-          console.log("eventPayload", eventPayload);
-        }}
-      />
-      {/* Usage for employee onboarding flow, uncomment and replace companyId with your company ID to use */}
-      {/* <Employee.OnboardingFlow
-        companyId="your-company-id-here" // Replace with your company ID
-        onEvent={(eventType, eventPayload) => {
-          console.log("eventType", eventType);
-          console.log("eventPayload", eventPayload);
-        }}
-      /> */}
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Landing />} />
+          {CompanyOnboardingRoutes}
+          {OnboardedCompanyRoutes}
+          {EmployeeSelfOnboardingRoutes}
+        </Routes>
+        <HomeButton />
+      </BrowserRouter>
     </GustoProvider>
   );
 }

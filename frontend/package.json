@@ -10,9 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@gusto/embedded-react-sdk": "^0.34.0",
+    "@gusto/embedded-react-sdk": "^0.46.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.17.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

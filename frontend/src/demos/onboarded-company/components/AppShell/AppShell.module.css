@@ -1,0 +1,15 @@
+.shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 56px 1fr;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  min-height: 100vh;
+}
+
+.main {
+  grid-area: main;
+  padding: 24px;
+  overflow: auto;
+}
