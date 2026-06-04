@@ -1,4 +1,4 @@
-import { ComponentPlaceholder } from "../components/ComponentPlaceholder/ComponentPlaceholder";
+import { ComponentPlaceholder } from "../../../shared/ComponentPlaceholder/ComponentPlaceholder";
 
 export function RunPayroll() {
   return <ComponentPlaceholder label="<Payroll.PayrollFlow />" />;

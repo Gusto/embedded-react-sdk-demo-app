@@ -1,16 +1,11 @@
 import { GustoProvider } from "@gusto/embedded-react-sdk";
 import "@gusto/embedded-react-sdk/style.css";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { AppShell } from "./components/AppShell/AppShell";
-import { BankAccount } from "./pages/BankAccount";
-import { Documents } from "./pages/Documents";
-import { Employees } from "./pages/Employees";
-import { FederalTaxes } from "./pages/FederalTaxes";
-import { Locations } from "./pages/Locations";
-import { PaySchedule } from "./pages/PaySchedule";
-import { RunPayroll } from "./pages/RunPayroll";
-import { StateTaxes } from "./pages/StateTaxes";
-import { TimeOff } from "./pages/TimeOff";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { CompanyOnboardingRoutes } from "./demos/company-onboarding/routes";
+import { EmployeeSelfOnboardingRoutes } from "./demos/employee-self-onboarding/routes";
+import { OnboardedCompanyRoutes } from "./demos/onboarded-company/routes";
+import { Landing } from "./Landing";
+import { HomeButton } from "./shared/HomeButton/HomeButton";
 import "./App.css";
 
 function App() {
@@ -18,19 +13,12 @@ function App() {
     <GustoProvider config={{ baseUrl: "http://localhost:3001" }}>
       <BrowserRouter>
         <Routes>
-          <Route element={<AppShell />}>
-            <Route index element={<Navigate to="/run-payroll" replace />} />
-            <Route path="/run-payroll" element={<RunPayroll />} />
-            <Route path="/time-off" element={<TimeOff />} />
-            <Route path="/employees" element={<Employees />} />
-            <Route path="/bank-account" element={<BankAccount />} />
-            <Route path="/locations" element={<Locations />} />
-            <Route path="/federal-taxes" element={<FederalTaxes />} />
-            <Route path="/state-taxes" element={<StateTaxes />} />
-            <Route path="/pay-schedule" element={<PaySchedule />} />
-            <Route path="/documents" element={<Documents />} />
-          </Route>
+          <Route index element={<Landing />} />
+          {CompanyOnboardingRoutes}
+          {OnboardedCompanyRoutes}
+          {EmployeeSelfOnboardingRoutes}
         </Routes>
+        <HomeButton />
       </BrowserRouter>
     </GustoProvider>
   );
