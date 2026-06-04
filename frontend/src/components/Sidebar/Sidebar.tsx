@@ -15,22 +15,12 @@ export function Sidebar() {
               Run Payroll
             </NavLink>
           </li>
-          <li>
-            <NavLink to="/pay-contractors" className={linkClass}>
-              Pay Contractors
-            </NavLink>
-          </li>
         </ul>
         <div className={styles.groupHeading}>People</div>
         <ul className={styles.list}>
           <li>
             <NavLink to="/employees" className={linkClass}>
               Employees
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/contractors" className={linkClass}>
-              Contractors
             </NavLink>
           </li>
         </ul>
