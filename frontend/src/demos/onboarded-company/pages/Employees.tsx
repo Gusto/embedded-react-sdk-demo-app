@@ -7,7 +7,11 @@ import {
   useOutletContext,
   useParams,
 } from "react-router-dom";
-import { EmployeeOnboarding, componentEvents } from "@gusto/embedded-react-sdk";
+import {
+  EmployeeManagement,
+  EmployeeOnboarding,
+  componentEvents,
+} from "@gusto/embedded-react-sdk";
 import { COMPANY_ID } from "../../../config";
 
 // Statuses that indicate the employee is self-onboarding. When true, the admin
@@ -18,6 +22,15 @@ const SELF_ONBOARDING_STATUSES = new Set([
   "self_onboarding_invited_started",
   "self_onboarding_invited_overdue",
   "self_onboarding_pending_invite",
+]);
+
+// Statuses where the EmployeeDocuments (I-9 config) step is no longer needed —
+// the employee has already completed onboarding or is awaiting admin review,
+// so we route from deductions straight to summary. Matches the SDK guard.
+const DOCUMENTS_CONFIG_COMPLETED_STATUSES = new Set([
+  "self_onboarding_completed_by_employee",
+  "self_onboarding_awaiting_admin_review",
+  "onboarding_completed",
 ]);
 
 // Cross-step ephemeral state that doesn't belong in the URL. The Layout route
@@ -165,12 +178,38 @@ function PaymentMethod() {
 
 function Deductions() {
   const { employeeId } = useParams<{ employeeId: string }>();
+  const [{ onboardingStatus }] = useOnboardingContext();
   const navigate = useNavigate();
+  const skipDocumentsConfig = DOCUMENTS_CONFIG_COMPLETED_STATUSES.has(
+    onboardingStatus ?? "",
+  );
   return (
     <EmployeeOnboarding.Deductions
       employeeId={employeeId!}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_DEDUCTION_DONE) {
+          navigate(
+            skipDocumentsConfig
+              ? `/employees/${employeeId}/summary`
+              : `/employees/${employeeId}/employee-documents`,
+          );
+        }
+      }}
+    />
+  );
+}
+
+function EmployeeDocuments() {
+  const { employeeId } = useParams<{ employeeId: string }>();
+  const navigate = useNavigate();
+  // Lives under EmployeeManagement in current SDK; will migrate to
+  // EmployeeOnboarding.EmployeeDocuments in a future release per its
+  // @deprecated note.
+  return (
+    <EmployeeManagement.EmployeeDocuments
+      employeeId={employeeId!}
+      onEvent={(type) => {
+        if (type === componentEvents.EMPLOYEE_DOCUMENTS_DONE) {
           navigate(`/employees/${employeeId}/summary`);
         }
       }}
@@ -210,6 +249,10 @@ export function Employees() {
         <Route path=":employeeId/state-taxes" element={<StateTaxes />} />
         <Route path=":employeeId/payment-method" element={<PaymentMethod />} />
         <Route path=":employeeId/deductions" element={<Deductions />} />
+        <Route
+          path=":employeeId/employee-documents"
+          element={<EmployeeDocuments />}
+        />
         <Route path=":employeeId/summary" element={<Summary />} />
       </Route>
     </Routes>
