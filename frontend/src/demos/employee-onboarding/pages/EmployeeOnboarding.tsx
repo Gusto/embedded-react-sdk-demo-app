@@ -1,9 +1,4 @@
-import {
-  type Dispatch,
-  type SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import {
   Outlet,
   useMatch,
@@ -17,6 +12,7 @@ import {
   componentEvents,
 } from "@gusto/embedded-react-sdk";
 import { CenteredPage } from "../../../shared/CenteredPage/CenteredPage";
+import { usePersistedState } from "../../../shared/usePersistedState";
 import { COMPANY_ID } from "../../../config";
 
 // Statuses indicating the employee is self-onboarding. When the current
@@ -52,31 +48,14 @@ type OnboardingContextValue = [
   Dispatch<SetStateAction<OnboardingContext>>,
 ];
 
-// localStorage is a single flat key/value store shared across the origin, so
-// we namespace ourselves with this prefix to avoid colliding with other code
-// on the page.
+// Demo state is persisted to localStorage via `usePersistedState`; partners
+// would back this with their own database. The prefix namespaces our keys
+// from anything else on the origin.
 const ONBOARDING_STORAGE_PREFIX = "gusto-demo-employee-onboarding:";
-
-function readPersistedContext(key: string | null): OnboardingContext {
-  if (!key) return {};
-  const raw = localStorage.getItem(key);
-  if (!raw) return {};
-  try {
-    return JSON.parse(raw) as OnboardingContext;
-  } catch {
-    return {};
-  }
-}
 
 // `OnboardingFlow` is the layout route at /employee-onboarding. It owns the
 // cross-step state for an in-progress employee onboarding (`startDate`,
 // `onboardingStatus`) and exposes it to step routes via Outlet context.
-// Persists per-employee to localStorage so a mid-flow refresh restores the
-// values Compensation and Deductions depend on.
-//
-// localStorage is a demo crutch — in a real integration, persist this in
-// your own database keyed by employee, alongside whatever else you track
-// for in-progress onboarding.
 //
 // `useMatch` is used (rather than `useParams`) because as the layout route
 // element, this component sees only its own segment's params; `:employeeId`
@@ -87,13 +66,7 @@ export function OnboardingFlow() {
     ? `${ONBOARDING_STORAGE_PREFIX}${match.params.employeeId}`
     : null;
 
-  const [ctx, setCtx] = useState<OnboardingContext>(() =>
-    readPersistedContext(storageKey),
-  );
-
-  useEffect(() => {
-    if (storageKey) localStorage.setItem(storageKey, JSON.stringify(ctx));
-  }, [storageKey, ctx]);
+  const [ctx, setCtx] = usePersistedState<OnboardingContext>(storageKey, {});
 
   const value: OnboardingContextValue = [ctx, setCtx];
   return (
