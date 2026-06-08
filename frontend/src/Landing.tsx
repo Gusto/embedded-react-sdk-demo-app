@@ -19,6 +19,11 @@ const cards: Card[] = [
     description: "Manage an already onboarded company — run payroll, pay people, manage settings.",
   },
   {
+    to: "/employee-onboarding",
+    title: "Employee onboarding",
+    description: "Walk through onboarding a new employee as an admin.",
+  },
+  {
     to: "/employee-self-onboarding",
     title: "Employee self onboarding",
     description: "Let an employee complete their own onboarding tasks.",
