@@ -6,8 +6,6 @@ import {
 } from "react";
 import {
   Outlet,
-  Route,
-  Routes,
   useMatch,
   useNavigate,
   useOutletContext,
@@ -15,10 +13,7 @@ import {
 } from "react-router-dom";
 import {
   EmployeeManagement,
-  // Aliased so this file can export a page component named
-  // `EmployeeOnboarding` matching the demo's name without colliding with
-  // the SDK namespace.
-  EmployeeOnboarding as Onboarding,
+  EmployeeOnboarding,
   componentEvents,
 } from "@gusto/embedded-react-sdk";
 import { CenteredPage } from "../../../shared/CenteredPage/CenteredPage";
@@ -73,16 +68,20 @@ function readPersistedContext(key: string | null): OnboardingContext {
   }
 }
 
-// `OnboardingFlow` is the parent route that owns cross-step state for an
-// in-progress employee onboarding (`startDate`, `onboardingStatus`) and
-// exposes it to step routes via Outlet context. Persists per-employee to
-// localStorage so a mid-flow refresh restores the values Compensation and
-// Deductions depend on.
+// `OnboardingFlow` is the layout route at /employee-onboarding. It owns the
+// cross-step state for an in-progress employee onboarding (`startDate`,
+// `onboardingStatus`) and exposes it to step routes via Outlet context.
+// Persists per-employee to localStorage so a mid-flow refresh restores the
+// values Compensation and Deductions depend on.
 //
 // localStorage is a demo crutch — in a real integration, persist this in
 // your own database keyed by employee, alongside whatever else you track
 // for in-progress onboarding.
-function OnboardingFlow() {
+//
+// `useMatch` is used (rather than `useParams`) because as the layout route
+// element, this component sees only its own segment's params; `:employeeId`
+// is defined on descendant routes and isn't visible via `useParams` here.
+export function OnboardingFlow() {
   const match = useMatch("/employee-onboarding/:employeeId/*");
   const storageKey = match?.params.employeeId
     ? `${ONBOARDING_STORAGE_PREFIX}${match.params.employeeId}`
@@ -108,11 +107,11 @@ function useOnboardingContext() {
   return useOutletContext<OnboardingContextValue>();
 }
 
-function EmployeeList() {
+export function EmployeeList() {
   const [, setCtx] = useOnboardingContext();
   const navigate = useNavigate();
   return (
-    <Onboarding.EmployeeList
+    <EmployeeOnboarding.EmployeeList
       companyId={COMPANY_ID}
       onEvent={(type, payload) => {
         if (type === componentEvents.EMPLOYEE_CREATE) {
@@ -132,12 +131,12 @@ function EmployeeList() {
   );
 }
 
-function Profile() {
+export function Profile() {
   const { employeeId } = useParams<{ employeeId?: string }>();
   const [, setCtx] = useOnboardingContext();
   const navigate = useNavigate();
   return (
-    <Onboarding.Profile
+    <EmployeeOnboarding.Profile
       companyId={COMPANY_ID}
       employeeId={employeeId}
       isAdmin
@@ -161,13 +160,13 @@ function Profile() {
   );
 }
 
-function Compensation() {
+export function Compensation() {
   const { employeeId } = useParams<{ employeeId: string }>();
   const [{ startDate, onboardingStatus }] = useOnboardingContext();
   const navigate = useNavigate();
   const isSelfOnboarding = SELF_ONBOARDING_STATUSES.has(onboardingStatus ?? "");
   return (
-    <Onboarding.Compensation
+    <EmployeeOnboarding.Compensation
       employeeId={employeeId!}
       startDate={startDate!}
       onEvent={(type) => {
@@ -183,11 +182,11 @@ function Compensation() {
   );
 }
 
-function FederalTaxes() {
+export function FederalTaxes() {
   const { employeeId } = useParams<{ employeeId: string }>();
   const navigate = useNavigate();
   return (
-    <Onboarding.FederalTaxes
+    <EmployeeOnboarding.FederalTaxes
       employeeId={employeeId!}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_FEDERAL_TAXES_DONE) {
@@ -198,11 +197,11 @@ function FederalTaxes() {
   );
 }
 
-function StateTaxes() {
+export function StateTaxes() {
   const { employeeId } = useParams<{ employeeId: string }>();
   const navigate = useNavigate();
   return (
-    <Onboarding.StateTaxes
+    <EmployeeOnboarding.StateTaxes
       employeeId={employeeId!}
       isAdmin
       onEvent={(type) => {
@@ -214,11 +213,11 @@ function StateTaxes() {
   );
 }
 
-function PaymentMethod() {
+export function PaymentMethod() {
   const { employeeId } = useParams<{ employeeId: string }>();
   const navigate = useNavigate();
   return (
-    <Onboarding.PaymentMethod
+    <EmployeeOnboarding.PaymentMethod
       employeeId={employeeId!}
       isAdmin
       onEvent={(type) => {
@@ -230,7 +229,7 @@ function PaymentMethod() {
   );
 }
 
-function Deductions() {
+export function Deductions() {
   const { employeeId } = useParams<{ employeeId: string }>();
   const [{ onboardingStatus }] = useOnboardingContext();
   const navigate = useNavigate();
@@ -238,7 +237,7 @@ function Deductions() {
     onboardingStatus ?? "",
   );
   return (
-    <Onboarding.Deductions
+    <EmployeeOnboarding.Deductions
       employeeId={employeeId!}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_DEDUCTION_DONE) {
@@ -256,7 +255,7 @@ function Deductions() {
 // Lives under EmployeeManagement in the current SDK; will move to
 // EmployeeOnboarding.EmployeeDocuments in a future release per its
 // @deprecated note on the EmployeeManagement export.
-function EmployeeDocuments() {
+export function EmployeeDocuments() {
   const { employeeId } = useParams<{ employeeId: string }>();
   const navigate = useNavigate();
   return (
@@ -271,12 +270,12 @@ function EmployeeDocuments() {
   );
 }
 
-function Summary() {
+export function Summary() {
   const { employeeId } = useParams<{ employeeId: string }>();
   const [, setCtx] = useOnboardingContext();
   const navigate = useNavigate();
   return (
-    <Onboarding.OnboardingSummary
+    <EmployeeOnboarding.OnboardingSummary
       employeeId={employeeId!}
       isAdmin
       onEvent={(type) => {
@@ -286,29 +285,5 @@ function Summary() {
         }
       }}
     />
-  );
-}
-
-// State machine table: each route maps a URL to a step block. OnboardingFlow
-// is the parent route so all steps share Outlet context for cross-step state.
-export function EmployeeOnboarding() {
-  return (
-    <Routes>
-      <Route element={<OnboardingFlow />}>
-        <Route index element={<EmployeeList />} />
-        <Route path="new/profile" element={<Profile />} />
-        <Route path=":employeeId/profile" element={<Profile />} />
-        <Route path=":employeeId/compensation" element={<Compensation />} />
-        <Route path=":employeeId/federal-taxes" element={<FederalTaxes />} />
-        <Route path=":employeeId/state-taxes" element={<StateTaxes />} />
-        <Route path=":employeeId/payment-method" element={<PaymentMethod />} />
-        <Route path=":employeeId/deductions" element={<Deductions />} />
-        <Route
-          path=":employeeId/employee-documents"
-          element={<EmployeeDocuments />}
-        />
-        <Route path=":employeeId/summary" element={<Summary />} />
-      </Route>
-    </Routes>
   );
 }
