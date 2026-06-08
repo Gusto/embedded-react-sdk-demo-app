@@ -5,19 +5,9 @@ import {
   useState,
 } from "react";
 
-// `usePersistedState` mirrors `useState`'s API but reads its initial value
-// from localStorage at the given key on mount and writes back to that key
-// whenever the value changes. Pass a `null` key to opt out of persistence
-// (e.g., when the resource id isn't known yet); state is held in memory
-// only until a real key arrives.
-//
-// localStorage is a single flat key/value store shared across the origin —
-// callers must pick a namespaced key to avoid colliding with other code on
-// the page.
-//
-// Persisting demo state in localStorage is a crutch — in a real integration
-// you'd persist this in your own database, keyed by whatever resource the
-// state belongs to.
+// `useState` with localStorage read-through and write-back at the given
+// key. A `null` key opts out (state stays in memory only). Pick a
+// namespaced key — localStorage is shared across the origin.
 export function usePersistedState<T>(
   key: string | null,
   initial: T,

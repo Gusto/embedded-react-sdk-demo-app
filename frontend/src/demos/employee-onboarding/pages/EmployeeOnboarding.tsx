@@ -1,7 +1,7 @@
 import { type Dispatch, type SetStateAction } from "react";
 import {
   Outlet,
-  useMatch,
+  useLocation,
   useNavigate,
   useOutletContext,
   useParams,
@@ -15,9 +15,8 @@ import { CenteredPage } from "../../../shared/CenteredPage/CenteredPage";
 import { usePersistedState } from "../../../shared/usePersistedState";
 import { COMPANY_ID } from "../../../config";
 
-// When onboardingStatus is in this set, the admin flow skips federal taxes,
-// state taxes, and payment method after compensation — those steps are
-// filled in by the employee themselves.
+// When onboardingStatus matches one of these, the admin flow skips
+// federal/state taxes and payment method after compensation.
 const SELF_ONBOARDING_STATUSES = new Set([
   "self_onboarding_invited",
   "self_onboarding_invited_started",
@@ -25,8 +24,8 @@ const SELF_ONBOARDING_STATUSES = new Set([
   "self_onboarding_pending_invite",
 ]);
 
-// When onboardingStatus is in this set, deductions routes straight to summary,
-// skipping the EmployeeDocuments (I-9) step — onboarding is already complete
+// When onboardingStatus matches one of these, deductions routes straight
+// to summary, skipping EmployeeDocuments — onboarding is already complete
 // or awaiting admin review. Mirrors the SDK's employeeDocumentsGuard.
 const DOCUMENTS_CONFIG_COMPLETED_STATUSES = new Set([
   "self_onboarding_completed_by_employee",
@@ -34,8 +33,8 @@ const DOCUMENTS_CONFIG_COMPLETED_STATUSES = new Set([
   "onboarding_completed",
 ]);
 
-// Cross-step state: `startDate` (required by Compensation) and
-// `onboardingStatus` (drives the self-onboarding and I-9 skip branches).
+// startDate is required by Compensation; onboardingStatus drives the
+// self-onboarding and I-9 skip branches.
 type OnboardingContext = {
   startDate?: string;
   onboardingStatus?: string;
@@ -48,26 +47,30 @@ type OnboardingContextValue = [
 
 const ONBOARDING_STORAGE_PREFIX = "gusto-demo-employee-onboarding:";
 
-// `OnboardingFlow` is the layout route at /employee-onboarding. It owns the
-// cross-step state for an in-progress employee onboarding.
-//
-// `useMatch` is used (not `useParams`) because as the layout route element,
-// this component only sees its own segment's params; `:employeeId` lives on
-// descendant routes.
-export function OnboardingFlow() {
-  const match = useMatch("/employee-onboarding/:employeeId/*");
-  const storageKey = match?.params.employeeId
-    ? `${ONBOARDING_STORAGE_PREFIX}${match.params.employeeId}`
-    : null;
-
-  const [ctx, setCtx] = usePersistedState<OnboardingContext>(storageKey, {});
-
-  const value: OnboardingContextValue = [ctx, setCtx];
+// Outer layout for /employee-onboarding. Hosts the list and the create-mode
+// profile, which run before there's an employeeId to key state by.
+export function OnboardingShell() {
   return (
     <CenteredPage>
-      <Outlet context={value} />
+      <Outlet />
     </CenteredPage>
   );
+}
+
+// Inner layout under :employeeId. Owns the per-employee onboarding context.
+// Profile-create hands off the initial value via `location.state` because
+// this layout isn't mounted yet during creation.
+export function OnboardingFlow() {
+  const { employeeId } = useParams<"employeeId">();
+  const location = useLocation();
+  const initial = (location.state as OnboardingContext | null) ?? {};
+  const [ctx, setCtx] = usePersistedState<OnboardingContext>(
+    `${ONBOARDING_STORAGE_PREFIX}${employeeId}`,
+    initial,
+  );
+
+  const value: OnboardingContextValue = [ctx, setCtx];
+  return <Outlet context={value} />;
 }
 
 function useOnboardingContext() {
@@ -75,22 +78,16 @@ function useOnboardingContext() {
 }
 
 export function EmployeeList() {
-  const [, setCtx] = useOnboardingContext();
   const navigate = useNavigate();
   return (
     <EmployeeOnboarding.EmployeeList
       companyId={COMPANY_ID}
       onEvent={(type, payload) => {
         if (type === componentEvents.EMPLOYEE_CREATE) {
-          setCtx({});
           navigate("/employee-onboarding/new/profile");
         }
         if (type === componentEvents.EMPLOYEE_UPDATE) {
-          const data = payload as {
-            employeeId: string;
-            onboardingStatus: string;
-          };
-          setCtx({ onboardingStatus: data.onboardingStatus });
+          const data = payload as { employeeId: string };
           navigate(`/employee-onboarding/${data.employeeId}/profile`);
         }
       }}
@@ -98,9 +95,13 @@ export function EmployeeList() {
   );
 }
 
+// Mounted at /new/profile (create, outside OnboardingFlow) and
+// /:employeeId/profile (edit, inside). In create mode the initial onboarding
+// fields are handed to OnboardingFlow via location.state on the next
+// navigate; in edit mode updates flow through setCtx.
 export function Profile() {
   const { employeeId } = useParams<{ employeeId?: string }>();
-  const [, setCtx] = useOnboardingContext();
+  const ctx = useOutletContext<OnboardingContextValue | undefined>();
   const navigate = useNavigate();
   return (
     <EmployeeOnboarding.Profile
@@ -115,11 +116,14 @@ export function Profile() {
             startDate: string;
             onboardingStatus: string;
           };
-          setCtx({
+          const next: OnboardingContext = {
             startDate: data.startDate,
             onboardingStatus: data.onboardingStatus,
+          };
+          ctx?.[1](next);
+          navigate(`/employee-onboarding/${data.uuid}/compensation`, {
+            state: next,
           });
-          navigate(`/employee-onboarding/${data.uuid}/compensation`);
         }
         if (type === componentEvents.CANCEL) navigate("/employee-onboarding");
       }}
@@ -128,7 +132,7 @@ export function Profile() {
 }
 
 export function Compensation() {
-  const { employeeId } = useParams<{ employeeId: string }>();
+  const { employeeId } = useParams<"employeeId">();
   const [{ startDate, onboardingStatus }] = useOnboardingContext();
   const navigate = useNavigate();
   const isSelfOnboarding = SELF_ONBOARDING_STATUSES.has(onboardingStatus ?? "");
@@ -150,7 +154,7 @@ export function Compensation() {
 }
 
 export function FederalTaxes() {
-  const { employeeId } = useParams<{ employeeId: string }>();
+  const { employeeId } = useParams<"employeeId">();
   const navigate = useNavigate();
   return (
     <EmployeeOnboarding.FederalTaxes
@@ -165,7 +169,7 @@ export function FederalTaxes() {
 }
 
 export function StateTaxes() {
-  const { employeeId } = useParams<{ employeeId: string }>();
+  const { employeeId } = useParams<"employeeId">();
   const navigate = useNavigate();
   return (
     <EmployeeOnboarding.StateTaxes
@@ -181,7 +185,7 @@ export function StateTaxes() {
 }
 
 export function PaymentMethod() {
-  const { employeeId } = useParams<{ employeeId: string }>();
+  const { employeeId } = useParams<"employeeId">();
   const navigate = useNavigate();
   return (
     <EmployeeOnboarding.PaymentMethod
@@ -197,7 +201,7 @@ export function PaymentMethod() {
 }
 
 export function Deductions() {
-  const { employeeId } = useParams<{ employeeId: string }>();
+  const { employeeId } = useParams<"employeeId">();
   const [{ onboardingStatus }] = useOnboardingContext();
   const navigate = useNavigate();
   const skipDocumentsConfig = DOCUMENTS_CONFIG_COMPLETED_STATUSES.has(
@@ -222,7 +226,7 @@ export function Deductions() {
 // Currently exported under EmployeeManagement (deprecated); will move to
 // EmployeeOnboarding.EmployeeDocuments in a future SDK release.
 export function EmployeeDocuments() {
-  const { employeeId } = useParams<{ employeeId: string }>();
+  const { employeeId } = useParams<"employeeId">();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.EmployeeDocuments
@@ -237,7 +241,7 @@ export function EmployeeDocuments() {
 }
 
 export function Summary() {
-  const { employeeId } = useParams<{ employeeId: string }>();
+  const { employeeId } = useParams<"employeeId">();
   const [, setCtx] = useOnboardingContext();
   const navigate = useNavigate();
   return (
