@@ -15,10 +15,9 @@ import { CenteredPage } from "../../../shared/CenteredPage/CenteredPage";
 import { usePersistedState } from "../../../shared/usePersistedState";
 import { COMPANY_ID } from "../../../config";
 
-// Statuses indicating the employee is self-onboarding. When the current
-// onboardingStatus is in this set, the admin flow skips federal taxes,
-// state taxes, and payment method after compensation — the employee will
-// fill those in themselves.
+// When onboardingStatus is in this set, the admin flow skips federal taxes,
+// state taxes, and payment method after compensation — those steps are
+// filled in by the employee themselves.
 const SELF_ONBOARDING_STATUSES = new Set([
   "self_onboarding_invited",
   "self_onboarding_invited_started",
@@ -26,18 +25,17 @@ const SELF_ONBOARDING_STATUSES = new Set([
   "self_onboarding_pending_invite",
 ]);
 
-// Statuses where the EmployeeDocuments (I-9 config) step is no longer needed:
-// the employee has already completed onboarding or is awaiting admin review,
-// so deductions routes straight to summary. Mirrors the SDK's
-// employeeDocumentsGuard.
+// When onboardingStatus is in this set, deductions routes straight to summary,
+// skipping the EmployeeDocuments (I-9) step — onboarding is already complete
+// or awaiting admin review. Mirrors the SDK's employeeDocumentsGuard.
 const DOCUMENTS_CONFIG_COMPLETED_STATUSES = new Set([
   "self_onboarding_completed_by_employee",
   "self_onboarding_awaiting_admin_review",
   "onboarding_completed",
 ]);
 
-// Cross-step ephemeral state that doesn't belong in the URL. OnboardingFlow
-// owns it and exposes a [state, setState] tuple to children via Outlet context.
+// Cross-step state: `startDate` (required by Compensation) and
+// `onboardingStatus` (drives the self-onboarding and I-9 skip branches).
 type OnboardingContext = {
   startDate?: string;
   onboardingStatus?: string;
@@ -48,18 +46,14 @@ type OnboardingContextValue = [
   Dispatch<SetStateAction<OnboardingContext>>,
 ];
 
-// Demo state is persisted to localStorage via `usePersistedState`; partners
-// would back this with their own database. The prefix namespaces our keys
-// from anything else on the origin.
 const ONBOARDING_STORAGE_PREFIX = "gusto-demo-employee-onboarding:";
 
 // `OnboardingFlow` is the layout route at /employee-onboarding. It owns the
-// cross-step state for an in-progress employee onboarding (`startDate`,
-// `onboardingStatus`) and exposes it to step routes via Outlet context.
+// cross-step state for an in-progress employee onboarding.
 //
-// `useMatch` is used (rather than `useParams`) because as the layout route
-// element, this component sees only its own segment's params; `:employeeId`
-// is defined on descendant routes and isn't visible via `useParams` here.
+// `useMatch` is used (not `useParams`) because as the layout route element,
+// this component only sees its own segment's params; `:employeeId` lives on
+// descendant routes.
 export function OnboardingFlow() {
   const match = useMatch("/employee-onboarding/:employeeId/*");
   const storageKey = match?.params.employeeId
@@ -225,9 +219,8 @@ export function Deductions() {
   );
 }
 
-// Lives under EmployeeManagement in the current SDK; will move to
-// EmployeeOnboarding.EmployeeDocuments in a future release per its
-// @deprecated note on the EmployeeManagement export.
+// Currently exported under EmployeeManagement (deprecated); will move to
+// EmployeeOnboarding.EmployeeDocuments in a future SDK release.
 export function EmployeeDocuments() {
   const { employeeId } = useParams<{ employeeId: string }>();
   const navigate = useNavigate();
