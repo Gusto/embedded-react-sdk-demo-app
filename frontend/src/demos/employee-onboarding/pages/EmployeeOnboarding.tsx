@@ -7,8 +7,8 @@ import {
   useParams,
 } from "react-router-dom";
 import {
-  EmployeeManagement,
   EmployeeOnboarding,
+  EmployeeOnboardingStatus,
   componentEvents,
 } from "@gusto/embedded-react-sdk";
 import { CenteredPage } from "../../../shared/CenteredPage/CenteredPage";
@@ -17,20 +17,20 @@ import { COMPANY_ID } from "../../../config";
 
 // When onboardingStatus matches one of these, the admin flow skips
 // federal/state taxes and payment method after compensation.
-const SELF_ONBOARDING_STATUSES = new Set([
-  "self_onboarding_invited",
-  "self_onboarding_invited_started",
-  "self_onboarding_invited_overdue",
-  "self_onboarding_pending_invite",
+const SELF_ONBOARDING_STATUSES: ReadonlySet<string> = new Set([
+  EmployeeOnboardingStatus.SELF_ONBOARDING_PENDING_INVITE,
+  EmployeeOnboardingStatus.SELF_ONBOARDING_INVITED,
+  EmployeeOnboardingStatus.SELF_ONBOARDING_INVITED_STARTED,
+  EmployeeOnboardingStatus.SELF_ONBOARDING_INVITED_OVERDUE,
 ]);
 
 // When onboardingStatus matches one of these, deductions routes straight
 // to summary, skipping EmployeeDocuments — onboarding is already complete
 // or awaiting admin review. Mirrors the SDK's employeeDocumentsGuard.
-const DOCUMENTS_CONFIG_COMPLETED_STATUSES = new Set([
-  "self_onboarding_completed_by_employee",
-  "self_onboarding_awaiting_admin_review",
-  "onboarding_completed",
+const DOCUMENTS_CONFIG_COMPLETED_STATUSES: ReadonlySet<string> = new Set([
+  EmployeeOnboardingStatus.SELF_ONBOARDING_COMPLETED_BY_EMPLOYEE,
+  EmployeeOnboardingStatus.SELF_ONBOARDING_AWAITING_ADMIN_REVIEW,
+  EmployeeOnboardingStatus.ONBOARDING_COMPLETED,
 ]);
 
 // startDate is required by Compensation; onboardingStatus drives the
@@ -258,7 +258,7 @@ export function EmployeeDocuments() {
   const { employeeId } = useParams<"employeeId">();
   const navigate = useNavigate();
   return (
-    <EmployeeManagement.EmployeeDocuments
+    <EmployeeOnboarding.EmployeeDocuments
       employeeId={employeeId!}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_DOCUMENTS_DONE) {
