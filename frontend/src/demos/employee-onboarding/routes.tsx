@@ -5,10 +5,10 @@ import {
   EmployeeDocuments,
   EmployeeList,
   FederalTaxes,
-  OnboardingFlow,
   OnboardingShell,
   PaymentMethod,
-  Profile,
+  ProfileCreate,
+  ProfileEdit,
   StateTaxes,
   Summary,
 } from "./pages/EmployeeOnboarding";
@@ -16,9 +16,9 @@ import {
 export const EmployeeOnboardingRoutes = (
   <Route path="/employee-onboarding" element={<OnboardingShell />}>
     <Route index element={<EmployeeList />} />
-    <Route path="new/profile" element={<Profile />} />
-    <Route path=":employeeId" element={<OnboardingFlow />}>
-      <Route path="profile" element={<Profile />} />
+    <Route path="new" element={<ProfileCreate />} />
+    <Route path=":employeeId">
+      <Route path="profile" element={<ProfileEdit />} />
       <Route path="compensation" element={<Compensation />} />
       <Route path="federal-taxes" element={<FederalTaxes />} />
       <Route path="state-taxes" element={<StateTaxes />} />
