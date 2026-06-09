@@ -36,6 +36,9 @@ const DOCUMENTS_CONFIG_COMPLETED_STATUSES = new Set([
 // startDate is required by Compensation; onboardingStatus drives the
 // self-onboarding and I-9 skip branches.
 type OnboardingContext = {
+  // ISO date string (YYYY-MM-DD). The SDK's Profile event emits and the
+  // Compensation prop expects exactly this format — pass it through as a
+  // string rather than round-tripping through `Date`.
   startDate?: string;
   onboardingStatus?: string;
 };
@@ -62,8 +65,7 @@ export function OnboardingShell() {
 // this layout isn't mounted yet during creation.
 export function OnboardingFlow() {
   const { employeeId } = useParams<"employeeId">();
-  const location = useLocation();
-  const initial = (location.state as OnboardingContext | null) ?? {};
+  const initial = readInitialContext(useLocation().state);
   const [ctx, setCtx] = usePersistedState<OnboardingContext>(
     `${ONBOARDING_STORAGE_PREFIX}${employeeId}`,
     initial,
@@ -71,6 +73,21 @@ export function OnboardingFlow() {
 
   const value: OnboardingContextValue = [ctx, setCtx];
   return <Outlet context={value} />;
+}
+
+// `location.state` is typed as `any` by React Router and is fully
+// caller-controlled, so pull each field through an explicit type check
+// rather than casting the whole object into our shape.
+function readInitialContext(state: unknown): OnboardingContext {
+  const source = (state ?? {}) as Record<string, unknown>;
+  return {
+    startDate:
+      typeof source.startDate === "string" ? source.startDate : undefined,
+    onboardingStatus:
+      typeof source.onboardingStatus === "string"
+        ? source.onboardingStatus
+        : undefined,
+  };
 }
 
 function useOnboardingContext() {
@@ -83,12 +100,17 @@ export function EmployeeList() {
     <EmployeeOnboarding.EmployeeList
       companyId={COMPANY_ID}
       onEvent={(type, payload) => {
-        if (type === componentEvents.EMPLOYEE_CREATE) {
-          navigate("/employee-onboarding/new/profile");
-        }
-        if (type === componentEvents.EMPLOYEE_UPDATE) {
-          const data = payload as { employeeId: string };
-          navigate(`/employee-onboarding/${data.employeeId}/profile`);
+        switch (type) {
+          case componentEvents.EMPLOYEE_CREATE:
+            // User clicked "Add employee" in the list.
+            navigate("/employee-onboarding/new/profile");
+            break;
+          case componentEvents.EMPLOYEE_UPDATE: {
+            // User selected an existing employee to continue onboarding.
+            const data = payload as { employeeId: string };
+            navigate(`/employee-onboarding/${data.employeeId}/profile`);
+            break;
+          }
         }
       }}
     />
@@ -110,22 +132,31 @@ export function Profile() {
       isAdmin
       isSelfOnboardingEnabled
       onEvent={(type, payload) => {
-        if (type === componentEvents.EMPLOYEE_PROFILE_DONE) {
-          const data = payload as {
-            uuid: string;
-            startDate: string;
-            onboardingStatus: string;
-          };
-          const next: OnboardingContext = {
-            startDate: data.startDate,
-            onboardingStatus: data.onboardingStatus,
-          };
-          ctx?.[1](next);
-          navigate(`/employee-onboarding/${data.uuid}/compensation`, {
-            state: next,
-          });
+        switch (type) {
+          case componentEvents.EMPLOYEE_PROFILE_DONE: {
+            // SDK persisted the profile form. Payload includes the (possibly
+            // newly created) employee uuid plus the initial onboarding
+            // fields the rest of the flow keys off.
+            const data = payload as {
+              uuid: string;
+              startDate: string;
+              onboardingStatus: string;
+            };
+            const next: OnboardingContext = {
+              startDate: data.startDate,
+              onboardingStatus: data.onboardingStatus,
+            };
+            ctx?.[1](next);
+            navigate(`/employee-onboarding/${data.uuid}/compensation`, {
+              state: next,
+            });
+            break;
+          }
+          case componentEvents.CANCEL:
+            // User dismissed the form.
+            navigate("/employee-onboarding");
+            break;
         }
-        if (type === componentEvents.CANCEL) navigate("/employee-onboarding");
       }}
     />
   );
@@ -223,8 +254,6 @@ export function Deductions() {
   );
 }
 
-// Currently exported under EmployeeManagement (deprecated); will move to
-// EmployeeOnboarding.EmployeeDocuments in a future SDK release.
 export function EmployeeDocuments() {
   const { employeeId } = useParams<"employeeId">();
   const navigate = useNavigate();
