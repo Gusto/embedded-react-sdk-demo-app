@@ -1,10 +1,9 @@
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   EmployeeOnboarding,
   EmployeeOnboardingStatus,
   componentEvents,
 } from "@gusto/embedded-react-sdk";
-import { CenteredPage } from "../../../shared/CenteredPage/CenteredPage";
 import { createPersistedStore } from "../../../shared/persistedStore";
 import { COMPANY_ID } from "../../../config";
 
@@ -32,14 +31,6 @@ const SELF_ONBOARDING_STATUSES: ReadonlySet<string> = new Set([
   EmployeeOnboardingStatus.SELF_ONBOARDING_INVITED_STARTED,
   EmployeeOnboardingStatus.SELF_ONBOARDING_INVITED_OVERDUE,
 ]);
-
-export function OnboardingShell() {
-  return (
-    <CenteredPage>
-      <Outlet />
-    </CenteredPage>
-  );
-}
 
 export function EmployeeList() {
   const navigate = useNavigate();

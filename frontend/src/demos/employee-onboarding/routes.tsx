@@ -1,11 +1,11 @@
-import { Route } from "react-router-dom";
+import { Outlet, Route } from "react-router-dom";
+import { CenteredPage } from "../../shared/CenteredPage/CenteredPage";
 import {
   Compensation,
   Deductions,
   EmployeeDocuments,
   EmployeeList,
   FederalTaxes,
-  OnboardingShell,
   PaymentMethod,
   ProfileCreate,
   ProfileEdit,
@@ -14,7 +14,14 @@ import {
 } from "./pages/EmployeeOnboarding";
 
 export const EmployeeOnboardingRoutes = (
-  <Route path="/employee-onboarding" element={<OnboardingShell />}>
+  <Route
+    path="/employee-onboarding"
+    element={
+      <CenteredPage>
+        <Outlet />
+      </CenteredPage>
+    }
+  >
     <Route index element={<EmployeeList />} />
     <Route path="new" element={<ProfileCreate />} />
     <Route path=":employeeId">
