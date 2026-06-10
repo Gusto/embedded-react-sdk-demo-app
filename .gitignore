@@ -19,6 +19,9 @@ build/
 *.swp
 *.swo
 
+# Local agent skills (not pushed to the repo)
+.claude/
+
 # OS files
 .DS_Store
 Thumbs.db 
