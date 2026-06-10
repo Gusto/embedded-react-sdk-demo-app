@@ -2,6 +2,7 @@ import { GustoProvider } from "@gusto/embedded-react-sdk";
 import "@gusto/embedded-react-sdk/style.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { CompanyOnboardingRoutes } from "./demos/company-onboarding/routes";
+import { EmployeeOnboardingRoutes } from "./demos/employee-onboarding/routes";
 import { EmployeeSelfOnboardingRoutes } from "./demos/employee-self-onboarding/routes";
 import { OnboardedCompanyRoutes } from "./demos/onboarded-company/routes";
 import { Landing } from "./Landing";
@@ -16,6 +17,7 @@ function App() {
           <Route index element={<Landing />} />
           {CompanyOnboardingRoutes}
           {OnboardedCompanyRoutes}
+          {EmployeeOnboardingRoutes}
           {EmployeeSelfOnboardingRoutes}
         </Routes>
         <HomeButton />
