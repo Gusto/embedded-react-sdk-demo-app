@@ -71,9 +71,11 @@ curl --request POST
 
 The response will include:
 
-- `company_id` - Use this in the frontend [App.tsx](./frontend/src/App.tsx) component
+- `company_id` - Set as `COMPANY_ID` in [frontend/src/config.ts](./frontend/src/config.ts)
 - `access_token` - Not needed for the backend (tokens are auto-refreshed)
 - `refresh_token` - Use this in the backend `tokens.json` file for automatic token refresh
+
+Also set `EMPLOYEE_ID` in [frontend/src/config.ts](./frontend/src/config.ts) for the employee self-onboarding demo — use the UUID of an employee in a self-onboarding (invited) state.
 
 ## App Setup Instructions
 
