@@ -9,10 +9,9 @@ import {
   Receipts,
 } from "./pages/RunPayroll";
 
-// Nested inside the onboarded-company AppShell route, so every step renders in
-// the dashboard shell (sidebar/header) and is its own URL. The `:payrollId`
-// route has no element — it just groups the per-payroll steps so each child
-// inherits the param and renders into the AppShell's <Outlet />.
+// Nested in the onboarded-company AppShell so each step renders in the
+// dashboard shell at its own URL. The `:payrollId` route just groups the
+// per-payroll steps that share the param.
 export const RunPayrollRoutes = (
   <Route path="run-payroll">
     <Route index element={<PayrollLanding />} />

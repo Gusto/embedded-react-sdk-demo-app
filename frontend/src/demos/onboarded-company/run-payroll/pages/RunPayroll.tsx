@@ -2,21 +2,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Payroll, componentEvents } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID } from "../../../../config";
 
-// This demo composes the SDK's individual payroll block components behind
-// react-router instead of using the all-in-one <Payroll.PayrollFlow />. Each
-// step is its own URL, so a browser refresh resumes the correct step rather
-// than dropping the user back at the start. No cross-step persistence is
-// needed: payrollId / employeeId live in the URL, and each block fetches its
-// own pay period and status from the API.
+// Composes the SDK's individual payroll blocks behind react-router instead of
+// the all-in-one <Payroll.PayrollFlow />, so each step is its own URL and a
+// refresh resumes it. State lives in the URL (payrollId / employeeId); each
+// block fetches its own data.
 
-// PayrollLanding is the landing for the whole flow. It already provides the
-// Run payroll / Payroll history tabs and surfaces blocker/RFI/recovery alerts
-// when present, so we don't recreate those. It runs its own state machine for
-// in-place history viewing (receipt/summary), but the Flow re-emits every event
-// to onEvent, so the actions that leave the landing still bubble up here for us
-// to route to real URLs. We deliberately ignore the in-place history events
-// (RUN_PAYROLL_RECEIPT_VIEWED / RUN_PAYROLL_SUMMARY_VIEWED) and let the landing
-// handle those itself.
+// Maps the landing's events to routes. We ignore its in-place history events
+// (RUN_PAYROLL_RECEIPT_VIEWED / RUN_PAYROLL_SUMMARY_VIEWED) and let it handle
+// those itself.
 export function PayrollLanding() {
   const navigate = useNavigate();
   return (
@@ -46,10 +39,6 @@ export function PayrollLanding() {
   );
 }
 
-// Off-cycle creation runs before the payroll exists. This single block covers
-// reason selection, pay period dates, employee selection, and deductions; on
-// submit the SDK creates the off-cycle payroll and returns the new uuid, after
-// which the flow merges into the same execution path as a regular payroll.
 export function OffCycleCreate() {
   const navigate = useNavigate();
   return (
@@ -140,9 +129,7 @@ export function Receipts() {
   return <Payroll.PayrollReceipts payrollId={payrollId!} onEvent={() => {}} />;
 }
 
-// The blockers block is self-contained: it lists payroll blockers and renders
-// payroll-blocking information requests (RFIs) and recovery cases inline, each
-// with its own resolution modal. Mounting it on a route is all the demo needs.
+// Self-contained: lists blockers and resolves RFIs / recovery cases inline.
 export function Blockers() {
   return <Payroll.PayrollBlockerList companyId={COMPANY_ID} onEvent={() => {}} />;
 }
