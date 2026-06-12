@@ -5,8 +5,7 @@ import styles from "./ManageEmployees.module.css";
 
 // Recreates <EmployeeManagement.DashboardFlow /> as routed blocks: the dashboard
 // tabs become URLs, each tab's cards emit an edit event that navigates to a
-// manage route rendering the matching edit-form block. Unlike DashboardFlow, the
-// post-edit success alert is dropped; cards re-fetch and show updated data.
+// manage route rendering the matching edit-form block.
 
 export function EmployeeListPage() {
   const navigate = useNavigate();
@@ -183,8 +182,6 @@ export function ProfileEdit() {
   );
 }
 
-// Home/Work address forms handle save/add/delete internally and only emit
-// *_EDIT_CANCELLED (on Back), so that's the only event that returns to the tab.
 export function HomeAddressEdit() {
   const { employeeId } = useParams<"employeeId">();
   const navigate = useNavigate();
