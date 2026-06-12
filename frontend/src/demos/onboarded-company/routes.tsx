@@ -6,13 +6,13 @@ import { Employees } from "./pages/Employees";
 import { FederalTaxes } from "./pages/FederalTaxes";
 import { Locations } from "./pages/Locations";
 import { PaySchedule } from "./pages/PaySchedule";
-import { RunPayroll } from "./pages/RunPayroll";
 import { StateTaxes } from "./pages/StateTaxes";
 import { TimeOff } from "./pages/TimeOff";
+import { RunPayrollRoutes } from "./run-payroll/routes";
 
 export const OnboardedCompanyRoutes = (
   <Route element={<AppShell />}>
-    <Route path="/run-payroll" element={<RunPayroll />} />
+    {RunPayrollRoutes}
     <Route path="/time-off" element={<TimeOff />} />
     <Route path="/employees" element={<Employees />} />
     <Route path="/bank-account" element={<BankAccount />} />
