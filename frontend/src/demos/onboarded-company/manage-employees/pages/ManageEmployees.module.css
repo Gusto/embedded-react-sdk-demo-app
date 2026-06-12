@@ -1,0 +1,12 @@
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.backLink:hover {
+  color: #4338ca;
+}
