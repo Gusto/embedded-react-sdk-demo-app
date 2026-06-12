@@ -6,10 +6,6 @@ import { COMPANY_ID } from "../../../../config";
 // the all-in-one <Payroll.PayrollFlow />, so each step is its own URL and a
 // refresh resumes it. State lives in the URL (payrollId / employeeId); each
 // block fetches its own data.
-
-// Maps the landing's events to routes. We ignore its in-place history events
-// (RUN_PAYROLL_RECEIPT_VIEWED / RUN_PAYROLL_SUMMARY_VIEWED) and let it handle
-// those itself.
 export function PayrollLanding() {
   const navigate = useNavigate();
   return (
@@ -129,7 +125,6 @@ export function Receipts() {
   return <Payroll.PayrollReceipts payrollId={payrollId!} onEvent={() => {}} />;
 }
 
-// Self-contained: lists blockers and resolves RFIs / recovery cases inline.
 export function Blockers() {
   return <Payroll.PayrollBlockerList companyId={COMPANY_ID} onEvent={() => {}} />;
 }
