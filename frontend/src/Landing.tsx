@@ -9,6 +9,12 @@ type Card = {
 
 const cards: Card[] = [
   {
+    to: "/about-demo",
+    title: "About this demo",
+    description:
+      "Get a quick overview of what this app demonstrates and what partners can take from it.",
+  },
+  {
     to: "/company-onboarding",
     title: "Company onboarding",
     description: "Walk through setting up a brand new company on Gusto.",

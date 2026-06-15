@@ -1,6 +1,7 @@
 import { GustoProvider } from "@gusto/embedded-react-sdk";
 import "@gusto/embedded-react-sdk/style.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AboutDemoPage } from "./AboutDemoPage";
 import { CompanyOnboardingRoutes } from "./demos/company-onboarding/routes";
 import { EmployeeOnboardingRoutes } from "./demos/employee-onboarding/routes";
 import { EmployeeSelfOnboardingRoutes } from "./demos/employee-self-onboarding/routes";
@@ -15,6 +16,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<Landing />} />
+          <Route path="/about-demo" element={<AboutDemoPage />} />
           {CompanyOnboardingRoutes}
           {OnboardedCompanyRoutes}
           {EmployeeOnboardingRoutes}
