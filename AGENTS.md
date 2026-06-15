@@ -32,15 +32,14 @@ panel; they're injected as env vars):
 
 ```
 node scripts/setup-demo-company.mjs     # provision + seed + approve + wire up
-node scripts/cleanup-demo-company.mjs    # best-effort: suspend the company
 ```
 
 `setup-demo-company.mjs` mints a system token, creates a partner-managed
 company, completes every onboarding step (address, pay schedule, industry,
 federal tax, bank + verify, a fully-onboarded employee, CA tax rates, signatory
 + signed forms), calls `finish_onboarding` then the demo-only `approve`, and
-then writes `backend/tokens.json` and patches `frontend/src/config.ts`. These
-scripts are deliberately separate from the app code in `backend`/`frontend`.
+then writes `backend/tokens.json` and patches `frontend/src/config.ts`. This
+script is deliberately separate from the app code in `backend`/`frontend`.
 
 After running it, start the dev servers normally (see `README.md`). For purely
 local dev you can instead hand-fill `backend/.env` + `backend/tokens.json` per
@@ -55,8 +54,8 @@ the README; never commit real credentials.
 - The script is idempotent: re-running reuses the recorded company
   (`scripts/.demo-company.json` + `backend/tokens.json`) instead of creating
   another. Provisioning is only unavoidable on a brand-new VM, so company volume
-  is ~one per fresh agent. There is no delete-company API; cleanup can only
-  SUSPEND, and only from the same environment that holds the company token.
+  is ~one per fresh agent. There is no delete-company API, but Gusto reclaims
+  demo companies incrementally on its own, so no explicit cleanup is needed.
 - Gusto rotates the refresh token on every refresh and the backend persists the
   rotated value to `backend/tokens.json`. Don't externally exercise that refresh
   token (e.g. ad-hoc `oauth/token` calls) without saving the result, or the

@@ -79,7 +79,8 @@ export async function getSystemToken() {
   return res.access_token;
 }
 
-// Exchange a company refresh token for a fresh access token (used by cleanup).
+// Exchange a company refresh token for a fresh access token (used by the
+// setup script's reuse path to validate a previously-recorded company).
 export async function refreshCompanyToken(refreshToken) {
   const { clientId, clientSecret } = requireClientCreds();
   const api = client(null);
