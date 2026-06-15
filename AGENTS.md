@@ -66,6 +66,3 @@ the README; never commit real credentials.
   still render regardless (they make no API calls).
 - The frontend's backend URL is hardcoded to `http://localhost:3001` in
   `frontend/src/App.tsx` (`GustoProvider` `baseUrl`).
-- `frontend/src/demos/onboarded-company/pages/Employees.tsx` is intentionally a
-  `ComponentPlaceholder`, so the Employees page shows placeholder text even with
-  a live employee — that's an app stub, not a data problem.
