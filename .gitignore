@@ -22,6 +22,9 @@ build/
 # Local agent skills (not pushed to the repo)
 .claude/
 
+# Cloud Agent / CI demo-company record written by scripts/setup-demo-company.mjs
+scripts/.demo-company.json
+
 # OS files
 .DS_Store
 Thumbs.db 

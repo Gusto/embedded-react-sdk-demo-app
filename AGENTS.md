@@ -16,43 +16,57 @@ scripts — refer to those rather than duplicating them here.
 Lint: `npm run lint` (frontend only; backend has no lint script).
 Build: `npm run build` in each service.
 
-### Auth / credentials (how secrets map to the backend)
+### Auth / zero-config bootstrap for cloud agents
 
-The backend authenticates to Gusto by refreshing an access token via
-`POST /oauth/token` using `CLIENT_ID` + `CLIENT_SECRET` + a refresh token. There
-is no raw "access token only" mode — a bare access token is not enough. In a
-cloud agent, supply all three via the Secrets panel; they are injected as
-environment variables and consumed as follows:
+The backend reaches Gusto with a company-scoped token that it derives from a
+refresh token in `backend/tokens.json`; the frontend reads a `COMPANY_ID` (and
+`EMPLOYEE_ID`) from `frontend/src/config.ts`. Both files are the only inputs the
+app needs, and the application code is unchanged.
 
-- `CLIENT_ID` / `CLIENT_SECRET`: read directly from `process.env` (`dotenv` does
-  not override real env vars), so the Secrets-panel values work with no `.env`
-  file needed.
-- `GUSTO_REFRESH_TOKEN`: seeds the refresh token when `backend/tokens.json` is
-  absent (the normal case on a fresh VM, since the file is gitignored). See
-  `loadRefreshToken()` in `backend/src/tokenManager.ts`. `tokens.json`, when
-  present, always takes priority over this env var.
+A Gusto company refresh token rotates and can't live in a static secret, and a
+system token (mintable from client creds) can't access company data. So a fresh
+cloud VM can't reuse a stored company token. Instead, a dedicated script
+provisions a brand-new, fully-onboarded, approved demo company from the only
+durable secrets — `CLIENT_ID` and `CLIENT_SECRET` (set these in the Secrets
+panel; they're injected as env vars):
 
-For purely local dev you can instead use files: `cp backend/.env.example
-backend/.env` (fill in `CLIENT_ID`/`CLIENT_SECRET`) and `cp
-backend/tokens.example.json backend/tokens.json` (fill in `refresh_token`).
-Either path works; never commit real credentials.
+```
+node scripts/setup-demo-company.mjs     # provision + seed + approve + wire up
+node scripts/cleanup-demo-company.mjs    # best-effort: suspend the company
+```
+
+`setup-demo-company.mjs` mints a system token, creates a partner-managed
+company, completes every onboarding step (address, pay schedule, industry,
+federal tax, bank + verify, a fully-onboarded employee, CA tax rates, signatory
++ signed forms), calls `finish_onboarding` then the demo-only `approve`, and
+then writes `backend/tokens.json` and patches `frontend/src/config.ts`. These
+scripts are deliberately separate from the app code in `backend`/`frontend`.
+
+After running it, start the dev servers normally (see `README.md`). For purely
+local dev you can instead hand-fill `backend/.env` + `backend/tokens.json` per
+the README; never commit real credentials.
 
 ### Non-obvious caveats
 
-- Gusto rotates the refresh token on every refresh, and the backend persists the
-  rotated value to `backend/tokens.json`. Within a session this is seamless. But
-  on a fresh cloud VM (no `tokens.json`) the backend re-seeds from the
-  `GUSTO_REFRESH_TOKEN` secret — if that seed token was already consumed in a
-  prior session, the refresh fails with `invalid_grant` and you must update the
-  secret to a current refresh token.
-- The proxy talks to the real `api.gusto-demo.com`. With missing/invalid/stale
-  credentials, token refresh returns `invalid_grant` and every proxied request
-  returns HTTP 500. The frontend SDK surfaces this as an "API error" dialog.
-  This is expected when credentials are not wired up — the landing page and
-  routing still render fine because they make no API calls.
+- The bootstrap script's local edit to `frontend/src/config.ts` (the company /
+  employee ids) and the generated `backend/tokens.json` are runtime artifacts —
+  do NOT commit them. `tokens.json` is gitignored; revert `config.ts` before
+  committing.
+- The script is idempotent: re-running reuses the recorded company
+  (`scripts/.demo-company.json` + `backend/tokens.json`) instead of creating
+  another. Provisioning is only unavoidable on a brand-new VM, so company volume
+  is ~one per fresh agent. There is no delete-company API; cleanup can only
+  SUSPEND, and only from the same environment that holds the company token.
+- Gusto rotates the refresh token on every refresh and the backend persists the
+  rotated value to `backend/tokens.json`. Don't externally exercise that refresh
+  token (e.g. ad-hoc `oauth/token` calls) without saving the result, or the
+  backend's stored token goes stale and refreshes fail with `invalid_grant`.
+- The proxy talks to the real `api.gusto-demo.com`. With no/stale credentials,
+  token refresh returns `invalid_grant` and proxied requests return HTTP 500;
+  the frontend SDK shows an "API error" dialog. The landing page and routing
+  still render regardless (they make no API calls).
 - The frontend's backend URL is hardcoded to `http://localhost:3001` in
   `frontend/src/App.tsx` (`GustoProvider` `baseUrl`).
-- `COMPANY_ID` and `EMPLOYEE_ID` are hardcoded placeholder UUIDs in
-  `frontend/src/config.ts` (a committed file). The SDK flows need a real
-  `company_id` that matches the backend's credentials; set these locally for
-  testing but avoid committing real IDs.
+- `frontend/src/demos/onboarded-company/pages/Employees.tsx` is intentionally a
+  `ComponentPlaceholder`, so the Employees page shows placeholder text even with
+  a live employee — that's an app stub, not a data problem.
