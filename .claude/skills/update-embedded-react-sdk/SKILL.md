@@ -3,8 +3,9 @@ name: update-embedded-react-sdk
 description: >-
   CI/automation orchestrator that updates the @gusto/embedded-react-sdk dependency
   end to end: runs the sdk-upgrade agent to research the release and migrate the
-  routed demos, then opens a pull request with the upgrade report as the body and
-  requests review from the @Gusto/embedded-sdk team so they are notified via GitHub.
+  routed demos, then opens a ready-for-review (non-draft) pull request with the
+  upgrade report as the body and requests review from the @Gusto/embedded-sdk team
+  so they are notified via GitHub (drafts suppress that notification).
   Use when a new SDK version is published or when running the SDK update automation.
   For a local upgrade with no PR, run the sdk-upgrade agent directly instead.
 disable-model-invocation: true
@@ -21,6 +22,20 @@ It is normally kicked off headless by a CI script when a new version of
 GitHub review-request notifications — no Slack, webhooks, or secrets required. The
 `@Gusto/embedded-sdk` team is also auto-requested via [.github/CODEOWNERS](../../../.github/CODEOWNERS),
 so the explicit `--reviewer` below is belt-and-suspenders.
+
+**Open the PR ready for review, never as a draft.** This is the whole reason the
+notification works. GitHub suppresses CODEOWNERS review requests on draft PRs and
+does not email the requested reviewers — code owners are not even auto-requested
+until the PR is marked "Ready for review." A draft PR therefore looks fine but
+silently fails the one job this skill has (getting the upgrade on the team's
+radar). So whatever tool you create the PR with, it must be a ready PR:
+
+- Cursor cloud-agent PR tool (the CI path): pass `draft: false`. It defaults to
+  `draft: true`, so you must override it — this is the default that bit us.
+- `gh pr create`: it is ready by default; just do not pass `--draft`.
+
+If for any reason a draft slips through, mark it ready (`gh pr ready <url>` or the
+PR tool) so the review requests and emails actually fire.
 
 ## Workflow
 
@@ -40,6 +55,10 @@ Keep the agent's returned report verbatim — it becomes the PR body.
 
 ### 2. Open the PR (only if the agent made changes)
 
+Open it **ready for review, not a draft** (see the intro — a draft PR sends no
+review-request notifications). When the cloud-agent PR tool is available, prefer
+it and pass `draft: false`. The `gh` equivalent:
+
 ```bash
 cd frontend && export VERSION=<new-version>
 git checkout -b "chore/update-ersdk-$VERSION"
@@ -51,10 +70,12 @@ gh pr create \
   --reviewer Gusto/embedded-sdk
 ```
 
-Requesting the team as a reviewer sends each member a GitHub notification + email.
-CODEOWNERS would request them anyway; passing `--reviewer` makes it explicit and
-fails loudly if the team ever loses repo access. Report the PR URL in the final
-summary.
+Requesting the team as a reviewer on a ready (non-draft) PR sends each member a
+GitHub notification + email. CODEOWNERS would request them anyway; passing
+`--reviewer` makes it explicit and fails loudly if the team ever loses repo
+access. Both the auto-request and the explicit request are no-ops on a draft, so
+the ready state is what actually delivers the notification. Report the PR URL in
+the final summary.
 
 ### 3. No shippable changes
 
@@ -65,5 +86,8 @@ nothing shipped (carry over the agent's WIP/Skipped sections), so there's a reco
 ## Notes
 
 - No secrets required — notification is entirely through GitHub review requests.
+- The PR must be **ready for review, not a draft** — GitHub suppresses CODEOWNERS
+  review requests and reviewer emails on drafts, so a draft PR notifies no one.
+  The cloud-agent PR tool defaults to draft; override it with `draft: false`.
 - The `@Gusto/embedded-sdk` team must keep write access to this repo for the
   CODEOWNERS auto-request and `--reviewer` to deliver.
