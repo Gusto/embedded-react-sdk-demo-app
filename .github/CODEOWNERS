@@ -1,0 +1,5 @@
+# Every PR auto-requests review from the Embedded SDK team.
+# This is how automated @gusto/embedded-react-sdk upgrade PRs notify the team
+# (see .claude/skills/update-embedded-react-sdk). The team must keep write
+# access to this repo for the auto-request to fire.
+* @Gusto/embedded-sdk
