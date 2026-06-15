@@ -16,27 +16,34 @@ scripts — refer to those rather than duplicating them here.
 Lint: `npm run lint` (frontend only; backend has no lint script).
 Build: `npm run build` in each service.
 
-### Required first step for cloud agents: run `agent-setup`
+### Setup runs automatically — `.cursor/environment.json`
 
-ALWAYS run this as the very first step of ANY task in this repo, before reading
-deeper or writing code — regardless of what you're changing:
+Setup is NOT left to agent discretion. `.cursor/environment.json` (committed at
+the repo root) wires it into the Cursor cloud-agent boot sequence, which runs
+deterministically on every fresh VM before the agent starts working:
+
+- `install` → `npm install` in `backend` and `frontend` (checkpoint-cached).
+- `start` → `bash scripts/agent-setup.sh`, which (re)installs deps and runs
+  `scripts/setup-demo-company.mjs` to provision/reuse an approved demo company.
+
+Provisioning lives in `start` (not `install`) on purpose: `start` runs fresh on
+every boot and its side effects are never baked into the cached snapshot, so the
+rotating company refresh token is never staled by a reused checkpoint. A
+committed `.cursor/environment.json` also takes precedence over any
+dashboard-configured environment, so this is the single source of truth.
+
+If you ever need to run it by hand (local dev, or to re-provision), invoke:
 
 ```
 bash scripts/agent-setup.sh
 ```
 
 Do not try to judge whether your change "touches" auth, the backend, or the
-frontend. The app is non-functional without a provisioned demo company, and the
-script is idempotent and cheap when one already exists, so running it
-unconditionally is always the correct, deterministic choice. The previous
-"bootstrap only if it seems relevant" guidance was a footgun: a fresh agent
-can't reliably tell when it's needed, so the answer is "always."
-
-`agent-setup.sh` installs backend + frontend dependencies and then runs
-`scripts/setup-demo-company.mjs`. It is named `agent-setup` (not `setup`) on
-purpose: it is the automated cloud-agent/CI path, distinct from the normal
-local-dev instructions in `README.md`, so humans running the demo by hand won't
-mistake it for the standard run steps.
+frontend — the boot sequence already runs it for you, and the script is
+idempotent and cheap when a company already exists. It is named `agent-setup`
+(not `setup`) on purpose: it is the automated cloud-agent/CI path, distinct from
+the normal local-dev instructions in `README.md`, so humans running the demo by
+hand won't mistake it for the standard run steps.
 
 #### Why a script and not a stored token
 
@@ -58,14 +65,10 @@ signatory + signed forms), calls `finish_onboarding` then the demo-only
 `frontend/src/config.ts`. Both scripts are deliberately separate from the app
 code in `backend`/`frontend`.
 
-After `agent-setup.sh` finishes, start the dev servers normally (see
-`README.md`). For purely local dev you can instead hand-fill `backend/.env` +
-`backend/tokens.json` per the README; never commit real credentials.
-
-> Even better than relying on this instruction: wire `bash scripts/agent-setup.sh`
-> into the cloud agent environment's startup script (Cursor dashboard → Cloud
-> Agents) so every fresh VM provisions the company automatically, with zero agent
-> judgment involved.
+After the boot sequence finishes (or after running `agent-setup.sh` by hand),
+start the dev servers normally (see `README.md`). For purely local dev you can
+instead hand-fill `backend/.env` + `backend/tokens.json` per the README; never
+commit real credentials.
 
 ### Non-obvious caveats
 
