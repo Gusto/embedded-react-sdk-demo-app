@@ -1,0 +1,4 @@
+{
+  "install": "npm install --prefix backend && npm install --prefix frontend",
+  "start": "bash scripts/agent-setup.sh"
+}
