@@ -47,25 +47,47 @@ class TokenManager {
   }
 
   /**
-   * Load refresh token from tokens.json file
+   * Load the refresh token.
+   *
+   * tokens.json is the primary source because it holds the most recently
+   * rotated token (it's rewritten on every refresh). When that file is absent
+   * - e.g. on an ephemeral cloud agent / CI VM where secrets are injected as
+   * environment variables instead of a committed file - we fall back to the
+   * GUSTO_REFRESH_TOKEN env var to seed the initial token. Once seeded, the
+   * rotated token is still persisted to tokens.json for the rest of the run.
    */
   private loadRefreshToken(): string {
+    const fileRefreshToken = this.loadRefreshTokenFromFile();
+    if (fileRefreshToken) {
+      return fileRefreshToken;
+    }
+
+    const envRefreshToken = process.env.GUSTO_REFRESH_TOKEN?.trim();
+    if (envRefreshToken) {
+      console.log("Seeding refresh token from GUSTO_REFRESH_TOKEN env var.");
+      return envRefreshToken;
+    }
+
+    throw new Error(
+      `No refresh token found at ${this.tokensFilePath}.\n` +
+      "Either copy tokens.example.json to tokens.json and add your refresh token, " +
+      "or set the GUSTO_REFRESH_TOKEN environment variable."
+    );
+  }
+
+  /**
+   * Read the refresh token from tokens.json, returning null when the file does
+   * not exist or has no refresh_token. Throws only on malformed JSON.
+   */
+  private loadRefreshTokenFromFile(): string | null {
     if (!existsSync(this.tokensFilePath)) {
-      throw new Error(
-        `tokens.json not found at ${this.tokensFilePath}\n` +
-        "Please copy tokens.example.json to tokens.json and add your refresh token."
-      );
+      return null;
     }
 
     try {
       const fileContent = readFileSync(this.tokensFilePath, "utf-8");
       const tokenStorage: TokenStorage = JSON.parse(fileContent);
-
-      if (!tokenStorage.refresh_token) {
-        throw new Error("refresh_token not found in tokens.json");
-      }
-
-      return tokenStorage.refresh_token;
+      return tokenStorage.refresh_token || null;
     } catch (error) {
       if (error instanceof SyntaxError) {
         throw new Error(`Invalid JSON in tokens.json: ${error.message}`);

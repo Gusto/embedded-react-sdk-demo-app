@@ -93,6 +93,8 @@ The backend uses automatic token refresh to handle token expiration. You'll need
 
 The refresh token is stored separately because it gets automatically updated each time it's used. The backend saves the new refresh token to `tokens.json` on every refresh, so it persists across server restarts.
 
+> **Environments without a file (cloud agents / CI):** if `tokens.json` is absent, the backend seeds its refresh token from the `GUSTO_REFRESH_TOKEN` environment variable instead. `tokens.json` takes priority when both are present. This lets you inject `CLIENT_ID`, `CLIENT_SECRET`, and `GUSTO_REFRESH_TOKEN` as secrets/env vars with no committed files.
+
 1. Navigate to the backend directory:
 
 ```bash
