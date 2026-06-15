@@ -19,6 +19,9 @@ build/
 *.swp
 *.swo
 
+# Cloud Agent / CI demo-company record written by scripts/setup-demo-company.mjs
+scripts/.demo-company.json
+
 # OS files
 .DS_Store
-Thumbs.db 
+Thumbs.db
