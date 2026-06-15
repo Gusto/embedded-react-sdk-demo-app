@@ -6,6 +6,7 @@ import {
   OffCycleCreate,
   Overview,
   PayrollLanding,
+  PayrollSuccess,
   Receipts,
 } from "./pages/RunPayroll";
 
@@ -19,6 +20,7 @@ export const RunPayrollRoutes = (
     <Route path="off-cycle" element={<OffCycleCreate />} />
     <Route path=":payrollId">
       <Route path="configuration" element={<Configuration />} />
+      <Route path="success" element={<PayrollSuccess />} />
       <Route path="overview" element={<Overview />} />
       <Route path="edit-employee/:employeeId" element={<EditEmployee />} />
       <Route path="receipts" element={<Receipts />} />

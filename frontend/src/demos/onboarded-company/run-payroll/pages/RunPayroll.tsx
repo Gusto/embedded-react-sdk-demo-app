@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Payroll, componentEvents } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID } from "../../../../config";
+import styles from "./PayrollSuccess.module.css";
 
 // Composes the SDK's individual payroll blocks behind react-router instead of
 // the all-in-one <Payroll.PayrollFlow />, so each step is its own URL and a
@@ -60,7 +61,7 @@ export function Configuration() {
       onEvent={(type, payload) => {
         switch (type) {
           case componentEvents.RUN_PAYROLL_CALCULATED:
-            navigate(`/run-payroll/${payrollId}/overview`);
+            navigate(`/run-payroll/${payrollId}/success`);
             break;
           case componentEvents.RUN_PAYROLL_EMPLOYEE_EDIT: {
             const { employeeId } = payload as { employeeId: string };
@@ -73,6 +74,33 @@ export function Configuration() {
         }
       }}
     />
+  );
+}
+
+// Custom interstitial after PayrollConfiguration finishes calculating. The SDK
+// flow goes straight from calculate to the overview; this demo inserts a
+// success screen first, then hands off to PayrollOverview via the CTA.
+export function PayrollSuccess() {
+  const { payrollId } = useParams<"payrollId">();
+  const navigate = useNavigate();
+  return (
+    <div className={styles.card}>
+      <span className={styles.icon} aria-hidden="true">
+        &#10003;
+      </span>
+      <h1 className={styles.title}>Congrats on successfully running payroll!</h1>
+      <p className={styles.subtitle}>
+        Your payroll has been calculated. Continue to the overview to review the
+        details and submit.
+      </p>
+      <button
+        type="button"
+        className={styles.cta}
+        onClick={() => navigate(`/run-payroll/${payrollId}/overview`)}
+      >
+        Continue to overview
+      </button>
+    </div>
   );
 }
 
