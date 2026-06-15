@@ -32,7 +32,16 @@ const stamp = Date.now();
 // These produce throwaway demo identifiers (EIN / SSN) for a sandbox company,
 // not security-sensitive secrets, but use a CSPRNG (node:crypto) anyway.
 const uniqueEin = () => `${randomInt(10, 100)}-${randomInt(1000000, 10000000)}`;
-const rand9 = () => String(randomInt(100000000, 1000000000));
+// A structurally valid SSN: area 001-899 (never 666), group 01-99, serial
+// 0001-9999. A plain random 9-digit number is rejected by the Gusto API, which
+// enforces real SSN rules (e.g. "SSNs cannot begin with a 9", no 000/666 area).
+const randSsn = () => {
+  let area = randomInt(1, 900); // 001-899, excludes 9xx and 000
+  while (area === 666) area = randomInt(1, 900);
+  const group = randomInt(1, 100); // 01-99
+  const serial = randomInt(1, 10000); // 0001-9999
+  return `${String(area).padStart(3, "0")}${String(group).padStart(2, "0")}${String(serial).padStart(4, "0")}`;
+};
 
 function futureFridayISO() {
   const d = new Date();
@@ -181,7 +190,7 @@ async function seedCompany(api, companyId) {
           title: "CEO",
           phone: "4155550123",
           birthday: "1980-01-01",
-          ssn: rand9(),
+          ssn: randSsn(),
           home_address: { street_1: "548 Market St", street_2: "", city: "San Francisco", state: "CA", zip: "94104" },
         },
       });
@@ -216,7 +225,7 @@ async function seedEmployee(api, companyId) {
   const fresh = await api(`/v1/employees/${empId}`);
   await api(`/v1/employees/${empId}`, {
     method: "PUT",
-    body: { version: fresh.version, ssn: rand9(), date_of_birth: "1990-01-01", first_name: "Demo", last_name: "Employee" },
+    body: { version: fresh.version, ssn: randSsn(), date_of_birth: "1990-01-01", first_name: "Demo", last_name: "Employee" },
   });
 
   await api(`/v1/employees/${empId}/work_addresses`, {
