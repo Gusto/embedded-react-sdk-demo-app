@@ -17,6 +17,7 @@
 // creating another company.
 
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { randomInt } from "node:crypto";
 import {
   client,
   getSystemToken,
@@ -28,9 +29,10 @@ import {
 } from "./gusto-demo-lib.mjs";
 
 const stamp = Date.now();
-const uniqueEin = () =>
-  `${Math.floor(10 + Math.random() * 89)}-${Math.floor(1000000 + Math.random() * 8999999)}`;
-const rand9 = () => String(Math.floor(100000000 + Math.random() * 899999999));
+// These produce throwaway demo identifiers (EIN / SSN) for a sandbox company,
+// not security-sensitive secrets, but use a CSPRNG (node:crypto) anyway.
+const uniqueEin = () => `${randomInt(10, 100)}-${randomInt(1000000, 10000000)}`;
+const rand9 = () => String(randomInt(100000000, 1000000000));
 
 function futureFridayISO() {
   const d = new Date();

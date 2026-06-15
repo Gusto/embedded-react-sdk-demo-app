@@ -18,6 +18,19 @@ export const RECORD_FILE = join(__dirname, ".demo-company.json");
 export const API_VERSION = "2025-06-15";
 export const BASE_URL = process.env.GUSTO_API_BASE_URL || "https://api.gusto-demo.com";
 
+// SSRF guard: every request must resolve to this single, pre-configured origin.
+// Paths are built internally, but we still validate the final origin so a
+// stray/absolute path can never redirect a request to another host.
+const ALLOWED_ORIGIN = new URL(BASE_URL).origin;
+
+function resolveAllowedUrl(path) {
+  const url = new URL(path, BASE_URL);
+  if (url.origin !== ALLOWED_ORIGIN) {
+    throw new Error(`Refusing request to non-allowlisted origin: ${url.origin}`);
+  }
+  return url;
+}
+
 export function requireClientCreds() {
   const clientId = process.env.CLIENT_ID;
   const clientSecret = process.env.CLIENT_SECRET;
@@ -38,7 +51,7 @@ export function client(token) {
       "X-Gusto-API-Version": API_VERSION,
     };
     if (token) headers.Authorization = `Bearer ${token}`;
-    const res = await fetch(BASE_URL + path, {
+    const res = await fetch(resolveAllowedUrl(path), {
       method,
       headers,
       body: body ? JSON.stringify(body) : undefined,
