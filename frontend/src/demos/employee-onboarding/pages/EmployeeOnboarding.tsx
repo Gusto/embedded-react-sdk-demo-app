@@ -230,7 +230,7 @@ export function Summary() {
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEES_LIST) {
           onboardingStore.clear(employeeId!);
-          navigate("/employee-onboarding");
+          navigate("/");
         }
       }}
     />
