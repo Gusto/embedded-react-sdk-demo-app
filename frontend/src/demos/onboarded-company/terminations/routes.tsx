@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
 import {
-  DismissalPayroll,
+  PayPeriodSelection,
   Summary,
   TerminateForm,
 } from "./pages/Terminations";
@@ -12,7 +12,7 @@ export const TerminationsRoutes = (
     <Route path=":employeeId">
       <Route index element={<TerminateForm />} />
       <Route path="summary" element={<Summary />} />
-      <Route path="dismissal-payroll" element={<DismissalPayroll />} />
+      <Route path="pay-period" element={<PayPeriodSelection />} />
     </Route>
   </Route>
 );

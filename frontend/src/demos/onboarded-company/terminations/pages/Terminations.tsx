@@ -7,12 +7,15 @@ import {
 import { COMPANY_ID } from "../../../../config";
 import styles from "./Terminations.module.css";
 
-// Mirrors the SDK's PayrollOption (Employee/types); swap to the exported type
-// once it's surfaced on the EmployeeManagement barrel.
-const PAYROLL_OPTIONS = ["dismissalPayroll", "regularPayroll", "anotherWay"] as const;
-type PayrollOption = (typeof PAYROLL_OPTIONS)[number];
+const PAYROLL_OPTIONS = [
+  "dismissalPayroll",
+  "regularPayroll",
+  "anotherWay",
+] as const satisfies readonly EmployeeManagement.PayrollOption[];
 
-function parsePayrollOption(value: string | null): PayrollOption | undefined {
+function parsePayrollOption(
+  value: string | null,
+): EmployeeManagement.PayrollOption | undefined {
   return PAYROLL_OPTIONS.find((option) => option === value);
 }
 
@@ -31,7 +34,7 @@ export function TerminateForm() {
           switch (type) {
             case componentEvents.EMPLOYEE_TERMINATION_DONE: {
               const { payrollOption, payrollUuid } = payload as {
-                payrollOption: PayrollOption;
+                payrollOption: EmployeeManagement.PayrollOption;
                 payrollUuid?: string;
               };
               const params = new URLSearchParams({ payrollOption });
@@ -80,16 +83,19 @@ export function Summary() {
             case componentEvents.EMPLOYEE_TERMINATION_CANCELLED:
               navigate("/employees");
               break;
+            // Payroll already created by the terminate form -> hand straight to
+            // the run-payroll routes; otherwise pick a pay period first.
             case componentEvents.EMPLOYEE_TERMINATION_RUN_PAYROLL: {
               const { payrollUuid: uuid } = payload as { payrollUuid?: string };
-              const suffix = uuid ? `?payrollUuid=${uuid}` : "";
               navigate(
-                `/employees/terminations/${employeeId}/dismissal-payroll${suffix}`,
+                uuid
+                  ? `/run-payroll/${uuid}/configuration`
+                  : `/employees/terminations/${employeeId}/pay-period`,
               );
               break;
             }
             case componentEvents.EMPLOYEE_TERMINATION_RUN_OFF_CYCLE_PAYROLL:
-              navigate(`/employees/terminations/${employeeId}/dismissal-payroll`);
+              navigate(`/employees/terminations/${employeeId}/pay-period`);
               break;
           }
         }}
@@ -98,22 +104,25 @@ export function Summary() {
   );
 }
 
-export function DismissalPayroll() {
+// Off-cycle dismissal payroll: select the pay period, then reuse the existing
+// run-payroll routes to run it (the same execution DismissalFlow wraps).
+export function PayPeriodSelection() {
   const { employeeId } = useParams<"employeeId">();
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   return (
     <>
       <Link to="/employees" className={styles.backLink}>
         <span aria-hidden="true">&larr;</span>Back to employees
       </Link>
-      <Payroll.DismissalFlow
+      <Payroll.DismissalPayPeriodSelection
         companyId={COMPANY_ID}
         employeeId={employeeId!}
-        payrollId={searchParams.get("payrollUuid") ?? undefined}
-        onEvent={(type) => {
-          if (type === componentEvents.PAYROLL_EXIT_FLOW) {
-            navigate("/employees");
+        onEvent={(type, payload) => {
+          if (type === componentEvents.DISMISSAL_PAY_PERIOD_SELECTED) {
+            const { payrollUuid } = payload as { payrollUuid?: string };
+            if (payrollUuid) {
+              navigate(`/run-payroll/${payrollUuid}/configuration`);
+            }
           }
         }}
       />
