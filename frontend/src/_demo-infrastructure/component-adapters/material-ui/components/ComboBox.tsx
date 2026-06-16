@@ -1,6 +1,6 @@
 import { Autocomplete, TextField } from "@mui/material";
 import type { ComboBoxOption, ComboBoxProps } from "@gusto/embedded-react-sdk";
-import { hiddenLabelSx, nonNativeRequired } from "../shared";
+import { hiddenLabelSx } from "../shared";
 
 export function MuiComboBox({
   label,
@@ -64,13 +64,6 @@ export function MuiComboBox({
           helperText={errorMessage ?? description}
           inputRef={inputRef}
           sx={hiddenLabelSx(shouldVisuallyHideLabel)}
-          slotProps={{
-            ...params.slotProps,
-            htmlInput: {
-              ...params.slotProps.htmlInput,
-              ...nonNativeRequired,
-            },
-          }}
         />
       )}
     />

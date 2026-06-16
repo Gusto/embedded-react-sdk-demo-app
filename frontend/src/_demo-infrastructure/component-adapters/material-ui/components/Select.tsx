@@ -1,6 +1,6 @@
 import { MenuItem, TextField } from "@mui/material";
 import type { SelectProps } from "@gusto/embedded-react-sdk";
-import { hiddenLabelSx, nonNativeRequired } from "../shared";
+import { hiddenLabelSx } from "../shared";
 
 export function MuiSelect({
   label,
@@ -36,7 +36,6 @@ export function MuiSelect({
       onBlur={onBlur}
       className={className}
       sx={hiddenLabelSx(shouldVisuallyHideLabel)}
-      slotProps={{ htmlInput: { ...nonNativeRequired } }}
     >
       {placeholder && (
         <MenuItem value="" disabled>

@@ -32,9 +32,3 @@ export function formatDateInput(date?: Date | null): string {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
-
-// `htmlInput` override that strips the native `required` attribute from the DOM
-// input. The required asterisk still renders from the TextField `required` prop;
-// this just stops the browser's built-in validation popup from blocking submit
-// before the SDK's own validation runs. Temporary until the SDK core fix lands.
-export const nonNativeRequired = { required: false } as const;

@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import type { TextAreaProps } from "@gusto/embedded-react-sdk";
-import { hiddenLabelSx, nonNativeRequired } from "../shared";
+import { hiddenLabelSx } from "../shared";
 
 export function MuiTextArea({
   label,
@@ -45,7 +45,6 @@ export function MuiTextArea({
         htmlInput: {
           cols,
           "aria-describedby": ariaDescribedby,
-          ...nonNativeRequired,
         },
       }}
     />

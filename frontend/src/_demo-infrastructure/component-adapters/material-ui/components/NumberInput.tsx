@@ -1,6 +1,6 @@
 import { InputAdornment, TextField } from "@mui/material";
 import type { NumberInputProps } from "@gusto/embedded-react-sdk";
-import { hiddenLabelSx, nonNativeRequired } from "../shared";
+import { hiddenLabelSx } from "../shared";
 
 export function MuiNumberInput({
   label,
@@ -48,7 +48,7 @@ export function MuiNumberInput({
       className={className}
       sx={hiddenLabelSx(shouldVisuallyHideLabel)}
       slotProps={{
-        htmlInput: { min, max, ...nonNativeRequired },
+        htmlInput: { min, max },
         input: {
           startAdornment: startAdornment ? (
             <InputAdornment position="start">{startAdornment}</InputAdornment>

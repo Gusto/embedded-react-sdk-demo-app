@@ -1,6 +1,6 @@
 import { InputAdornment, TextField } from "@mui/material";
 import type { TextInputProps } from "@gusto/embedded-react-sdk";
-import { hiddenLabelSx, nonNativeRequired } from "../shared";
+import { hiddenLabelSx } from "../shared";
 
 export function MuiTextInput({
   label,
@@ -53,7 +53,6 @@ export function MuiTextInput({
           maxLength,
           "aria-describedby": ariaDescribedby,
           "aria-labelledby": ariaLabelledby,
-          ...nonNativeRequired,
         },
         input: {
           startAdornment: adornmentStart ? (

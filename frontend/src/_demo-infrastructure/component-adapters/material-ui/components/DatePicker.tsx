@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import type { DatePickerProps } from "@gusto/embedded-react-sdk";
-import { formatDateInput, hiddenLabelSx, nonNativeRequired } from "../shared";
+import { formatDateInput, hiddenLabelSx } from "../shared";
 
 export function MuiDatePicker({
   label,
@@ -46,7 +46,6 @@ export function MuiDatePicker({
         htmlInput: {
           min: formatDateInput(minDate),
           max: formatDateInput(maxDate),
-          ...nonNativeRequired,
         },
       }}
     />
