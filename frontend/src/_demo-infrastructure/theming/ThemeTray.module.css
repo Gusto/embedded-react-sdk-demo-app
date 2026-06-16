@@ -187,6 +187,10 @@
   width: 20px;
   height: 20px;
   cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  flex-shrink: 0;
 }
 
 .swatch {
@@ -199,13 +203,12 @@
 
 .colorPicker {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  width: 1px;
+  height: 1px;
   opacity: 0;
-  cursor: pointer;
   border: none;
   padding: 0;
+  overflow: hidden;
 }
 
 .swatchPlaceholder {

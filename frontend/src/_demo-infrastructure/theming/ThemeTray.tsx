@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useTheming } from "./context";
 import {
   groupThemeTokens,
@@ -18,6 +18,7 @@ function matchesQuery(token: ThemeToken, query: string): boolean {
 
 function TokenRow({ token }: { token: ThemeToken }) {
   const { overrides, setOverride } = useTheming();
+  const colorInputRef = useRef<HTMLInputElement>(null);
   const override = (overrides[token.key] as string | undefined) ?? "";
   const swatchColor = override || token.defaultValue;
   const colorPickerValue =
@@ -28,15 +29,20 @@ function TokenRow({ token }: { token: ThemeToken }) {
   return (
     <div className={styles.token}>
       {token.isColor ? (
-        <label
-          className={styles.swatchLabel}
-          aria-label={`Pick ${tokenLabel(token.key)} color`}
-        >
-          <span
-            className={styles.swatch}
-            style={{ background: swatchColor || "transparent" }}
-          />
+        <>
+          <button
+            type="button"
+            className={styles.swatchLabel}
+            aria-label={`Pick ${tokenLabel(token.key)} color`}
+            onClick={() => colorInputRef.current?.click()}
+          >
+            <span
+              className={styles.swatch}
+              style={{ background: swatchColor || "transparent" }}
+            />
+          </button>
           <input
+            ref={colorInputRef}
             type="color"
             className={styles.colorPicker}
             value={colorPickerValue}
@@ -45,7 +51,7 @@ function TokenRow({ token }: { token: ThemeToken }) {
             }}
             tabIndex={-1}
           />
-        </label>
+        </>
       ) : (
         <span className={styles.swatchPlaceholder} />
       )}
