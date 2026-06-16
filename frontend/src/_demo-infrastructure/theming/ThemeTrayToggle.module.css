@@ -1,0 +1,39 @@
+.button {
+  position: fixed;
+  /* Offset left of the HomeButton (right: 24px, 48px wide) so they never overlap. */
+  right: 84px;
+  bottom: 24px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 18px;
+  border-radius: 24px;
+  background: #ffffff;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.08);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease, box-shadow 120ms ease,
+    transform 120ms ease;
+  z-index: 50;
+}
+
+.label {
+  line-height: 1;
+}
+
+.button:hover {
+  color: #4338ca;
+  border-color: #4338ca;
+  box-shadow: 0 6px 18px rgba(67, 56, 202, 0.18);
+  transform: translateY(-1px);
+}
+
+.button:focus-visible {
+  outline: 2px solid #4338ca;
+  outline-offset: 2px;
+}
