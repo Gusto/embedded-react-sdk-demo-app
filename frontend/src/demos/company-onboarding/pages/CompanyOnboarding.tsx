@@ -6,7 +6,6 @@ import {
 } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID } from "../../../config";
 import { CompanyDocumentSignerComposition } from "../block-compositions/CompanyDocumentSignerComposition";
-import { LocationsComposition } from "../block-compositions/LocationsComposition";
 import { StateTaxesComposition } from "../block-compositions/StateTaxesComposition";
 
 // This demo composes the individual SDK company-onboarding blocks behind
@@ -37,17 +36,16 @@ export function Overview() {
   );
 }
 
-// Locations is a composite block: it has smaller sub-steps (locations list +
-// location form) that we route individually here. That routed implementation
-// lives in block-compositions/. Render <CompanyOnboarding.Locations .../> instead
-// for the turnkey single-component step.
 export function Locations() {
   const navigate = useNavigate();
   return (
-    <LocationsComposition
+    <CompanyOnboarding.Locations
       companyId={COMPANY_ID}
-      basePath="/company-onboarding/locations"
-      onComplete={() => navigate("/company-onboarding/federal-taxes")}
+      onEvent={(type) => {
+        if (type === componentEvents.COMPANY_LOCATION_DONE) {
+          navigate("/company-onboarding/federal-taxes");
+        }
+      }}
     />
   );
 }

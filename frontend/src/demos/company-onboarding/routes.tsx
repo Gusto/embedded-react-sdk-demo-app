@@ -22,7 +22,7 @@ export const CompanyOnboardingRoutes = (
     }
   >
     <Route index element={<Navigate to="locations" replace />} />
-    <Route path="locations/*" element={<Locations />} />
+    <Route path="locations" element={<Locations />} />
     <Route path="federal-taxes" element={<FederalTaxes />} />
     <Route path="industry" element={<Industry />} />
     <Route path="bank-account" element={<BankAccount />} />
