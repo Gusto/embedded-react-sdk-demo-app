@@ -82,8 +82,7 @@ function withoutHopByHopHeaders(source: Headers): Headers {
 function buildTargetUrl(req: Request): string {
   const url = new URL(GUSTO_API_BASE_URL);
   // req.path is the parsed path only (never the full/absolute URL), so it can't
-  // re-target the host. Let the URL parser pull the query off originalUrl rather
-  // than hand-splitting on "?".
+  // re-target the host.
   url.pathname = req.path;
   url.search = new URL(req.originalUrl, GUSTO_API_BASE_URL).search;
   return url.toString();
@@ -91,12 +90,16 @@ function buildTargetUrl(req: Request): string {
 
 // express.raw() gives a Buffer when there's a body and an empty object
 // otherwise, so bodyless requests (the calculate / submit PUTs) carry no body.
-// Node's fetch accepts a Buffer at runtime; the cast satisfies its narrower
-// BodyInit type.
-function getRequestBody(req: Request): BodyInit | undefined {
-  return Buffer.isBuffer(req.body) && req.body.length > 0
-    ? (req.body as unknown as BodyInit)
-    : undefined;
+// We hand fetch a plain Uint8Array (a valid BodyInit) rather than the Buffer,
+// whose ArrayBufferLike-backed type fetch doesn't accept even though the bytes
+// are identical.
+function getRequestBody(req: Request): Uint8Array<ArrayBuffer> | undefined {
+  if (!Buffer.isBuffer(req.body) || req.body.length === 0) {
+    return undefined;
+  }
+  const body = new Uint8Array(req.body.length);
+  body.set(req.body);
+  return body;
 }
 
 // Pipe the API's response body (a web ReadableStream) straight to the client,
