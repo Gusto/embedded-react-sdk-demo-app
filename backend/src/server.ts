@@ -61,11 +61,17 @@ function withoutHopByHopHeaders(source: Headers): Headers {
   return result;
 }
 
-// Map an incoming SDK request onto the matching Gusto API URL, carrying the
-// query string through unchanged.
+// Map an incoming SDK request onto the matching Gusto API URL. Building a URL
+// object keeps the host fixed up front and lets the URL parser handle encoding
+// and the query string, rather than hand-splitting on "?".
 function buildTargetUrl(req: Request): string {
-  const queryString = req.originalUrl.split("?")[1];
-  return `${GUSTO_API_BASE_URL}${req.path}${queryString ? `?${queryString}` : ""}`;
+  const url = new URL(GUSTO_API_BASE_URL);
+  // req.path is the parsed path only (never the full/absolute URL), so it can't
+  // re-target the host.
+  url.pathname = req.path;
+  const queryIndex = req.originalUrl.indexOf("?");
+  url.search = queryIndex === -1 ? "" : req.originalUrl.slice(queryIndex);
+  return url.toString();
 }
 
 // express.raw() gives a Buffer when there's a body and an empty object
