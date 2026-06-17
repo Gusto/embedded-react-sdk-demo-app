@@ -87,6 +87,7 @@ The backend uses automatic token refresh to handle token expiration. You'll need
 - `CLIENT_ID` - Your app's Client ID from the Gusto developer dashboard (required)
 - `CLIENT_SECRET` - Your app's Client Secret from the Gusto developer dashboard (required)
 - `GUSTO_API_BASE_URL` - Optional, defaults to `https://api.gusto-demo.com`
+- `ALLOWED_ORIGINS` - Optional, comma-separated extra browser origins allowed through CORS. The proxy holds your Gusto credentials, so CORS is locked to `localhost` by default (where the demo frontend runs); add any other origins here.
 
 **Token storage** (`tokens.json`):
 - `refresh_token` - The refresh token obtained from creating a partner managed company (required)
