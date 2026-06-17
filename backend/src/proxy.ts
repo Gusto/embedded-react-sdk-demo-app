@@ -1,13 +1,34 @@
+import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import cors, { CorsOptions } from "cors";
 import { Readable } from "node:stream";
-import {
-  ALLOWED_ORIGINS,
-  GUSTO_API_BASE_URL,
-  PAGINATION_HEADERS,
-  PORT,
-} from "./config";
 import { tokenManager } from "./tokenManager";
+
+dotenv.config();
+
+const GUSTO_API_BASE_URL =
+  process.env.GUSTO_API_BASE_URL ?? "https://api.gusto-demo.com";
+
+// Defaults to 3001 (the port this demo's frontend points at). Override with PORT
+// only when running multiple proxy instances side by side.
+const PORT = Number(process.env.PORT) || 3001;
+
+// A cross-origin browser fetch can only read custom response headers that the
+// server explicitly allow-lists. The SDK reads these pagination headers off the
+// fetch response to drive its list pagination controls.
+const PAGINATION_HEADERS = [
+  "x-total-count",
+  "x-total-pages",
+  "x-page",
+  "x-per-page",
+];
+
+// Extra browser origins allowed through CORS, on top of localhost. Comma-separated
+// in the ALLOWED_ORIGINS env var. Empty by default.
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 const app = express();
 
@@ -30,8 +51,6 @@ const corsOptions: CorsOptions = {
       callback(new Error(`Origin not allowed by CORS: ${origin}`));
     }
   },
-  // Let the browser read the API's pagination headers so the SDK can drive its
-  // list pagination controls. See PAGINATION_HEADERS in config.ts for why.
   exposedHeaders: PAGINATION_HEADERS,
 };
 app.use(cors(corsOptions));

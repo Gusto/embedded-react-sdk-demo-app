@@ -2,9 +2,9 @@
   "name": "embedded-react-sdk-demo-app-backend",
   "version": "1.0.0",
   "description": "Backend proxy server for Gusto's Embedded SDK demo",
-  "main": "dist/server.js",
+  "main": "dist/proxy.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node dist/proxy.js",
     "dev": "nodemon",
     "build": "tsc",
     "watch": "tsc -w"

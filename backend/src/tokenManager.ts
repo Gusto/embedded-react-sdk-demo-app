@@ -1,14 +1,20 @@
 // NOTE: This file is a demo-only convenience, not a pattern to copy verbatim.
 // To keep setup frictionless it stores and rotates the OAuth refresh token in a
 // local tokens.json file. In your own app you'd manage these credentials the way
-// you already handle secrets - e.g. a secrets manager or an encrypted datastore -
-// rather than a JSON file on disk. The OAuth flow itself (exchanging the refresh
-// token for short-lived access tokens, and persisting the rotated refresh token)
-// is the part worth modeling; the file-based storage is just demo scaffolding.
+// you already handle secrets - e.g. a secrets manager or an encrypted datastore.
 
+import dotenv from "dotenv";
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
-import { GUSTO_API_BASE_URL, TOKEN_EXPIRY_BUFFER_MS } from "./config";
+
+dotenv.config();
+
+const GUSTO_API_BASE_URL =
+  process.env.GUSTO_API_BASE_URL ?? "https://api.gusto-demo.com";
+
+// Refresh an access token this far before it actually expires, so an in-flight
+// request never races a token expiring mid-call.
+const TOKEN_EXPIRY_BUFFER_MS = 5 * 60 * 1000;
 
 interface TokenResponse {
   access_token: string;
