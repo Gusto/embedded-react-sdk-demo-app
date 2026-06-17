@@ -9,9 +9,7 @@ dotenv.config();
 const GUSTO_API_BASE_URL =
   process.env.GUSTO_API_BASE_URL ?? "https://api.gusto-demo.com";
 
-// Defaults to 3001 (the port this demo's frontend points at). Override with PORT
-// only when running multiple proxy instances side by side.
-const PORT = Number(process.env.PORT) || 3001;
+const PORT = 3001;
 
 // A cross-origin browser fetch can only read custom response headers that the
 // server explicitly allow-lists. The SDK reads these pagination headers off the
