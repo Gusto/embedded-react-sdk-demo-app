@@ -6,6 +6,12 @@ import {
 } from "@gusto/embedded-react-sdk";
 import { createPersistedStore } from "../../../shared/persistedStore";
 import { COMPANY_ID } from "../../../config";
+import { CompensationComposition } from "../block-compositions/CompensationComposition";
+
+// This demo composes the individual SDK employee-onboarding blocks behind
+// react-router so each step owns a URL. For a turnkey integration, skip all of
+// this and render <EmployeeOnboarding.OnboardingFlow .../>, which runs the same
+// steps inside one component.
 
 type OnboardingContext = {
   startDate?: string;
@@ -74,7 +80,7 @@ export function ProfileCreate() {
               startDate: data.startDate,
               onboardingStatus: data.onboardingStatus,
             });
-            navigate(`/employee-onboarding/${data.uuid}/compensation`);
+            navigate(`/employee-onboarding/${data.uuid}/compensation/new`);
             break;
           }
           case componentEvents.CANCEL:
@@ -120,6 +126,11 @@ export function ProfileEdit() {
   );
 }
 
+// Compensation is a composite block: it has smaller sub-steps (jobs list +
+// edit-compensation form) that we route individually here. That routed
+// implementation lives in block-compositions/. Render
+// <EmployeeOnboarding.Compensation .../> instead for the turnkey single-component
+// step.
 export function Compensation() {
   const { employeeId } = useParams<"employeeId">();
   const { startDate, onboardingStatus } =
@@ -127,18 +138,16 @@ export function Compensation() {
   const navigate = useNavigate();
   const isSelfOnboarding = SELF_ONBOARDING_STATUSES.has(onboardingStatus ?? "");
   return (
-    <EmployeeOnboarding.Compensation
+    <CompensationComposition
       employeeId={employeeId!}
       startDate={startDate!}
-      onEvent={(type) => {
-        if (type === componentEvents.EMPLOYEE_COMPENSATION_DONE) {
-          navigate(
-            isSelfOnboarding
-              ? `/employee-onboarding/${employeeId}/deductions`
-              : `/employee-onboarding/${employeeId}/federal-taxes`,
-          );
-        }
-      }}
+      onComplete={() =>
+        navigate(
+          isSelfOnboarding
+            ? `/employee-onboarding/${employeeId}/deductions`
+            : `/employee-onboarding/${employeeId}/federal-taxes`,
+        )
+      }
     />
   );
 }

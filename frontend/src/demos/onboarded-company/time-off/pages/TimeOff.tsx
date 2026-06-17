@@ -2,6 +2,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { TimeOff, componentEvents } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID } from "../../../../config";
 
+// This demo composes the individual SDK time-off blocks behind react-router so
+// each step owns a URL. For a turnkey integration, skip all of this and render
+// <TimeOff.TimeOffFlow .../>, which runs the same steps inside one component.
+
 type SickOrVacation = "sick" | "vacation";
 
 function isSickOrVacation(value: string | undefined): value is SickOrVacation {

@@ -3,9 +3,10 @@ import { EmployeeManagement, EmployeeOnboarding, componentEvents } from "@gusto/
 import { COMPANY_ID } from "../../../../config";
 import styles from "./ManageEmployees.module.css";
 
-// Recreates <EmployeeManagement.DashboardFlow /> as routed blocks: the dashboard
-// tabs become URLs, each tab's cards emit an edit event that navigates to a
-// manage route rendering the matching edit-form block.
+// This demo composes the individual SDK employee-management blocks behind
+// react-router so each step owns a URL. For a turnkey integration, skip all of
+// this and render <EmployeeManagement.DashboardFlow .../>, which runs the same
+// steps inside one component.
 
 export function EmployeeListPage() {
   const navigate = useNavigate();
