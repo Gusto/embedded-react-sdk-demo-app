@@ -78,16 +78,14 @@ function withoutHopByHopHeaders(source: Headers): Headers {
   return result;
 }
 
-// Map an incoming SDK request onto the matching Gusto API URL. Building a URL
-// object keeps the host fixed up front and lets the URL parser handle encoding
-// and the query string, rather than hand-splitting on "?".
+// Map an incoming SDK request onto the matching Gusto API URL.
 function buildTargetUrl(req: Request): string {
   const url = new URL(GUSTO_API_BASE_URL);
   // req.path is the parsed path only (never the full/absolute URL), so it can't
-  // re-target the host.
+  // re-target the host. Let the URL parser pull the query off originalUrl rather
+  // than hand-splitting on "?".
   url.pathname = req.path;
-  const queryIndex = req.originalUrl.indexOf("?");
-  url.search = queryIndex === -1 ? "" : req.originalUrl.slice(queryIndex);
+  url.search = new URL(req.originalUrl, GUSTO_API_BASE_URL).search;
   return url.toString();
 }
 
