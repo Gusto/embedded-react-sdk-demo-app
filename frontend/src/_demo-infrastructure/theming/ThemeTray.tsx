@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from "react";
+import { useAdapters } from "../component-adapters";
 import { useTheming } from "./context";
 import {
   groupThemeTokens,
@@ -6,6 +7,40 @@ import {
   type ThemeToken,
 } from "./themeTokens";
 import styles from "./ThemeTray.module.css";
+
+function AdapterSelector() {
+  const { adapters, selectedId, select } = useAdapters();
+  const active = adapters.find((a) => a.id === selectedId);
+
+  return (
+    <div className={styles.adapterSection}>
+      <span className={styles.adapterTitle}>Components</span>
+      <div
+        className={styles.adapterOptions}
+        role="radiogroup"
+        aria-label="Component adapter"
+      >
+        {adapters.map((adapter) => (
+          <button
+            key={adapter.id}
+            type="button"
+            role="radio"
+            aria-checked={adapter.id === selectedId}
+            className={`${styles.adapterOption} ${
+              adapter.id === selectedId ? styles.adapterOptionActive : ""
+            }`}
+            onClick={() => {
+              select(adapter.id);
+            }}
+          >
+            {adapter.label}
+          </button>
+        ))}
+      </div>
+      {active && <p className={styles.adapterDescription}>{active.description}</p>}
+    </div>
+  );
+}
 
 function matchesQuery(token: ThemeToken, query: string): boolean {
   if (!query) return true;
@@ -146,9 +181,9 @@ export function ThemeTray() {
       >
         <header className={styles.header}>
           <div>
-            <h2 className={styles.title}>Theme</h2>
+            <h2 className={styles.title}>Customize</h2>
             <p className={styles.subtitle}>
-              Live-edit the Gusto SDK theme tokens
+              Swap component adapters and live-edit the SDK theme tokens
             </p>
           </div>
           <button
@@ -160,6 +195,8 @@ export function ThemeTray() {
             ×
           </button>
         </header>
+
+        <AdapterSelector />
 
         <div className={styles.searchRow}>
           <input
