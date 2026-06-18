@@ -18,7 +18,7 @@ export const OnboardedCompanyRoutes = (
     {TerminationsRoutes}
     {TimeOffRoutes}
     <Route path="/bank-account" element={<BankAccount />} />
-    <Route path="/locations" element={<Locations />} />
+    <Route path="/locations/*" element={<Locations />} />
     <Route path="/federal-taxes" element={<FederalTaxes />} />
     <Route path="/state-taxes/*" element={<StateTaxes />} />
     <Route path="/pay-schedule" element={<PaySchedule />} />
