@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import {
   Navigate,
   NavLink,
@@ -10,22 +11,14 @@ import {
 import { CompanyOnboarding, componentEvents } from "@gusto/embedded-react-sdk";
 import styles from "./CompanyDocumentSignerComposition.module.css";
 
-// Fine-grained, two-level rebuild of the company document-signing step, routed so
-// each stage owns a URL: document list -> assign signatory -> sign a form.
+// Fine-grained rebuild of the company document-signing step from its sub-blocks
+// (DocumentList -> CreateSignatory / InviteSignatory -> SignatureForm), routed so
+// each stage owns a URL. If you don't need this control, render
+// <CompanyOnboarding.DocumentSigner /> instead - it composes these same sub-blocks
+// behind its own internal flow.
 //
-// We always enter on the document list. Its built-in "manage signatories" panel
-// (part of CompanyOnboarding.DocumentList) prompts to *assign* a signatory when
-// none exists and to *change* one when it does, both emitting
-// COMPANY_FORM_EDIT_SIGNATORY - so the list itself decides whether the assign
-// step is needed and we never have to fetch signatories to pick an entry point.
-//
-// Level up for less control:
-//   - Whole flow: render <CompanyOnboarding.DocumentSigner /> instead - it
-//     composes these same sub-blocks (assign signatory -> list -> signing)
-//     behind its own internal flow.
-//   - Assign step only: render <CompanyOnboarding.AssignSignatory />, which
-//     presents the create/invite selection plus both forms. We expand it into a
-//     two-tab create/invite UI here purely to show the underlying sub-blocks.
+// The assign step splits <CompanyOnboarding.AssignSignatory /> into two tabs
+// (create / invite) here to expose its underlying sub-blocks.
 
 type CompanyDocumentSignerCompositionProps = {
   companyId: string;
@@ -40,9 +33,6 @@ export function CompanyDocumentSignerComposition({
   basePath,
   onComplete,
 }: CompanyDocumentSignerCompositionProps) {
-  const navigate = useNavigate();
-  const toDocuments = () => navigate(`${basePath}/documents`);
-
   return (
     <Routes>
       <Route index element={<Navigate to={`${basePath}/documents`} replace />} />
@@ -50,41 +40,68 @@ export function CompanyDocumentSignerComposition({
         <Route index element={<Navigate to="create" replace />} />
         <Route
           path="create"
-          element={<CreateSignatoryStep companyId={companyId} onAssigned={toDocuments} />}
+          element={<CreateSignatoryStep companyId={companyId} basePath={basePath} />}
         />
         <Route
           path="invite"
-          element={<InviteSignatoryStep companyId={companyId} onAssigned={toDocuments} />}
+          element={<InviteSignatoryStep companyId={companyId} basePath={basePath} />}
         />
       </Route>
+      {/* The signatory id rides in the URL (rather than React state) so each stage
+          still owns its URL and the id survives the sign round-trip. It is absent
+          until a signatory is created in this session. */}
       <Route
-        path="documents"
+        path="documents/:signatoryId?"
         element={
-          <CompanyOnboarding.DocumentList
-            companyId={companyId}
-            onEvent={(type, payload) => {
-              switch (type) {
-                case componentEvents.COMPANY_VIEW_FORM_TO_SIGN: {
-                  const { uuid } = payload as { uuid: string };
-                  navigate(`${basePath}/sign/${uuid}`);
-                  break;
-                }
-                case componentEvents.COMPANY_FORM_EDIT_SIGNATORY:
-                  navigate(`${basePath}/assign`);
-                  break;
-                case componentEvents.COMPANY_FORMS_DONE:
-                  onComplete();
-                  break;
-              }
-            }}
-          />
+          <DocumentsStep companyId={companyId} basePath={basePath} onComplete={onComplete} />
         }
       />
       <Route
-        path="sign/:formId"
-        element={<SignFormStep companyId={companyId} onDone={toDocuments} />}
+        path="sign/:signatoryId/:formId"
+        element={<SignFormStep companyId={companyId} basePath={basePath} />}
       />
     </Routes>
+  );
+}
+
+// DocumentList only lets the current user sign when its `signatoryId` matches the
+// company's saved signatory (it treats them as the "self signatory"). We read that
+// id from the route and pass it down so the demo user can sign the forms
+// end-to-end; a production app would set it based on who is actually signing.
+function DocumentsStep({
+  companyId,
+  basePath,
+  onComplete,
+}: {
+  companyId: string;
+  basePath: string;
+  onComplete: () => void;
+}) {
+  const navigate = useNavigate();
+  const { signatoryId } = useParams<"signatoryId">();
+
+  return (
+    <CompanyOnboarding.DocumentList
+      companyId={companyId}
+      signatoryId={signatoryId}
+      onEvent={(type, payload) => {
+        switch (type) {
+          case componentEvents.COMPANY_VIEW_FORM_TO_SIGN: {
+            const { uuid } = payload as { uuid: string };
+            // Keep the signatory id in the URL so signing stays enabled when we
+            // return to the list.
+            navigate(`${basePath}/sign/${signatoryId}/${uuid}`);
+            break;
+          }
+          case componentEvents.COMPANY_FORM_EDIT_SIGNATORY:
+            navigate(`${basePath}/assign`);
+            break;
+          case componentEvents.COMPANY_FORMS_DONE:
+            onComplete();
+            break;
+        }
+      }}
+    />
   );
 }
 
@@ -115,23 +132,37 @@ function AssignSignatoryTabs() {
   );
 }
 
-// Pass CreateSignatory an optional `signatoryId` to switch it to update mode;
-// without it (as in this demo) it always creates. Get the id from the signatories
-// endpoint:
+// CreateSignatory decides create vs update internally: pass it an optional
+// `signatoryId` and it pre-fills and updates that signatory; omit it (as in this
+// demo) and it always creates. To run it in update mode you'd supply an id from
+// the signatories endpoint:
 // https://docs.gusto.com/embedded-payroll/reference/get-v1-companies-company_uuid-signatories
+//
+// We keep it in create mode here, but capture the new signatory's id from
+// COMPANY_SIGNATORY_CREATED and carry it into the document-list URL so the demo
+// user (the self signatory) can sign.
 function CreateSignatoryStep({
   companyId,
-  onAssigned,
+  basePath,
 }: {
   companyId: string;
-  onAssigned: () => void;
+  basePath: string;
 }) {
+  const navigate = useNavigate();
+  // Captured on COMPANY_SIGNATORY_CREATED, applied when the flow completes.
+  const createdSignatoryId = useRef<string>(undefined);
+
   return (
     <CompanyOnboarding.CreateSignatory
       companyId={companyId}
-      onEvent={(type) => {
+      onEvent={(type, payload) => {
+        if (type === componentEvents.COMPANY_SIGNATORY_CREATED) {
+          const { uuid } = payload as { uuid: string };
+          createdSignatoryId.current = uuid;
+        }
         if (type === componentEvents.COMPANY_CREATE_SIGNATORY_DONE) {
-          onAssigned();
+          const id = createdSignatoryId.current;
+          navigate(id ? `${basePath}/documents/${id}` : `${basePath}/documents`);
         }
       }}
     />
@@ -140,17 +171,20 @@ function CreateSignatoryStep({
 
 function InviteSignatoryStep({
   companyId,
-  onAssigned,
+  basePath,
 }: {
   companyId: string;
-  onAssigned: () => void;
+  basePath: string;
 }) {
+  const navigate = useNavigate();
   return (
     <CompanyOnboarding.InviteSignatory
       companyId={companyId}
       onEvent={(type) => {
         if (type === componentEvents.COMPANY_INVITE_SIGNATORY_DONE) {
-          onAssigned();
+          // An invited signatory signs via their own emailed link, so the demo
+          // user is not the self signatory - return to the list without an id.
+          navigate(`${basePath}/documents`);
         }
       }}
     />
@@ -159,12 +193,13 @@ function InviteSignatoryStep({
 
 function SignFormStep({
   companyId,
-  onDone,
+  basePath,
 }: {
   companyId: string;
-  onDone: () => void;
+  basePath: string;
 }) {
-  const { formId } = useParams<"formId">();
+  const navigate = useNavigate();
+  const { signatoryId, formId } = useParams<"signatoryId" | "formId">();
   return (
     <CompanyOnboarding.SignatureForm
       companyId={companyId}
@@ -174,7 +209,7 @@ function SignFormStep({
           type === componentEvents.COMPANY_SIGN_FORM_DONE ||
           type === componentEvents.COMPANY_SIGN_FORM_BACK
         ) {
-          onDone();
+          navigate(`${basePath}/documents/${signatoryId}`);
         }
       }}
     />
