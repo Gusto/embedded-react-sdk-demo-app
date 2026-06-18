@@ -142,6 +142,11 @@ creating another. (Under the hood: the `setup` script in
 [backend/package.json](./backend/package.json) runs
 [scripts/setup-demo-company.mjs](./scripts/setup-demo-company.mjs).)
 
+> Note: running the setup script is a one-time setup step. Once it has provisioned
+> the company and written `backend/tokens.json`, the backend just uses that refresh
+> token (and auto-refreshes it) on every later run — you don't need to run `setup`
+> again.
+
 ### Alternatives to the setup script
 
 You can skip step 2 and fill the two inputs yourself:
