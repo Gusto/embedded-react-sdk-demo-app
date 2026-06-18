@@ -345,7 +345,8 @@ async function main() {
     method: "POST",
     body: {
       user: { first_name: "Cloud", last_name: "Agent", email: `cloud-agent+${stamp}@example.com` },
-      company: { name: `Cloud Agent Demo ${new Date(stamp).toISOString()}` },
+      // Readable name with a random suffix to avoid collisions across runs.
+      company: { name: `Demo Company ${randomInt(100000, 1000000)}` },
     },
   });
   const companyId = created.company_uuid;
