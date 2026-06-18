@@ -4,6 +4,8 @@ import {
   componentEvents,
   I9_FORM_NAME,
 } from "@gusto/embedded-react-sdk";
+import { useEmployeesGet } from "@gusto/embedded-api-v-2025-11-15/react-query/employeesGet";
+import { useEmployeeFormsList } from "@gusto/embedded-api-v-2025-11-15/react-query/employeeFormsList";
 
 // Fine-grained rebuild of the employee document-signing step from its sub-blocks
 // (EmploymentEligibility -> DocumentList -> SignatureForm / I9SignatureForm),
@@ -11,19 +13,15 @@ import {
 // <EmployeeOnboarding.DocumentSigner withEmployeeI9 /> instead - it composes
 // these same sub-blocks behind its own internal flow.
 //
-// This composition always enters on the `eligibility` route, which renders
-// EmployeeOnboarding.EmploymentEligibility (the I-9 employment eligibility form).
-// In a real integration you'd render that component only for employees who
-// actually need the I-9, otherwise entering directly on the `documents` route
-// (EmployeeOnboarding.DocumentList). Derive that decision from live data - this
-// is what the SDK DocumentSigner checks internally - and render
-// EmploymentEligibility first only when BOTH:
-//   1. I-9 is enabled for the employee - GET the employee and check
-//      `onboarding_documents_config.i9_document === true`:
-//      https://docs.gusto.com/embedded-payroll/reference/get-v1-employees
-//   2. The I-9 is still outstanding - GET their forms; the "US_I-9" form is
-//      either missing entirely or present with `requires_signing === true`:
-//      https://docs.gusto.com/embedded-payroll/reference/get-v1-employee-forms
+// The entry route derives the start step from live data the same way the
+// all-in-one DocumentSigner does internally, via the @gusto/embedded-api React
+// Query hooks. Keep that package on the same version the SDK depends on so its
+// hooks share the SDK's client and cache. Enter on EmploymentEligibility (the
+// I-9 form) only when the employee needs the I-9, otherwise on the document
+// list. The I-9 is needed when BOTH:
+//   1. I-9 is enabled for the employee (`onboardingDocumentsConfig.i9Document`).
+//   2. The I-9 is still outstanding - the "US_I-9" form is missing entirely or
+//      present with `requiresSigning === true`.
 
 type EmployeeDocumentSignerCompositionProps = {
   employeeId: string;
@@ -43,7 +41,12 @@ export function EmployeeDocumentSignerComposition({
 
   return (
     <Routes>
-      <Route index element={<Navigate to={`${basePath}/eligibility`} replace />} />
+      <Route
+        index
+        element={
+          <DocumentSignerEntry employeeId={employeeId} basePath={basePath} />
+        }
+      />
       <Route
         path="eligibility"
         element={
@@ -90,6 +93,38 @@ export function EmployeeDocumentSignerComposition({
         element={<SignI9FormStep employeeId={employeeId} basePath={basePath} />}
       />
     </Routes>
+  );
+}
+
+// Picks the entry step from live data: EmploymentEligibility when the employee
+// still needs the I-9, otherwise the document list. Mirrors the gate the
+// all-in-one DocumentSigner runs internally.
+function DocumentSignerEntry({
+  employeeId,
+  basePath,
+}: {
+  employeeId: string;
+  basePath: string;
+}) {
+  const { data: employeeData, isPending: employeePending } = useEmployeesGet({
+    employeeId,
+  });
+  const { data: formsData, isPending: formsPending } = useEmployeeFormsList({
+    employeeId,
+  });
+
+  if (employeePending || formsPending) return null;
+
+  const i9Enabled =
+    employeeData?.employee?.onboardingDocumentsConfig?.i9Document === true;
+  const i9Form = formsData?.forms?.find((form) => form.name === I9_FORM_NAME);
+  const needsI9Form = i9Enabled && (!i9Form || i9Form.requiresSigning === true);
+
+  return (
+    <Navigate
+      to={`${basePath}/${needsI9Form ? "eligibility" : "documents"}`}
+      replace
+    />
   );
 }
 
