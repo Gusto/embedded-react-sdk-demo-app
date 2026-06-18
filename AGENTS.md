@@ -102,3 +102,39 @@ credentials.
   still render regardless (they make no API calls).
 - The frontend's backend URL is hardcoded to `http://localhost:3001` in
   `frontend/src/App.tsx` (`GustoProvider` `baseUrl`).
+
+### SDK Upgrades and API Version Management
+
+When upgrading the `@gusto/embedded-react-sdk` package in `frontend/package.json`,
+**you MUST verify and update the API version** used by the backend and setup
+scripts to match the SDK's required minimum API version.
+
+#### How to check the SDK's API version:
+
+1. After upgrading, inspect
+   `frontend/node_modules/@gusto/embedded-react-sdk/package.json` and look for the
+   `@gusto/embedded-api-v-*` dependency. The version suffix (e.g., `2025-11-15` in
+   `@gusto/embedded-api-v-2025-11-15`) indicates the minimum API version required.
+
+2. Compare this to the API version configured in:
+   - `backend/src/tokenManager.ts` (the `X-Gusto-API-Version` header)
+   - `scripts/gusto-demo-lib.mjs` (the `API_VERSION` constant)
+
+3. If the SDK's required API version is newer than what's configured, update both
+   files to match or exceed the SDK's minimum version.
+
+4. Update the troubleshooting section in `README.md` (search for "API Version
+   Mismatch Error") if the example API versions shown there are outdated. Keep the
+   examples current with the actual versions in use.
+
+#### Why this matters:
+
+The Gusto API requires clients to send an `X-Gusto-API-Version` header that meets
+the minimum version supported by the SDK. If the backend sends a version that's
+too old, all API requests will fail with HTTP 406 and an `invalid_api_version`
+error. This is a common issue when the SDK is upgraded but the backend
+configuration is not updated accordingly.
+
+Partners integrating with this demo app may encounter this error and need to reach
+out to Gusto Technical Solutions to ensure their API version configuration is
+correct for their integration.
