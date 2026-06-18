@@ -13,6 +13,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = join(__dirname, "..");
 export const TOKENS_FILE = join(REPO_ROOT, "backend", "tokens.json");
 export const CONFIG_FILE = join(REPO_ROOT, "frontend", "src", "config.ts");
+export const CONFIG_EXAMPLE_FILE = join(REPO_ROOT, "frontend", "src", "config.example.ts");
 export const RECORD_FILE = join(__dirname, ".demo-company.json");
 
 export const API_VERSION = "2025-06-15";

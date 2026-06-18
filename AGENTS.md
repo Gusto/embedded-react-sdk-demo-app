@@ -72,10 +72,11 @@ commit real credentials.
 
 ### Non-obvious caveats
 
-- The bootstrap script's local edit to `frontend/src/config.ts` (the company /
-  employee ids) and the generated `backend/tokens.json` are runtime artifacts —
-  do NOT commit them. `tokens.json` is gitignored; revert `config.ts` before
-  committing.
+- The generated `frontend/src/config.ts` (company / employee ids) and the
+  generated `backend/tokens.json` are runtime artifacts — do NOT commit them.
+  Both are gitignored: `config.ts` is created from the committed
+  `config.example.ts` template (copied + patched by the setup script) on first
+  run, so edit `config.example.ts` for any committed config changes.
 - The setup is idempotent: re-running `agent-setup.sh` reuses installed deps and
   the recorded company (`scripts/.demo-company.json` + `backend/tokens.json`)
   instead of creating another, so running it unconditionally at the start of

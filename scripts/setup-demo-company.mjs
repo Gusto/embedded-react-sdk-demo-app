@@ -16,7 +16,7 @@
 // scripts/.demo-company.json + backend/tokens.json), it is reused instead of
 // creating another company.
 
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, copyFileSync } from "node:fs";
 import { randomInt } from "node:crypto";
 import {
   client,
@@ -24,6 +24,7 @@ import {
   refreshCompanyToken,
   TOKENS_FILE,
   CONFIG_FILE,
+  CONFIG_EXAMPLE_FILE,
   RECORD_FILE,
   log,
 } from "./gusto-demo-lib.mjs";
@@ -291,13 +292,23 @@ async function seedEmployee(api, companyId) {
 }
 
 function patchConfig(companyId, employeeId) {
+  // config.ts is gitignored and generated from config.example.ts on first run.
+  if (!existsSync(CONFIG_FILE)) {
+    copyFileSync(CONFIG_EXAMPLE_FILE, CONFIG_FILE);
+  }
   let src = readFileSync(CONFIG_FILE, "utf8");
-  src = src.replace(/(export const COMPANY_ID = ")[^"]*(";)/, `$1${companyId}$2`);
+  src = src.replace(
+    /(export const COMPANY_ID\b[^=]*=\s*)[^;]*(;)/,
+    `$1"${companyId}"$2`,
+  );
   if (employeeId) {
-    src = src.replace(/(export const EMPLOYEE_ID = ")[^"]*(";)/, `$1${employeeId}$2`);
+    src = src.replace(
+      /(export const EMPLOYEE_ID\b[^=]*=\s*)[^;]*(;)/,
+      `$1"${employeeId}"$2`,
+    );
   }
   writeFileSync(CONFIG_FILE, src);
-  log(`updated ${CONFIG_FILE} (local only -- do not commit)`);
+  log(`updated ${CONFIG_FILE} (local only -- config.ts is gitignored)`);
 }
 
 async function reuseExisting() {
