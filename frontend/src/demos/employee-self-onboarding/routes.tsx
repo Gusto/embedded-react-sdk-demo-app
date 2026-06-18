@@ -1,4 +1,5 @@
-import { Outlet, Route } from "react-router-dom";
+import { Navigate, Outlet, Route } from "react-router-dom";
+import { EMPLOYEE_ID } from "../../config";
 import { CenteredPage } from "../../shared/CenteredPage/CenteredPage";
 import {
   DocumentSigner,
@@ -13,10 +14,17 @@ import {
 export const EmployeeSelfOnboardingRoutes = (
   <Route
     path="/employee-self-onboarding"
+    // This demo runs against a single configured employee, so it can't do
+    // anything useful until EMPLOYEE_ID is set in config.ts — redirect home
+    // until then (create one via the Employee onboarding demo).
     element={
-      <CenteredPage>
-        <Outlet />
-      </CenteredPage>
+      EMPLOYEE_ID ? (
+        <CenteredPage>
+          <Outlet />
+        </CenteredPage>
+      ) : (
+        <Navigate to="/" replace />
+      )
     }
   >
     <Route index element={<Landing />} />
