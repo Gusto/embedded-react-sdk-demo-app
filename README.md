@@ -175,3 +175,26 @@ If you already have a company you'd like to use with this demo, you can place it
   the Employee onboarding demo and copy its id out of the browser URL
   (`/employee-onboarding/<employeeId>/...`). Put the company and employee ids in
   `frontend/src/config.ts` and the refresh token in `backend/tokens.json`.
+
+## Troubleshooting
+
+### API Version Mismatch Error
+
+If you see an error like:
+
+```
+API error occurred: Status 406
+Content-Type "application/json; charset=utf-8"
+Body: {"errors":[{"error_key":"request","category":"invalid_api_version",
+"message":"Invalid API Version `2025-11-15`. Version must be \u003e=2026-02-01. ..."}]}
+```
+
+This means **the API version configured for your integration does not match the
+minimum API version required by the Embedded React SDK**.
+
+#### How to fix:
+
+**Reach out to your Gusto solutions architect to update your API version
+configuration.** Your solutions architect will ensure your integration is
+configured with the correct API version and verify the update has been applied
+correctly.
