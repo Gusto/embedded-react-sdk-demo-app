@@ -189,34 +189,12 @@ Body: {"errors":[{"error_key":"request","category":"invalid_api_version",
 "message":"Invalid API Version `2025-11-15`. Version must be \u003e=2026-02-01. ..."}]}
 ```
 
-This means the **API version configured in your backend does not match the minimum
-API version required by the Embedded React SDK**.
-
-The Embedded React SDK bundles a specific version of the Gusto Embedded API (for
-example, `@gusto/embedded-api-v-2025-11-15`), which defines the minimum API
-version your backend must send in the `X-Gusto-API-Version` header. When the SDK
-is upgraded to a newer API version, you must also update your backend configuration.
+This means **the API version configured for your integration does not match the
+minimum API version required by the Embedded React SDK**.
 
 #### How to fix:
 
-1. **Check the SDK's required API version**: Look at the `@gusto/embedded-api-v-*`
-   package listed in `frontend/node_modules/@gusto/embedded-react-sdk/package.json`
-   under `dependencies`. The version suffix (e.g., `2025-11-15` in
-   `@gusto/embedded-api-v-2025-11-15`) is the minimum API version your backend
-   must use.
-
-2. **Update your backend API version**: Open `backend/src/tokenManager.ts` and
-   update the `X-Gusto-API-Version` header to match or exceed the SDK's required
-   version:
-
-   ```typescript
-   "X-Gusto-API-Version": "2026-02-01",  // Must match SDK's minimum
-   ```
-
-3. **Update the setup script** (if applicable): If you use the automated setup
-   script, also update the `API_VERSION` constant in `scripts/gusto-demo-lib.mjs`
-   to match.
-
-> **Note**: If you are not sure which API version to use, or if you need access to
-> a specific API version for your integration, reach out to Gusto Technical
-> Solutions for guidance.
+**Reach out to your Gusto solutions architect to update your API version
+configuration.** Your solutions architect will ensure your integration is
+configured with the correct API version and verify the update has been applied
+correctly.

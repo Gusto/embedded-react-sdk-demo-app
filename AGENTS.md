@@ -135,6 +135,9 @@ too old, all API requests will fail with HTTP 406 and an `invalid_api_version`
 error. This is a common issue when the SDK is upgraded but the backend
 configuration is not updated accordingly.
 
-Partners integrating with this demo app may encounter this error and need to reach
-out to Gusto Technical Solutions to ensure their API version configuration is
-correct for their integration.
+**Important**: Partners using this demo app as a reference cannot update API
+versions themselves. If partners encounter API version mismatch errors in their
+own integrations, they must reach out to their Gusto solutions architect to update
+their API version configuration. The solutions architect will ensure the correct
+version is configured and verify the update has been applied correctly across the
+partner's integration.
