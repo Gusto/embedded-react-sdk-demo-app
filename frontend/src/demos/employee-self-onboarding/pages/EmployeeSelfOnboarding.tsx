@@ -3,10 +3,6 @@ import { EmployeeOnboarding, componentEvents } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID, EMPLOYEE_ID } from "../../../config";
 import { EmployeeDocumentSignerComposition } from "../block-compositions/EmployeeDocumentSignerComposition";
 
-// EMPLOYEE_ID is optional in config (undefined until you have an employee), but
-// this whole flow requires one. The route redirects home when it's unset, so by
-// the time these pages render it is guaranteed present — hence the `!` below.
-
 // This demo composes the individual SDK employee self-onboarding blocks behind
 // react-router so each step owns a URL. For a turnkey integration, skip all of
 // this and render <EmployeeOnboarding.SelfOnboardingFlow .../>, which runs the
@@ -20,7 +16,7 @@ export function Landing() {
   return (
     <EmployeeOnboarding.Landing
       companyId={COMPANY_ID}
-      employeeId={EMPLOYEE_ID!}
+      employeeId={EMPLOYEE_ID}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_SELF_ONBOARDING_START) {
           navigate("/employee-self-onboarding/profile");
@@ -35,7 +31,7 @@ export function Profile() {
   return (
     <EmployeeOnboarding.Profile
       companyId={COMPANY_ID}
-      employeeId={EMPLOYEE_ID!}
+      employeeId={EMPLOYEE_ID}
       isAdmin={false}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_PROFILE_DONE) {
@@ -50,7 +46,7 @@ export function FederalTaxes() {
   const navigate = useNavigate();
   return (
     <EmployeeOnboarding.FederalTaxes
-      employeeId={EMPLOYEE_ID!}
+      employeeId={EMPLOYEE_ID}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_FEDERAL_TAXES_DONE) {
           navigate("/employee-self-onboarding/state-taxes");
@@ -64,7 +60,7 @@ export function StateTaxes() {
   const navigate = useNavigate();
   return (
     <EmployeeOnboarding.StateTaxes
-      employeeId={EMPLOYEE_ID!}
+      employeeId={EMPLOYEE_ID}
       isAdmin={false}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_STATE_TAXES_DONE) {
@@ -79,7 +75,7 @@ export function PaymentMethod() {
   const navigate = useNavigate();
   return (
     <EmployeeOnboarding.PaymentMethod
-      employeeId={EMPLOYEE_ID!}
+      employeeId={EMPLOYEE_ID}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_PAYMENT_METHOD_DONE) {
           navigate("/employee-self-onboarding/documents");
@@ -98,7 +94,7 @@ export function DocumentSigner() {
   const navigate = useNavigate();
   return (
     <EmployeeDocumentSignerComposition
-      employeeId={EMPLOYEE_ID!}
+      employeeId={EMPLOYEE_ID}
       basePath="/employee-self-onboarding/documents"
       onComplete={() => navigate("/employee-self-onboarding/summary")}
     />
@@ -109,7 +105,7 @@ export function Summary() {
   const navigate = useNavigate();
   return (
     <EmployeeOnboarding.OnboardingSummary
-      employeeId={EMPLOYEE_ID!}
+      employeeId={EMPLOYEE_ID}
       isAdmin={false}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_ONBOARDING_DONE) {

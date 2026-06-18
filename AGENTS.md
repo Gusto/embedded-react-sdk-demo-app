@@ -66,9 +66,17 @@ signatory + signed forms), calls `finish_onboarding` then the demo-only
 code in `backend`/`frontend`.
 
 After the boot sequence finishes (or after running `agent-setup.sh` by hand),
-start the dev servers normally (see `README.md`). For purely local dev you can
-instead hand-fill `backend/.env` + `backend/tokens.json` per the README; never
-commit real credentials.
+start the dev servers normally (see `README.md`).
+
+For local/partner dev there is a cross-platform alternative to the cloud
+`agent-setup.sh` path: put `CLIENT_ID` + `CLIENT_SECRET` in `backend/.env`, then
+run `npm run setup` from the `backend` directory. That script
+(`backend/package.json` -> `node -r dotenv/config ../scripts/setup-demo-company.mjs`)
+loads `backend/.env` and runs the same `setup-demo-company.mjs` provisioning,
+writing `backend/tokens.json` and `frontend/src/config.ts`. It is pure Node (no
+bash), so it works on macOS/Windows/Linux. You can still hand-fill
+`backend/.env` + `backend/tokens.json` per the README instead; never commit real
+credentials.
 
 ### Non-obvious caveats
 
