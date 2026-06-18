@@ -53,6 +53,25 @@ Update the dep in `frontend/package.json` to the target version, then install:
 cd frontend && npm install @gusto/embedded-react-sdk@<target>
 ```
 
+Then **sync the embedded-api dependency to whatever the new SDK pins.** The demo
+imports `@gusto/embedded-api-v-<date>` hooks directly (e.g. the I-9 entry gate in
+`block-compositions/EmployeeDocumentSignerComposition.tsx`), so its version must
+match the SDK's exactly. The package name is **date-versioned**, so both the name
+and the range can change across SDK releases. After the install above, read the
+SDK's own pin and mirror it:
+
+```bash
+# Find the @gusto/embedded-api-* dependency the new SDK declares (name + range):
+node -e "const d=require('@gusto/embedded-react-sdk/package.json').dependencies; const k=Object.keys(d).find(n=>n.startsWith('@gusto/embedded-api')); console.log(k, d[k])"
+```
+
+Update `frontend/package.json` so the demo's `@gusto/embedded-api-*` entry uses
+that exact name + range, **removing any stale older-dated `@gusto/embedded-api-*`
+entry** (a date bump changes the package name, so the old one must be deleted,
+not left alongside). Then `npm install` again. A mismatch between the demo's
+embedded-api dependency and the SDK's — or a leftover older-dated package — is a
+defect to fix, not ignore.
+
 ### 3. Research release notes
 
 Gather everything between current and target (exclusive of current, inclusive of target):
@@ -102,6 +121,9 @@ All three must pass; fix any lints you introduce:
 ```bash
 cd frontend && npx tsc -b && npm run lint && npm run build
 ```
+
+Also confirm the embedded-api dep still matches the SDK's pin (step 2) — a stale
+or mismatched `@gusto/embedded-api-*` version is a build/runtime defect.
 
 ### 7. Return the report
 

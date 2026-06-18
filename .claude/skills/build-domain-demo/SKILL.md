@@ -235,14 +235,15 @@ The parent route changes from `<Route path="<step>" element={<Step />} />` to `<
 
 Use **absolute `basePath`-rooted navigation** inside the composition (`navigate(\`${basePath}/edit/${id}\`)`), not relative `".."` hops — relative math across a nested `<Routes>` is error-prone.
 
-### Initial routing without refetching
+### Initial routing from entry data
 
-A composite block often picks its entry by reading live data (e.g. the all-in-one `DocumentSigner` starts on the document list when a signatory already exists; `Compensation` jumps straight to the form when there are no jobs yet). Per "Don't reproduce SDK-internal branching," don't refetch that to branch. In order of preference:
+A composite block often picks its entry by reading live data (e.g. the all-in-one `DocumentSigner` starts on the document list when a signatory already exists; `Compensation` jumps straight to the form when there are no jobs yet). In order of preference:
 
 1. **Let a sub-block's own affordance drive it.** Often a sub-block already exposes the branch. The company `DocumentList`, for instance, renders a "manage signatories" panel that says *Assign signatory* when none exists and *Change signatory* when one does — both emit `COMPANY_FORM_EDIT_SIGNATORY`. So the composition can always enter on the document list and route to the assign step only when that event fires; no signatory fetch, no entry flag.
 2. **Drive the entry from a prop you already control** — a flag like `withEmployeeI9` passed by the consuming step, or the existing create-vs-edit split (a brand-new entity routes to the create sub-route; resuming routes to the list).
+3. **Fetch the live status via the SDK's own query** when the branch genuinely depends on data neither an affordance nor a caller prop can answer. Use the version-matched `@gusto/embedded-api-*` React Query hooks (the same ones the SDK block uses internally), not the persistence store — `GustoProvider` already mounts that package's query client + client context, so the demo shares the SDK's cache and stays consistent with live data. The employee `EmployeeDocumentSignerComposition` does this: its `index` route reads the employee + their forms (`useEmployeesGet` / `useEmployeeFormsList`) to decide whether the I-9 employment-eligibility step is needed (`onboardingDocumentsConfig.i9Document` enabled AND the `US_I-9` form missing or `requiresSigning`), mirroring the all-in-one `DocumentSigner` gate, then `<Navigate replace>`s to `eligibility` or `documents`.
 
-Avoid inventing a boolean (`startAtDocuments`-style) that just re-encodes a live-data decision the caller can't actually answer — it tends to be wrong at exactly the call site that doesn't have the data. Document any remaining gap in the composition's header comment (the all-in-one block still does the smart, data-driven thing).
+What's banned is reading a **stale cached value off the persistence store** to branch (see "Don't reproduce SDK-internal branching"): that's the cautionary `documents-skip` tale, where a cached `onboardingStatus` had advanced by the time it was read. Fetching the same live data the SDK fetches is fine. Also avoid inventing a boolean (`startAtDocuments`-style) that just re-encodes a live-data decision the caller can't actually answer — it tends to be wrong at exactly the call site that doesn't have the data.
 
 ### Comments (two templates, wording kept identical across files)
 
