@@ -3,11 +3,8 @@
 // for you. config.ts is gitignored (like .env) because it holds the ids for your
 // own demo company. See the README.
 
-// Your partner-managed company's id.
+// The company id featured in the demos.
 export const COMPANY_ID = "";
 
-// The employee whose self-onboarding flow the self-onboarding demo runs.
-// `npm run setup` fills this in. To fill it manually, run the Employee
-// onboarding demo to create an employee, then copy its id out of the browser URL
-// (/employee-onboarding/<employeeId>/...).
+// The employee id featured in the demos.
 export const EMPLOYEE_ID = "";

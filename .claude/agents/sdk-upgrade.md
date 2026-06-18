@@ -88,6 +88,11 @@ For a ship-ready net-new feature, place it by this decision tree:
 - **Top-level user flow** (peer of employee onboarding / self-onboarding / company onboarding) -> add a new route group under `frontend/src/demos/<domain>/routes.tsx` and register it in `frontend/src/App.tsx` alongside the existing `*Routes`.
 - Compose the actual flow per [build-domain-demo](../skills/build-domain-demo/SKILL.md) (single-file step components, pathless grouping route, `componentEvents.*`, `createPersistedStore`, etc.).
 
+If you add, move, or remove a demo directory (a new top-level flow under
+`frontend/src/demos/<domain>/`, or a new `onboarded-company/` sub-demo), update the
+"Examples" inventory in [README.md](../../README.md) so it still maps each demo to
+its directory.
+
 Keep comments stingy per build-domain-demo: default to zero, only a "why" a partner engineer couldn't infer.
 
 ### 6. Verify
@@ -109,6 +114,9 @@ End with the report below as your final message. Do not commit, push, open a PR,
 
 ### Implemented
 - <change> — <file path(s)>
+
+### README inventory
+- <updated / no change> — note any README "Examples" inventory edits from added/moved/removed demo directories
 
 ### Left as WIP (not implemented)
 - <feature> — <why: which components/exports are missing or stubbed>

@@ -1,168 +1,185 @@
 # Gusto Embedded SDK Demo
 
-This repository contains a demo application showcasing the integration of Gusto's Embedded SDK. It includes a proxy server for the Gusto API and a React frontend client.
+This repository is a reference for **orchestrating Gusto Embedded React SDK block
+components behind a router**. It is aimed at partner developers learning to build
+with the SDK (or spinning up a demo of their own) who want to understand how the
+individual pieces connect.
+
+Flow components orchestrate a whole flow for you automatically. This repo instead
+leans on **block components**, which are the right tool when you are wiring the
+SDK into your own router or need to control navigation yourself. For even finer
+control, several steps are shown as **block compositions** that decompose a
+composite block (like the signatory or document signer) into its sub-steps so
+each owns a URL.
+
+This repo is mostly about that composition. There is a further, more powerful
+customization path — **hooks** — that lets you rearrange form fields, place custom
+UI between items, and compose fields from different forms together. If composition
+alone is not enough for your needs, see the
+[SDK hooks guide](https://github.com/Gusto/embedded-react-sdk/blob/main/docs/hooks/hooks.md).
 
 ## Project Structure
 
-- `/backend` - Express.js proxy server for Gusto API
-- `/frontend` - React + TypeScript frontend application using Gusto's Embedded SDK
+- `/backend` - Express.js proxy server for the Gusto API (holds your credentials,
+  injects the auth token, auto-refreshes it).
+- `/frontend` - React + TypeScript app composing Gusto Embedded React SDK block
+  components behind `react-router-dom`.
 
-## Prerequisites
+## Build approaches
 
-Before setting up this demo application, you'll need to:
+From least to most custom:
 
-1. **Create a developer account** at [dev.gusto.com](https://dev.gusto.com)
-2. **Create a developer app** in your Gusto developer dashboard
-3. **Obtain a system access token** using your app's client credentials
-4. **Create a partner managed company** to get the company ID and company access token
+- **Flow components** - turnkey, self-orchestrating components (for example
+  `EmployeeOnboarding.SelfOnboardingFlow`). The least code: render one component
+  and it runs every step internally.
+- **Block components** - the individual steps, which you wire to your own router
+  for custom navigation. This is the primary pattern in this repo; see
+  [frontend/src/App.tsx](./frontend/src/App.tsx) registering the route groups.
+- **Block composition** - decompose a composite block's sub-steps for fully
+  custom experiences; see the `block-compositions/` directories under each demo.
+- **Hooks** - headless customization (rearrange fields, inject custom UI, compose
+  fields across forms). Beyond what this repo demonstrates; see the
+  [SDK hooks guide](https://github.com/Gusto/embedded-react-sdk/blob/main/docs/hooks/hooks.md).
 
-[Each of these steps is outlined in the getting started guide for embedded here](https://docs.gusto.com/embedded-payroll/docs/getting-started).
+## Examples
 
-### Step 1: Set up Developer Account and App
+Each demo is a self-contained set of block components composed behind the router.
+Top-level flows (registered in [frontend/src/App.tsx](./frontend/src/App.tsx)):
 
-You'll need to create an account at [dev.gusto.com](https://dev.gusto.com), create an application, and then obtain the Client ID and Secret for that application.
+- **Company onboarding** - [frontend/src/demos/company-onboarding/](./frontend/src/demos/company-onboarding/) -
+  set up a brand new company on Gusto.
+- **Onboarded company** - [frontend/src/demos/onboarded-company/](./frontend/src/demos/onboarded-company/) -
+  manage an already-onboarded company. Contains nested sub-demos:
+  - Run payroll - [run-payroll/](./frontend/src/demos/onboarded-company/run-payroll/)
+  - Manage employees - [manage-employees/](./frontend/src/demos/onboarded-company/manage-employees/)
+  - Terminations - [terminations/](./frontend/src/demos/onboarded-company/terminations/)
+  - Time off - [time-off/](./frontend/src/demos/onboarded-company/time-off/)
+  - Company settings (bank account, locations, federal taxes, state taxes, pay
+    schedule, documents) - [pages/](./frontend/src/demos/onboarded-company/pages/)
+- **Employee onboarding** - [frontend/src/demos/employee-onboarding/](./frontend/src/demos/employee-onboarding/) -
+  onboard a new employee as an admin.
+- **Employee self-onboarding** - [frontend/src/demos/employee-self-onboarding/](./frontend/src/demos/employee-self-onboarding/) -
+  let an employee complete their own onboarding tasks.
 
-1. Go to [dev.gusto.com](https://dev.gusto.com/accounts/sign_up) and create a developer account.
-2. Follow the steps to create an account, set up an Organization, and create an Application.
-3. On the dashboard at[dev.gusto.com](https://dev.gusto.com), navigate to Applications from the sidebar, then select your newly created application. You will see a section for `OAuth Credentials` on this page which will have the Client ID and Secret. You will need these for getting a system access token in the next step.
+### Block composition examples
 
-### Step 2: Get System Access Token
+The fine-grained tier — composite blocks broken into individually routed sub-steps:
 
-Follow the [System Access Tokens guide](https://docs.gusto.com/embedded-payroll/docs/system-access-tokens) to obtain a system access token using your app's credentials.
+- Company onboarding: state taxes - [StateTaxesComposition.tsx](./frontend/src/demos/company-onboarding/block-compositions/StateTaxesComposition.tsx),
+  document signer - [CompanyDocumentSignerComposition.tsx](./frontend/src/demos/company-onboarding/block-compositions/CompanyDocumentSignerComposition.tsx)
+- Employee onboarding: compensation - [CompensationComposition.tsx](./frontend/src/demos/employee-onboarding/block-compositions/CompensationComposition.tsx)
+- Employee self-onboarding: document signer - [EmployeeDocumentSignerComposition.tsx](./frontend/src/demos/employee-self-onboarding/block-compositions/EmployeeDocumentSignerComposition.tsx)
 
-Make a POST request to the `/oauth/token` endpoint:
+## Setup
 
-```bash
-curl --location --request POST 'https://api.gusto-demo.com/oauth/token'
---header 'Content-Type: application/json'
---data-raw '{
-  "client_id": "{{client_id}}",
-  "client_secret": "{{client_secret}}",
-  "grant_type": "system_access"
-}'
-```
+The app needs two inputs: a company refresh token for the backend
+([backend/tokens.json](./backend/tokens.json)) and the company/employee ids for
+the frontend ([frontend/src/config.ts](./frontend/src/config.ts)). Pick one of the
+options below. All of them require your app's `CLIENT_ID` / `CLIENT_SECRET` in
+`backend/.env` — the backend uses them to auto-refresh the company token.
 
-The response will include an `access_token` that expires in 2 hours.
+Both `backend/tokens.json` and `frontend/src/config.ts` are gitignored runtime
+artifacts (created from the committed `*.example.*` templates); never commit them.
 
-### Step 3: Create Partner Managed Company
+### Option A: Setup script (recommended)
 
-Use the system access token to create a partner managed company following the [Create Partner Managed Company guide](https://docs.gusto.com/embedded-payroll/reference/post-v1-partner-managed-companies).
-
-Make a POST request to create a company:
-
-```bash
-curl --request POST
---url https://api.gusto-demo.com/v1/partner_managed_companies
---header 'X-Gusto-API-Version: 2025-06-15'
---header 'accept: application/json'
---header 'authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN'
---header 'content-type: application/json'
---data '{
-  "user": {
-    "first_name": "FIRST_NAME",
-    "last_name": "LAST_NAME",
-    "email": "EMAIL"
-  },
-  "company": {
-    "name": "MY_COMPANY_NAME"
-  }
-}'
-```
-
-The response will include:
-
-- `company_id` - Set as `COMPANY_ID` in [frontend/src/config.ts](./frontend/src/config.ts)
-- `access_token` - Not needed for the backend (tokens are auto-refreshed)
-- `refresh_token` - Use this in the backend `tokens.json` file for automatic token refresh
-
-Also set `EMPLOYEE_ID` in [frontend/src/config.ts](./frontend/src/config.ts) for the employee self-onboarding demo — use the UUID of an employee in a self-onboarding (invited) state.
-
-## App Setup Instructions
-
-### Backend Setup
-
-The backend uses automatic token refresh to handle token expiration. You'll need to configure:
-
-**Environment variables** (`.env`):
-- `CLIENT_ID` - Your app's Client ID from the Gusto developer dashboard (required)
-- `CLIENT_SECRET` - Your app's Client Secret from the Gusto developer dashboard (required)
-- `GUSTO_API_BASE_URL` - Optional, defaults to `https://api.gusto-demo.com`
-- `ALLOWED_ORIGINS` - Optional, comma-separated extra browser origins allowed through CORS. The proxy holds your Gusto credentials, so CORS is locked to `localhost` by default (where the demo frontend runs); add any other origins here.
-
-**Token storage** (`tokens.json`):
-- `refresh_token` - The refresh token obtained from creating a partner managed company (required)
-
-The refresh token is stored separately because it gets automatically updated each time it's used. The backend saves the new refresh token to `tokens.json` on every refresh, so it persists across server restarts.
-
-1. Navigate to the backend directory:
+If you have an app's `CLIENT_ID` / `CLIENT_SECRET`, the setup script provisions a
+fresh demo company for you and writes both inputs. It mints a system access token,
+creates a partner-managed company, completes and approves onboarding, seeds an
+employee, then writes `backend/tokens.json` and `frontend/src/config.ts`. It is
+pure Node (no bash), so it runs on macOS, Windows, and Linux.
 
 ```bash
 cd backend
-```
-
-2. Install dependencies:
-
-```bash
+cp .env.example .env          # then set CLIENT_ID / CLIENT_SECRET
 npm install
-```
+npm run setup                 # provisions an approved demo company and writes
+                              # backend/tokens.json + frontend/src/config.ts
+npm run dev                   # http://localhost:3001
 
-3. Set up environment variables:
-
-```bash
-cp .env.example .env
-```
-
-4. Edit `.env` and add your OAuth credentials:
-
-```
-CLIENT_ID=your_client_id_here
-CLIENT_SECRET=your_client_secret_here
-```
-
-5. Set up token storage:
-
-```bash
-cp tokens.example.json tokens.json
-```
-
-6. Edit `tokens.json` and add your refresh token:
-
-```json
-{
-  "refresh_token": "your_refresh_token_here"
-}
-```
-
-The backend will automatically refresh the access token when it expires (every 2 hours) and update `tokens.json` with the new refresh token. You don't need to manually update tokens anymore.
-
-7. Start the server:
-
-```bash
-npm run dev
-```
-
-The server will run on `http://localhost:3001`
-
-### Frontend Setup
-
-1. Navigate to the frontend directory:
-
-```bash
+# in a second terminal
 cd frontend
-```
-
-2. Install dependencies:
-
-```bash
 npm install
+npm run dev                   # http://localhost:3002
 ```
 
-3. Start the development server:
+The script is idempotent: re-running reuses the recorded company instead of
+creating another. (Under the hood: the `setup` script in
+[backend/package.json](./backend/package.json) runs
+[scripts/setup-demo-company.mjs](./scripts/setup-demo-company.mjs).)
+
+### Option B: Already have a company (manual ids + token)
+
+If you already have a partner-managed company, skip the script and fill the two
+inputs yourself:
 
 ```bash
-npm run dev
+cd backend
+cp .env.example .env                 # set CLIENT_ID / CLIENT_SECRET
+cp tokens.example.json tokens.json   # set "refresh_token"
+cd ../frontend
+cp src/config.example.ts src/config.ts   # set COMPANY_ID and EMPLOYEE_ID
 ```
 
-The frontend will run on `http://localhost:3002`
+- `backend/.env` - `CLIENT_ID` / `CLIENT_SECRET` (required; used to refresh the
+  company token). Optional: `GUSTO_API_BASE_URL` (defaults to
+  `https://api.gusto-demo.com`) and `ALLOWED_ORIGINS` (extra CORS origins; the
+  proxy already allows `localhost`).
+- `backend/tokens.json` - `refresh_token` from your company. The backend
+  auto-refreshes the access token and writes the rotated refresh token back here
+  on every refresh, so it persists across restarts.
+- `frontend/src/config.ts` - `COMPANY_ID` and `EMPLOYEE_ID` for the entities
+  featured in the demos.
 
-[Gusto Embedded React SDK components are located in the App.tsx file here](./frontend/src/App.tsx). You'll need to supply the `company_id` obtained from creating a partner managed company above to the SDK components as the `companyId` prop.
+Then start the servers as in Option A (`npm run dev` in each of `backend` and
+`frontend`).
+
+### Option C: Create everything by hand (Gusto Embedded)
+
+If you want to create the credentials and company yourself, follow the Gusto
+Embedded guides below, then plug the resulting ids and refresh token into Option B.
+[The full getting-started guide is here](https://docs.gusto.com/embedded-payroll/docs/getting-started).
+
+1. **Developer account and app.** Create an account at
+   [dev.gusto.com](https://dev.gusto.com/accounts/sign_up), set up an
+   organization, and create an application. Its `OAuth Credentials` section has
+   the Client ID and Secret (these are your `CLIENT_ID` / `CLIENT_SECRET`).
+
+2. **System access token.** Follow the
+   [System Access Tokens guide](https://docs.gusto.com/embedded-payroll/docs/system-access-tokens):
+
+   ```bash
+   curl --location --request POST 'https://api.gusto-demo.com/oauth/token' \
+   --header 'Content-Type: application/json' \
+   --data-raw '{
+     "client_id": "{{client_id}}",
+     "client_secret": "{{client_secret}}",
+     "grant_type": "system_access"
+   }'
+   ```
+
+   The response includes an `access_token` that expires in 2 hours.
+
+3. **Create a partner-managed company.** Use the system access token, following
+   the [Create Partner Managed Company guide](https://docs.gusto.com/embedded-payroll/reference/post-v1-partner-managed-companies):
+
+   ```bash
+   curl --request POST \
+   --url https://api.gusto-demo.com/v1/partner_managed_companies \
+   --header 'X-Gusto-API-Version: 2025-06-15' \
+   --header 'accept: application/json' \
+   --header 'authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN' \
+   --header 'content-type: application/json' \
+   --data '{
+     "user": { "first_name": "FIRST_NAME", "last_name": "LAST_NAME", "email": "EMAIL" },
+     "company": { "name": "MY_COMPANY_NAME" }
+   }'
+   ```
+
+   The response includes `company_uuid` (your `COMPANY_ID`) and a `refresh_token`
+   (for `backend/tokens.json`). For `EMPLOYEE_ID`, use the UUID of an employee in
+   the company — you can create one via the Employee onboarding demo and copy its
+   id out of the browser URL (`/employee-onboarding/<employeeId>/...`).
+
+The frontend talks to the backend proxy at `http://localhost:3001`, configured via
+the `GustoProvider` in [frontend/src/App.tsx](./frontend/src/App.tsx).
