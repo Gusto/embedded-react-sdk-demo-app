@@ -9,6 +9,9 @@ yarn-error.log
 .env.local
 .env.*.local
 
+# Frontend runtime config (copy config.example.ts -> config.ts and fill in ids)
+frontend/src/config.ts
+
 # Build output
 dist/
 build/

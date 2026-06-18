@@ -66,16 +66,25 @@ signatory + signed forms), calls `finish_onboarding` then the demo-only
 code in `backend`/`frontend`.
 
 After the boot sequence finishes (or after running `agent-setup.sh` by hand),
-start the dev servers normally (see `README.md`). For purely local dev you can
-instead hand-fill `backend/.env` + `backend/tokens.json` per the README; never
-commit real credentials.
+start the dev servers normally (see `README.md`).
+
+For local/partner dev there is a cross-platform alternative to the cloud
+`agent-setup.sh` path: put `CLIENT_ID` + `CLIENT_SECRET` in `backend/.env`, then
+run `npm run setup` from the `backend` directory. That script
+(`backend/package.json` -> `node -r dotenv/config ../scripts/setup-demo-company.mjs`)
+loads `backend/.env` and runs the same `setup-demo-company.mjs` provisioning,
+writing `backend/tokens.json` and `frontend/src/config.ts`. It is pure Node (no
+bash), so it works on macOS/Windows/Linux. You can still hand-fill
+`backend/.env` + `backend/tokens.json` per the README instead; never commit real
+credentials.
 
 ### Non-obvious caveats
 
-- The bootstrap script's local edit to `frontend/src/config.ts` (the company /
-  employee ids) and the generated `backend/tokens.json` are runtime artifacts —
-  do NOT commit them. `tokens.json` is gitignored; revert `config.ts` before
-  committing.
+- The generated `frontend/src/config.ts` (company / employee ids) and the
+  generated `backend/tokens.json` are runtime artifacts — do NOT commit them.
+  Both are gitignored: `config.ts` is created from the committed
+  `config.example.ts` template (copied + patched by the setup script) on first
+  run, so edit `config.example.ts` for any committed config changes.
 - The setup is idempotent: re-running `agent-setup.sh` reuses installed deps and
   the recorded company (`scripts/.demo-company.json` + `backend/tokens.json`)
   instead of creating another, so running it unconditionally at the start of
