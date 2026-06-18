@@ -118,11 +118,9 @@ to provision a company.
 
 ### 2. Provision a demo company with the setup script (recommended)
 
-With your credentials in `backend/.env`, the setup script does the rest: it mints a
-system access token, creates a partner-managed company, completes and approves
-onboarding, seeds an employee, then writes `backend/tokens.json` and
-`frontend/src/config.ts`. It is pure Node (no bash), so it runs on macOS, Windows,
-and Linux.
+With your credentials in `backend/.env`, the setup script provisions a ready-to-use
+demo company and writes both inputs (`backend/tokens.json` and
+`frontend/src/config.ts`) for you.
 
 ```bash
 cd backend
@@ -149,7 +147,9 @@ creating another. (Under the hood: the `setup` script in
 
 ### Alternatives to the setup script
 
-You can skip step 2 and fill the two inputs yourself:
+The script automates the full Gusto Embedded setup: it mints a system access token,
+creates a partner-managed company, completes and approves its onboarding, and seeds
+an employee. You can skip it and fill the two inputs yourself instead:
 
 - **You already have a company.** Drop in its ids and refresh token directly:
 
