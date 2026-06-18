@@ -35,8 +35,9 @@ Copy this checklist and track progress:
 - [ ] 3. Research release notes (current -> target)
 - [ ] 4. Classify every change
 - [ ] 5. Implement ship-ready changes
-- [ ] 6. Verify build
-- [ ] 7. Return report
+- [ ] 6. Update the README examples inventory if any demo directory changed
+- [ ] 7. Verify build
+- [ ] 8. Return report
 ```
 
 ### 1. Determine versions
@@ -90,7 +91,16 @@ For a ship-ready net-new feature, place it by this decision tree:
 
 Keep comments stingy per build-domain-demo: default to zero, only a "why" a partner engineer couldn't infer.
 
-### 6. Verify
+### 6. Update the README examples inventory
+
+If your changes added, removed, renamed, or moved any demo directory — a routed
+demo under `frontend/src/demos/<domain>/` or a `block-compositions/` example —
+update the "Examples available" section in [README.md](../../README.md) so its
+directory map stays accurate. Add/rename/remove the matching bullet (and any
+nested sub-demo entry), and confirm every linked path resolves. If no demo
+directory changed, leave the inventory as-is.
+
+### 7. Verify
 
 All three must pass; fix any lints you introduce:
 
@@ -98,7 +108,7 @@ All three must pass; fix any lints you introduce:
 cd frontend && npx tsc -b && npm run lint && npm run build
 ```
 
-### 7. Return the report
+### 8. Return the report
 
 End with the report below as your final message. Do not commit, push, open a PR, or request reviews.
 
