@@ -24,7 +24,7 @@ export const EmployeeSelfOnboardingRoutes = (
     <Route path="federal-taxes" element={<FederalTaxes />} />
     <Route path="state-taxes" element={<StateTaxes />} />
     <Route path="payment-method" element={<PaymentMethod />} />
-    <Route path="documents" element={<DocumentSigner />} />
+    <Route path="documents/*" element={<DocumentSigner />} />
     <Route path="summary" element={<Summary />} />
   </Route>
 );

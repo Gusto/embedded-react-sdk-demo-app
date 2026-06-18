@@ -26,7 +26,7 @@ export const EmployeeOnboardingRoutes = (
     <Route path="new" element={<ProfileCreate />} />
     <Route path=":employeeId">
       <Route path="profile" element={<ProfileEdit />} />
-      <Route path="compensation" element={<Compensation />} />
+      <Route path="compensation/*" element={<Compensation />} />
       <Route path="federal-taxes" element={<FederalTaxes />} />
       <Route path="state-taxes" element={<StateTaxes />} />
       <Route path="payment-method" element={<PaymentMethod />} />

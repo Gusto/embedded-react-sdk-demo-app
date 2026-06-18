@@ -2,10 +2,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Payroll, componentEvents } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID } from "../../../../config";
 
-// Composes the SDK's individual payroll blocks behind react-router instead of
-// the all-in-one <Payroll.PayrollFlow />, so each step is its own URL and a
-// refresh resumes it. State lives in the URL (payrollId / employeeId); each
-// block fetches its own data.
+// This demo composes the individual SDK payroll blocks behind react-router so each
+// step owns a URL. For a turnkey integration, skip all of this and render
+// <Payroll.PayrollFlow .../>, which runs the same steps inside one component.
 export function PayrollLanding() {
   const navigate = useNavigate();
   return (

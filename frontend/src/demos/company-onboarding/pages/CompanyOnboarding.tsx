@@ -5,6 +5,13 @@ import {
   componentEvents,
 } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID } from "../../../config";
+import { CompanyDocumentSignerComposition } from "../block-compositions/CompanyDocumentSignerComposition";
+import { StateTaxesComposition } from "../block-compositions/StateTaxesComposition";
+
+// This demo composes the individual SDK company-onboarding blocks behind
+// react-router so each step owns a URL. For a turnkey integration, skip all of
+// this and render <CompanyOnboarding.OnboardingFlow .../>, which runs the same
+// steps inside one component.
 
 // OnboardingOverview shows either the list of steps still to fill out or the
 // summary and CTA to wrap up the company, choosing between them based on the
@@ -122,32 +129,35 @@ export function PaySchedule() {
   );
 }
 
+// StateTaxes is a composite block: it has smaller sub-steps (state-taxes list +
+// per-state form) that we route individually here. That routed implementation
+// lives in block-compositions/. Render <CompanyOnboarding.StateTaxes .../> instead
+// for the turnkey single-component step.
 export function StateTaxes() {
   const navigate = useNavigate();
   return (
-    <CompanyOnboarding.StateTaxes
+    <StateTaxesComposition
       companyId={COMPANY_ID}
-      onEvent={(type) => {
-        if (type === componentEvents.COMPANY_STATE_TAX_DONE) {
-          navigate("/company-onboarding/documents");
-        }
-      }}
+      basePath="/company-onboarding/state-taxes"
+      onComplete={() => navigate("/company-onboarding/documents")}
     />
   );
 }
 
 // Final step. On completion the flow loops to the overview summary, which now
 // reflects the completed onboarding status.
+// DocumentSigner is a composite block: it has smaller sub-steps (document list +
+// assign signatory + signature form) that we route individually here. That routed
+// implementation lives in block-compositions/. Render
+// <CompanyOnboarding.DocumentSigner .../> instead for the turnkey single-component
+// step.
 export function Documents() {
   const navigate = useNavigate();
   return (
-    <CompanyOnboarding.DocumentSigner
+    <CompanyDocumentSignerComposition
       companyId={COMPANY_ID}
-      onEvent={(type) => {
-        if (type === componentEvents.COMPANY_FORMS_DONE) {
-          navigate("/company-onboarding/overview");
-        }
-      }}
+      basePath="/company-onboarding/documents"
+      onComplete={() => navigate("/company-onboarding/overview")}
     />
   );
 }

@@ -7,6 +7,11 @@ import {
 import { COMPANY_ID } from "../../../../config";
 import styles from "./Terminations.module.css";
 
+// This demo composes the individual SDK termination blocks behind react-router so
+// each step owns a URL. For a turnkey integration, skip all of this and render
+// <EmployeeManagement.TerminationFlow .../>, which runs the same steps inside one
+// component.
+
 const PAYROLL_OPTIONS = [
   "dismissalPayroll",
   "regularPayroll",

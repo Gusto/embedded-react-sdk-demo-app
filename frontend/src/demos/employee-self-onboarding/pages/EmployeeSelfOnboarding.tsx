@@ -1,6 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { EmployeeOnboarding, componentEvents } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID, EMPLOYEE_ID } from "../../../config";
+import { EmployeeDocumentSignerComposition } from "../block-compositions/EmployeeDocumentSignerComposition";
+
+// This demo composes the individual SDK employee self-onboarding blocks behind
+// react-router so each step owns a URL. For a turnkey integration, skip all of
+// this and render <EmployeeOnboarding.SelfOnboardingFlow .../>, which runs the
+// same steps inside one component.
 
 // Self-onboarding is employee-facing: the employee already exists (an admin
 // invited them) and is identified by their session/link, so this demo runs the
@@ -79,17 +85,18 @@ export function PaymentMethod() {
   );
 }
 
+// DocumentSigner is a composite block: it has smaller sub-steps (I-9 employment
+// eligibility + document list + signature forms) that we route individually here.
+// That routed implementation lives in block-compositions/. Render
+// <EmployeeOnboarding.DocumentSigner withEmployeeI9 .../> instead for the turnkey
+// single-component step.
 export function DocumentSigner() {
   const navigate = useNavigate();
   return (
-    <EmployeeOnboarding.DocumentSigner
+    <EmployeeDocumentSignerComposition
       employeeId={EMPLOYEE_ID}
-      withEmployeeI9
-      onEvent={(type) => {
-        if (type === componentEvents.EMPLOYEE_FORMS_DONE) {
-          navigate("/employee-self-onboarding/summary");
-        }
-      }}
+      basePath="/employee-self-onboarding/documents"
+      onComplete={() => navigate("/employee-self-onboarding/summary")}
     />
   );
 }
