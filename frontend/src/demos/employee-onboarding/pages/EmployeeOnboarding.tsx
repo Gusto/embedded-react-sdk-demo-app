@@ -80,7 +80,7 @@ export function ProfileCreate() {
               startDate: data.startDate,
               onboardingStatus: data.onboardingStatus,
             });
-            navigate(`/employee-onboarding/${data.uuid}/compensation/new`);
+            navigate(`/employee-onboarding/${data.uuid}/compensation`);
             break;
           }
           case componentEvents.CANCEL:
