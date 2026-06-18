@@ -5,25 +5,25 @@ components behind a router**. It is aimed at partner developers learning to buil
 with the SDK (or spinning up a demo of their own) who want to understand how the
 individual pieces connect.
 
-Flow components orchestrate a whole flow for you automatically. This repo instead
-leans on **block components**, which are the right tool when you are wiring the
-SDK into your own router or need to control navigation yourself. For even finer
-control, several steps are shown as **block compositions** that decompose a
-composite block (like the signatory or document signer) into its sub-steps so
-each owns a URL.
+The SDK ships **flow components** that run an entire flow for you. This repo
+instead focuses on **block components** — the individual steps — composed behind a
+router, which is what you want when you control navigation yourself. A few steps go
+one level deeper with **block composition**, splitting a single step into smaller
+pieces for a more custom experience. See [Build approaches](#build-approaches) for
+when to reach for each, and [Examples](#examples) for where they're demonstrated.
 
-This repo is mostly about that composition. There is a further, more powerful
-customization path — **hooks** — that lets you rearrange form fields, place custom
-UI between items, and compose fields from different forms together. If composition
-alone is not enough for your needs, see the
-[SDK hooks guide](https://github.com/Gusto/embedded-react-sdk/blob/main/docs/hooks/hooks.md).
+You can also restyle the components (component adapters, theming) — see
+[Customization](#customization) — and, for the most control, drop down to
+**hooks**. See the [SDK hooks guide](https://github.com/Gusto/embedded-react-sdk/blob/main/docs/hooks/hooks.md).
 
 ## Project Structure
 
-- `/backend` - Express.js proxy server for the Gusto API (holds your credentials,
-  injects the auth token, auto-refreshes it).
+- `/backend` - Express.js proxy server for the Gusto API. It holds your
+  credentials, injects the auth token, and auto-refreshes it. The transparent
+  proxy is a single file: [backend/src/proxy.ts](./backend/src/proxy.ts).
 - `/frontend` - React + TypeScript app composing Gusto Embedded React SDK block
-  components behind `react-router-dom`.
+  components behind `react-router-dom`. The SDK is configured once via the
+  `GustoProvider` in [frontend/src/App.tsx](./frontend/src/App.tsx).
 
 ## Build approaches
 
@@ -69,6 +69,27 @@ The fine-grained tier — composite blocks broken into individually routed sub-s
   document signer - [CompanyDocumentSignerComposition.tsx](./frontend/src/demos/company-onboarding/block-compositions/CompanyDocumentSignerComposition.tsx)
 - Employee onboarding: compensation - [CompensationComposition.tsx](./frontend/src/demos/employee-onboarding/block-compositions/CompensationComposition.tsx)
 - Employee self-onboarding: document signer - [EmployeeDocumentSignerComposition.tsx](./frontend/src/demos/employee-self-onboarding/block-compositions/EmployeeDocumentSignerComposition.tsx)
+
+## Customization
+
+Beyond composition, the SDK lets you re-skin and restyle the components. Both are
+wired through the `GustoProvider` in [frontend/src/App.tsx](./frontend/src/App.tsx)
+and exposed as an interactive tray in the running app so you can see the effect
+live:
+
+- **Component adapters** - swap the SDK's built-in UI primitives for your own
+  component library via the `components` prop. This repo includes a complete
+  Material UI adapter as a worked example:
+  [frontend/src/_demo-infrastructure/component-adapters/material-ui/](./frontend/src/_demo-infrastructure/component-adapters/material-ui/).
+  See the [SDK component adapter guide](https://github.com/Gusto/embedded-react-sdk/blob/main/docs/component-adapter/component-adapter.md).
+- **Theming** - override colors, typography, radius, shadows, and more via the
+  `theme` prop:
+  [frontend/src/_demo-infrastructure/theming/](./frontend/src/_demo-infrastructure/theming/).
+  See the [SDK theming guide](https://github.com/Gusto/embedded-react-sdk/blob/main/docs/theming/theming-guide.md).
+
+The tray and its state live under `_demo-infrastructure/` and exist only to make
+these switchable in the demo. In a real integration you pass a fixed `components`
+map and `theme` object directly to `GustoProvider`.
 
 ## Setup
 
