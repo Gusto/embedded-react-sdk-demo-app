@@ -35,8 +35,6 @@ From least to most custom:
 - **Block components** - the individual steps, which you wire to your own router
   for custom navigation. This is the primary pattern in this repo; see
   [frontend/src/App.tsx](./frontend/src/App.tsx) registering the route groups.
-- **Block composition** - decompose a composite block's sub-steps for fully
-  custom experiences; see the `block-compositions/` directories under each demo.
 - **Hooks** - headless customization (rearrange fields, inject custom UI, compose
   fields across forms). Beyond what this repo demonstrates; see the
   [SDK hooks guide](https://github.com/Gusto/embedded-react-sdk/blob/main/docs/hooks/hooks.md).
@@ -63,7 +61,7 @@ Top-level flows (registered in [frontend/src/App.tsx](./frontend/src/App.tsx)):
 
 ### Block composition examples
 
-The fine-grained tier — composite blocks broken into individually routed sub-steps:
+For even more customization, composite blocks broken into individually routed sub-steps:
 
 - **Company onboarding**
   - State taxes - [StateTaxesComposition.tsx](./frontend/src/demos/company-onboarding/block-compositions/StateTaxesComposition.tsx)
@@ -76,26 +74,22 @@ The fine-grained tier — composite blocks broken into individually routed sub-s
 - **Employee self-onboarding**
   - Document signer - [EmployeeDocumentSignerComposition.tsx](./frontend/src/demos/employee-self-onboarding/block-compositions/EmployeeDocumentSignerComposition.tsx)
 
-## Customization
+## UI Customization
 
 Beyond composition, the SDK lets you re-skin and restyle the components. Both are
 wired through the `GustoProvider` in [frontend/src/App.tsx](./frontend/src/App.tsx)
 and exposed as an interactive tray in the running app so you can see the effect
 live:
 
+- **Theming** - override colors, typography, radius, shadows, and more via the
+  `theme` prop:
+  [frontend/src/_demo-infrastructure/theming/](./frontend/src/_demo-infrastructure/theming/).
+  See the [SDK theming guide](https://github.com/Gusto/embedded-react-sdk/blob/main/docs/theming/theming-guide.md).
 - **Component adapters** - swap the SDK's built-in UI primitives for your own
   component library via the `components` prop. This repo includes a complete
   Material UI adapter as a worked example:
   [frontend/src/_demo-infrastructure/component-adapters/material-ui/](./frontend/src/_demo-infrastructure/component-adapters/material-ui/).
   See the [SDK component adapter guide](https://github.com/Gusto/embedded-react-sdk/blob/main/docs/component-adapter/component-adapter.md).
-- **Theming** - override colors, typography, radius, shadows, and more via the
-  `theme` prop:
-  [frontend/src/_demo-infrastructure/theming/](./frontend/src/_demo-infrastructure/theming/).
-  See the [SDK theming guide](https://github.com/Gusto/embedded-react-sdk/blob/main/docs/theming/theming-guide.md).
-
-The tray and its state live under `_demo-infrastructure/` and exist only to make
-these switchable in the demo. In a real integration you pass a fixed `components`
-map and `theme` object directly to `GustoProvider`.
 
 ## Setup
 
@@ -107,7 +101,7 @@ never commit them. The steps below get you there.
 
 ### 1. Register with Gusto and get your credentials (required for everyone)
 
-No matter how you proceed, you need an app's `CLIENT_ID` / `CLIENT_SECRET` — the
+To get started, you'll need an app's `CLIENT_ID` / `CLIENT_SECRET` — the
 backend uses them to auto-refresh the company token, and the setup script uses them
 to provision a company.
 
@@ -121,10 +115,6 @@ to provision a company.
    cd backend
    cp .env.example .env          # then set CLIENT_ID / CLIENT_SECRET
    ```
-
-   Optional env vars: `GUSTO_API_BASE_URL` (defaults to
-   `https://api.gusto-demo.com`) and `ALLOWED_ORIGINS` (extra browser origins
-   allowed through CORS; the proxy already allows `localhost`).
 
 ### 2. Provision a demo company with the setup script (recommended)
 
