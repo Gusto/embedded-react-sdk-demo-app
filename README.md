@@ -43,7 +43,7 @@ From least to most custom:
 
 ## Examples
 
-Two files tie the whole app together:
+### Gobal Setup
 
 - **SDK setup** - [frontend/src/App.tsx](./frontend/src/App.tsx) - the single
   `GustoProvider` (base URL `http://localhost:3001`, theme, components) and the
@@ -51,6 +51,8 @@ Two files tie the whole app together:
 - **Backend proxy** - [backend/src/proxy.ts](./backend/src/proxy.ts) - the
   transparent proxy that injects your auth token and forwards requests to the
   Gusto API.
+
+### Demos
 
 Each demo is a self-contained set of block components composed behind the router.
 Top-level flows:
@@ -176,25 +178,13 @@ If you already have a company you'd like to use with this demo, you can place it
   (`/employee-onboarding/<employeeId>/...`). Put the company and employee ids in
   `frontend/src/config.ts` and the refresh token in `backend/tokens.json`.
 
-## Troubleshooting
+## Contributing
 
-### API Version Mismatch Error
+Contributions are welcome. Please read [CONTRIBUTING.md](./CONTRIBUTING.md) —
+contributions require signing Gusto's Contributor License Agreement (CLA), which
+is checked automatically on every pull request.
 
-If you see an error like:
+## License
 
-```
-API error occurred: Status 406
-Content-Type "application/json; charset=utf-8"
-Body: {"errors":[{"error_key":"request","category":"invalid_api_version",
-"message":"Invalid API Version `2025-11-15`. Version must be \u003e=2026-02-01. ..."}]}
-```
-
-This means **the API version configured for your integration does not match the
-minimum API version required by the Embedded React SDK**.
-
-#### How to fix:
-
-**Reach out to your Gusto solutions architect to update your API version
-configuration.** Your solutions architect will ensure your integration is
-configured with the correct API version and verify the update has been applied
-correctly.
+Licensed under the [Apache License 2.0](./LICENSE). Copyright 2026 ZenPayroll,
+Inc. dba Gusto.
