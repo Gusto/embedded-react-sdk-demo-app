@@ -181,9 +181,9 @@ If you already have a company you'd like to use with this demo, you can place it
 
 ## Contributing
 
-Contributions are welcome. Please read [CONTRIBUTING.md](./CONTRIBUTING.md) —
-contributions require signing Gusto's Contributor License Agreement (CLA), which
-is checked automatically on every pull request.
+Contributions are welcome. Please read [CONTRIBUTING.md](./CONTRIBUTING.md). By
+submitting a contribution, you agree it is licensed under the project's
+[Apache License 2.0](./LICENSE) (see Section 5, "Submission of Contributions").
 
 ## License
 
