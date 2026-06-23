@@ -1,5 +1,11 @@
 # AGENTS.md
 
+> **Audience: maintainers of this demo repo (and the AI agents that help them).**
+> This file — plus the `.claude/` and `.cursor/` tooling alongside it — exists to
+> build, upgrade, and run *this* demo app. It is **not** part of the Gusto Embedded
+> SDK integration that partners copy. Partners learning how to integrate the SDK
+> should look at `README.md` and `frontend/src/demos/` instead.
+
 ## Cursor Cloud specific instructions
 
 This repo is a Gusto Embedded SDK demo with two independent services. Standard

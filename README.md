@@ -109,8 +109,7 @@ live:
 The app needs two inputs: a company refresh token for the backend
 ([backend/tokens.json](./backend/tokens.json)) and the company/employee ids for
 the frontend ([frontend/src/config.ts](./frontend/src/config.ts)). Both are
-gitignored runtime artifacts created from the committed `*.example.*` templates;
-never commit them. The steps below get you there.
+gitignored config files created from `*.example.*` templates. The steps below get you there.
 
 ### 1. Register with Gusto and get your credentials (required for everyone)
 
@@ -129,7 +128,7 @@ to provision a company.
    cp .env.example .env          # then set CLIENT_ID / CLIENT_SECRET
    ```
 
-### 2. Provision a demo company with the setup script (recommended)
+### 2. Provision a demo company with the setup script
 
 With your credentials in `backend/.env`, the setup script does the rest: it mints a
 system access token, creates a partner-managed company, completes and approves
@@ -152,6 +151,8 @@ npm run dev                   # http://localhost:3002
 > the company and written `backend/tokens.json`, the backend just uses that refresh
 > token (and auto-refreshes it) on every later run — you don't need to run `setup`
 > again.
+
+#### Alternative: skip the script and configure manually
 
 If you already have a company you'd like to use with this demo, you can place its company id (and an employee id) in `frontend/src/config.ts` and its refresh token in `backend/tokens.json`. If you want to set up a company from scratch without the script, follow the Gusto Embedded guides to
   mint a [system access token](https://docs.gusto.com/embedded-payroll/docs/system-access-tokens)
