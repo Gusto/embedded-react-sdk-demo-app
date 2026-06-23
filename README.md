@@ -1,5 +1,12 @@
 # Gusto Embedded SDK Demo
 
+> **Reference implementation — provided "as is."** This repository is for
+> illustrative and educational purposes only and is not production-ready
+> software. Use of the Gusto Embedded React SDK, the Embedded Payroll API, and
+> related services is governed separately by your agreements with Gusto; the
+> open source license here covers only this sample code. Please read the full
+> [DISCLAIMER](./DISCLAIMER.md).
+
 This repository is a reference for **orchestrating Gusto Embedded React SDK block
 components behind a router**. It is aimed at partner developers learning to build
 with the SDK (or spinning up a demo of their own) who want to understand how the
@@ -184,6 +191,13 @@ If you already have a company you'd like to use with this demo, you can place it
 Contributions are welcome. Please read [CONTRIBUTING.md](./CONTRIBUTING.md). By
 submitting a contribution, you agree it is licensed under the project's
 [Apache License 2.0](./LICENSE) (see Section 5, "Submission of Contributions").
+
+## Disclaimer
+
+This is a reference implementation provided "as is," for illustrative and
+educational purposes only. It is not compliance advice, and the SDK, API, and
+Gusto services are governed by your separate agreements with Gusto. See the full
+[DISCLAIMER](./DISCLAIMER.md) for details.
 
 ## License
 
