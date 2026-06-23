@@ -4,18 +4,6 @@ Thanks for your interest in contributing to the Gusto Embedded SDK Demo. This is
 a reference application for partner developers, and we welcome issues and pull
 requests that make it a clearer, more useful example.
 
-## Contributor License Agreement (CLA)
-
-Before we can accept any contribution, you must sign Gusto's Contributor License
-Agreement. The CLA clarifies the intellectual-property license granted with your
-contribution; it protects both you and Gusto, and it does not change your right
-to use your own contributions for any other purpose.
-
-The CLA is checked automatically on every pull request via
-[CLA Assistant](https://cla-assistant.io/). When you open your first PR, the bot
-will prompt you to read and sign the agreement inline — no contribution can be
-merged until the check passes.
-
 ## License
 
 This project is licensed under the [Apache License 2.0](./LICENSE). By submitting
