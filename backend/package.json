@@ -2,6 +2,7 @@
   "name": "embedded-react-sdk-demo-app-backend",
   "version": "1.0.0",
   "description": "Backend proxy server for Gusto's Embedded SDK demo",
+  "license": "Apache-2.0",
   "main": "dist/proxy.js",
   "scripts": {
     "start": "node dist/proxy.js",
