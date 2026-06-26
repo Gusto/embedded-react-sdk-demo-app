@@ -6,9 +6,7 @@ requests that make it a clearer, more useful example.
 
 ## License
 
-This project is licensed under the [Apache License 2.0](./LICENSE). By submitting
-a contribution, you agree that your contribution is licensed under the same terms
-(see Section 5 of the license, "Submission of Contributions").
+This project is licensed under the Apache License 2.0. By submitting a contribution (for example, a pull request) for inclusion in this repository, you agree that your contribution is provided under the Apache License 2.0 — consistent with Section 5 of that license — and you represent that you have the right to submit it under those terms. A signed Contributor License Agreement (CLA) may be required for contributions going forward; we'll update this file if and when that process is in place.
 
 ## How to contribute
 
