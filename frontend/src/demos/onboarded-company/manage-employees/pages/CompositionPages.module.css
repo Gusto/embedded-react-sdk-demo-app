@@ -1,0 +1,58 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--primary-color, #0066cc);
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.backLink span {
+  margin-right: 0.25rem;
+}
+
+.header h1 {
+  margin: 0.5rem 0;
+}
+
+.subtitle {
+  color: var(--text-secondary, #666);
+  margin: 0.5rem 0 0 0;
+  font-size: 1.05rem;
+}
+
+.section {
+  margin-bottom: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.section h2 {
+  margin: 0 0 1.5rem 0;
+  color: var(--heading-color, #333);
+  font-size: 1.5rem;
+}
+
+.composition {
+  background: var(--bg-secondary, #fafafa);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 1.5rem;
+  min-height: 200px;
+}

@@ -4,6 +4,12 @@
   gap: 16px;
 }
 
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .backLink {
   display: inline-flex;
   align-items: center;
@@ -15,6 +21,20 @@
 
 .backLink:hover {
   color: #4338ca;
+}
+
+.compositionsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #4338ca;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.compositionsLink:hover {
+  text-decoration: underline;
 }
 
 .tabs {
