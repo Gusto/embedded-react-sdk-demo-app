@@ -1,7 +1,32 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, Navigate } from "react-router-dom";
 import { EmployeeManagement, EmployeeOnboarding, componentEvents } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID } from "../../../../config";
 import styles from "./ManageEmployees.module.css";
+
+function useRequiredEmployeeId(): string {
+  const { employeeId } = useParams<"employeeId">();
+  if (!employeeId) {
+    throw new Error("Employee ID is required but was not found in route params");
+  }
+  return employeeId;
+}
+
+function useRequiredParams<T extends string>(
+  ...paramNames: T[]
+): Record<T, string> {
+  const params = useParams();
+  const result = {} as Record<T, string>;
+  
+  for (const paramName of paramNames) {
+    const value = params[paramName];
+    if (!value) {
+      throw new Error(`Required param "${paramName}" is missing from route`);
+    }
+    result[paramName] = value;
+  }
+  
+  return result;
+}
 
 // This demo composes the individual SDK employee-management blocks behind
 // react-router so each step owns a URL. For a turnkey integration, skip all of
@@ -60,7 +85,7 @@ export function AddEmployee() {
 }
 
 export function BasicDetailsTab() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   const onEvent = (type: string) => {
     switch (type) {
@@ -77,15 +102,15 @@ export function BasicDetailsTab() {
   };
   return (
     <>
-      <EmployeeManagement.ProfileCard employeeId={employeeId!} onEvent={onEvent} />
-      <EmployeeManagement.HomeAddressCard employeeId={employeeId!} onEvent={onEvent} />
-      <EmployeeManagement.WorkAddressCard employeeId={employeeId!} onEvent={onEvent} />
+      <EmployeeManagement.ProfileCard employeeId={employeeId} onEvent={onEvent} />
+      <EmployeeManagement.HomeAddressCard employeeId={employeeId} onEvent={onEvent} />
+      <EmployeeManagement.WorkAddressCard employeeId={employeeId} onEvent={onEvent} />
     </>
   );
 }
 
 export function JobAndPayTab() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   const onEvent = (type: string, payload: unknown) => {
     switch (type) {
@@ -118,16 +143,16 @@ export function JobAndPayTab() {
   };
   return (
     <>
-      <EmployeeManagement.CompensationCard employeeId={employeeId!} onEvent={onEvent} />
-      <EmployeeManagement.PaymentMethodCard employeeId={employeeId!} onEvent={onEvent} />
-      <EmployeeManagement.DeductionsCard employeeId={employeeId!} onEvent={onEvent} />
-      <EmployeeManagement.PaystubsCard employeeId={employeeId!} onEvent={() => {}} />
+      <EmployeeManagement.CompensationCard employeeId={employeeId} onEvent={onEvent} />
+      <EmployeeManagement.PaymentMethodCard employeeId={employeeId} onEvent={onEvent} />
+      <EmployeeManagement.DeductionsCard employeeId={employeeId} onEvent={onEvent} />
+      <EmployeeManagement.PaystubsCard employeeId={employeeId} onEvent={() => {}} />
     </>
   );
 }
 
 export function TaxesTab() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   const onEvent = (type: string) => {
     switch (type) {
@@ -141,18 +166,18 @@ export function TaxesTab() {
   };
   return (
     <>
-      <EmployeeManagement.FederalTaxesCard employeeId={employeeId!} onEvent={onEvent} />
-      <EmployeeManagement.StateTaxesCard employeeId={employeeId!} onEvent={onEvent} />
+      <EmployeeManagement.FederalTaxesCard employeeId={employeeId} onEvent={onEvent} />
+      <EmployeeManagement.StateTaxesCard employeeId={employeeId} onEvent={onEvent} />
     </>
   );
 }
 
 export function DocumentsTab() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.DocumentsCard
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type, payload) => {
         if (type === componentEvents.EMPLOYEE_MANAGEMENT_DOCUMENTS_CARD_VIEW_REQUESTED) {
           const { formId } = payload as { formId: string };
@@ -164,13 +189,13 @@ export function DocumentsTab() {
 }
 
 export function ProfileEdit() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   const backToBasicDetails = () =>
     navigate(`/employees/${employeeId}/basic-details`);
   return (
     <EmployeeManagement.ProfileEditForm
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type) => {
         if (
           type === componentEvents.EMPLOYEE_MANAGEMENT_PROFILE_UPDATED ||
@@ -184,11 +209,11 @@ export function ProfileEdit() {
 }
 
 export function HomeAddressEdit() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.HomeAddressEditForm
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_MANAGEMENT_HOME_ADDRESS_EDIT_CANCELLED) {
           navigate(`/employees/${employeeId}/basic-details`);
@@ -199,11 +224,11 @@ export function HomeAddressEdit() {
 }
 
 export function WorkAddressEdit() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.WorkAddressEditForm
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type) => {
         if (type === componentEvents.EMPLOYEE_MANAGEMENT_WORK_ADDRESS_EDIT_CANCELLED) {
           navigate(`/employees/${employeeId}/basic-details`);
@@ -214,11 +239,11 @@ export function WorkAddressEdit() {
 }
 
 export function FederalTaxesEdit() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.FederalTaxesEditForm
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type) => {
         if (
           type === componentEvents.EMPLOYEE_MANAGEMENT_FEDERAL_TAXES_EDIT_FORM_SUBMITTED ||
@@ -232,11 +257,11 @@ export function FederalTaxesEdit() {
 }
 
 export function StateTaxesEdit() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.StateTaxesEditForm
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type) => {
         if (
           type === componentEvents.EMPLOYEE_MANAGEMENT_STATE_TAXES_UPDATED ||
@@ -250,11 +275,11 @@ export function StateTaxesEdit() {
 }
 
 export function PaymentMethodAdd() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.PaymentMethodBankForm
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type) => {
         if (
           type === componentEvents.EMPLOYEE_MANAGEMENT_PAYMENT_METHOD_BANK_FORM_SUBMITTED ||
@@ -268,11 +293,11 @@ export function PaymentMethodAdd() {
 }
 
 export function PaymentMethodSplit() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.PaymentMethodSplitForm
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type) => {
         if (
           type === componentEvents.EMPLOYEE_MANAGEMENT_PAYMENT_METHOD_SPLIT_FORM_SUBMITTED ||
@@ -286,12 +311,12 @@ export function PaymentMethodSplit() {
 }
 
 export function DocumentView() {
-  const { employeeId, formId } = useParams<"employeeId" | "formId">();
+  const { employeeId, formId } = useRequiredParams("employeeId", "formId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.DocumentManager
-      employeeId={employeeId!}
-      formId={formId!}
+      employeeId={employeeId}
+      formId={formId}
       onEvent={(type) => {
         if (type === componentEvents.CANCEL) {
           navigate(`/employees/${employeeId}/documents`);
@@ -302,11 +327,11 @@ export function DocumentView() {
 }
 
 export function CompensationAdd() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.CompensationAddJobForm
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type) => {
         if (
           type === componentEvents.EMPLOYEE_MANAGEMENT_COMPENSATION_ADD_JOB_FORM_SUBMITTED ||
@@ -320,11 +345,11 @@ export function CompensationAdd() {
 }
 
 export function CompensationAddAnother() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.CompensationAddAnotherJobForm
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type) => {
         if (
           type === componentEvents.EMPLOYEE_MANAGEMENT_COMPENSATION_ADD_ANOTHER_JOB_FORM_SUBMITTED ||
@@ -338,12 +363,12 @@ export function CompensationAddAnother() {
 }
 
 export function CompensationEdit() {
-  const { employeeId, jobId } = useParams<"employeeId" | "jobId">();
+  const { employeeId, jobId } = useRequiredParams("employeeId", "jobId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.CompensationEditForm
-      employeeId={employeeId!}
-      jobId={jobId!}
+      employeeId={employeeId}
+      jobId={jobId}
       onEvent={(type) => {
         if (
           type === componentEvents.EMPLOYEE_MANAGEMENT_COMPENSATION_EDIT_FORM_SUBMITTED ||
@@ -357,11 +382,11 @@ export function CompensationEdit() {
 }
 
 export function DeductionAdd() {
-  const { employeeId } = useParams<"employeeId">();
+  const employeeId = useRequiredEmployeeId();
   const navigate = useNavigate();
   return (
     <EmployeeManagement.DeductionsEditForm
-      employeeId={employeeId!}
+      employeeId={employeeId}
       onEvent={(type) => {
         if (
           type === componentEvents.EMPLOYEE_MANAGEMENT_DEDUCTIONS_EDIT_FORM_CREATED ||
@@ -376,12 +401,12 @@ export function DeductionAdd() {
 }
 
 export function DeductionEdit() {
-  const { employeeId, deductionId } = useParams<"employeeId" | "deductionId">();
+  const { employeeId, deductionId } = useRequiredParams("employeeId", "deductionId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.DeductionsEditForm
-      employeeId={employeeId!}
-      editingDeductionId={deductionId!}
+      employeeId={employeeId}
+      editingDeductionId={deductionId}
       onEvent={(type) => {
         if (
           type === componentEvents.EMPLOYEE_MANAGEMENT_DEDUCTIONS_EDIT_FORM_CREATED ||
