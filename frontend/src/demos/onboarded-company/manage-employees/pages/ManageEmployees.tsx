@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams, Navigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { EmployeeManagement, EmployeeOnboarding, componentEvents } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID } from "../../../../config";
 import styles from "./ManageEmployees.module.css";
