@@ -21,6 +21,13 @@ import {
   TaxesTab,
   WorkAddressEdit,
 } from "./pages/ManageEmployees";
+import { BlockCompositionsIndex } from "./pages/BlockCompositionsDemo";
+import {
+  BasicDetailsCompositions,
+  JobAndPayCompositions,
+  TaxesCompositions,
+  DocumentsCompositions,
+} from "./pages/CompositionPages";
 
 // Manage routes sit outside the DashboardTabs layout group so an edit form
 // renders without the tab sub-nav, like the SDK dashboard's full-view swap.
@@ -49,6 +56,20 @@ export const ManageEmployeesRoutes = (
       <Route path="compensation/:jobId/edit" element={<CompensationEdit />} />
       <Route path="deductions/add" element={<DeductionAdd />} />
       <Route path="deductions/:deductionId/edit" element={<DeductionEdit />} />
+      <Route path="compositions" element={<BlockCompositionsIndex />} />
+      <Route path="compositions/basic-details/*" element={<BasicDetailsCompositions />} />
+      <Route path="compositions/job-and-pay/*" element={<JobAndPayCompositions />} />
+      <Route path="compositions/taxes/*" element={<TaxesCompositions />} />
+      <Route path="compositions/documents/*" element={<DocumentsCompositions />} />
+      <Route path="compensation-composition/*" element={<></>} />
+      <Route path="deductions-composition/*" element={<></>} />
+      <Route path="payment-method-composition/*" element={<></>} />
+      <Route path="profile-composition/*" element={<></>} />
+      <Route path="home-address-composition/*" element={<></>} />
+      <Route path="work-address-composition/*" element={<></>} />
+      <Route path="federal-taxes-composition/*" element={<></>} />
+      <Route path="state-taxes-composition/*" element={<></>} />
+      <Route path="documents-composition/*" element={<></>} />
     </Route>
   </Route>
 );
