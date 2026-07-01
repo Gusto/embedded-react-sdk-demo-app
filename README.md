@@ -174,7 +174,7 @@ If you already have a company you'd like to use with this demo, you can place it
   # 2. Create a partner-managed company with that token
   curl --request POST \
   --url https://api.gusto-demo.com/v1/partner_managed_companies \
-  --header 'X-Gusto-API-Version: 2025-06-15' \
+  --header 'X-Gusto-API-Version: 2025-11-15' \
   --header 'authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN' \
   --header 'content-type: application/json' \
   --data '{ "user": { "first_name": "FIRST_NAME", "last_name": "LAST_NAME", "email": "EMAIL" }, "company": { "name": "MY_COMPANY_NAME" } }'
