@@ -132,7 +132,7 @@ class TokenManager {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Gusto-API-Version": "2025-11-15",
+        "X-Gusto-API-Version": "2026-02-01",
         Accept: "application/json",
       },
       body: JSON.stringify({
