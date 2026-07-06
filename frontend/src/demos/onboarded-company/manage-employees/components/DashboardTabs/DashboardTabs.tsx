@@ -14,14 +14,9 @@ export function DashboardTabs() {
 
   return (
     <div className={styles.layout}>
-      <div className={styles.headerRow}>
-        <Link to="/employees" className={styles.backLink}>
-          <span aria-hidden="true">&larr;</span>Back to employees
-        </Link>
-        <Link to="compositions" className={styles.compositionsLink}>
-          View exploded block compositions →
-        </Link>
-      </div>
+      <Link to="/employees" className={styles.backLink}>
+        <span aria-hidden="true">&larr;</span>Back to employees
+      </Link>
       <nav className={styles.tabs} aria-label="Employee management">
         {TABS.map((tab) => (
           <NavLink key={tab.to} to={tab.to} className={linkClass}>
