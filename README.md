@@ -174,7 +174,7 @@ If you already have a company you'd like to use with this demo, you can place it
   # 2. Create a partner-managed company with that token
   curl --request POST \
   --url https://api.gusto-demo.com/v1/partner_managed_companies \
-  --header 'X-Gusto-API-Version: 2025-06-15' \
+  --header 'X-Gusto-API-Version: 2025-11-15' \
   --header 'authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN' \
   --header 'content-type: application/json' \
   --data '{ "user": { "first_name": "FIRST_NAME", "last_name": "LAST_NAME", "email": "EMAIL" }, "company": { "name": "MY_COMPANY_NAME" } }'
@@ -185,6 +185,13 @@ If you already have a company you'd like to use with this demo, you can place it
   the Employee onboarding demo and copy its id out of the browser URL
   (`/employee-onboarding/<employeeId>/...`). Put the company and employee ids in
   `frontend/src/config.ts` and the refresh token in `backend/tokens.json`.
+
+## Troubleshooting
+
+### API Version Mismatch Error
+
+If you see API requests failing with HTTP 406 and an `invalid_api_version` error,
+reach out to your Gusto solutions architect to correct the API version.
 
 ## Contributing
 

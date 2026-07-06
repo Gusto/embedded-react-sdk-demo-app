@@ -16,7 +16,7 @@ export const CONFIG_FILE = join(REPO_ROOT, "frontend", "src", "config.ts");
 export const CONFIG_EXAMPLE_FILE = join(REPO_ROOT, "frontend", "src", "config.example.ts");
 export const RECORD_FILE = join(__dirname, ".demo-company.json");
 
-export const API_VERSION = "2025-06-15";
+export const API_VERSION = "2025-11-15";
 export const BASE_URL = process.env.GUSTO_API_BASE_URL || "https://api.gusto-demo.com";
 
 // SSRF guard: every request must resolve to this single, pre-configured origin.
