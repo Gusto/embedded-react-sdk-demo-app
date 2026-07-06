@@ -1,32 +1,8 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EmployeeManagement, EmployeeOnboarding, componentEvents } from "@gusto/embedded-react-sdk";
 import { COMPANY_ID } from "../../../../config";
+import { useRequiredParams } from "../../../../shared/useRequiredParams";
 import styles from "./ManageEmployees.module.css";
-
-function useRequiredEmployeeId(): string {
-  const { employeeId } = useParams<"employeeId">();
-  if (!employeeId) {
-    throw new Error("Employee ID is required but was not found in route params");
-  }
-  return employeeId;
-}
-
-function useRequiredParams<T extends string>(
-  ...paramNames: T[]
-): Record<T, string> {
-  const params = useParams();
-  const result = {} as Record<T, string>;
-  
-  for (const paramName of paramNames) {
-    const value = params[paramName];
-    if (!value) {
-      throw new Error(`Required param "${paramName}" is missing from route`);
-    }
-    result[paramName] = value;
-  }
-  
-  return result;
-}
 
 // This demo composes the individual SDK employee-management blocks behind
 // react-router so each step owns a URL. For a turnkey integration, skip all of
@@ -85,7 +61,7 @@ export function AddEmployee() {
 }
 
 export function BasicDetailsTab() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   const onEvent = (type: string) => {
     switch (type) {
@@ -110,7 +86,7 @@ export function BasicDetailsTab() {
 }
 
 export function JobAndPayTab() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   const onEvent = (type: string, payload: unknown) => {
     switch (type) {
@@ -152,7 +128,7 @@ export function JobAndPayTab() {
 }
 
 export function TaxesTab() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   const onEvent = (type: string) => {
     switch (type) {
@@ -173,7 +149,7 @@ export function TaxesTab() {
 }
 
 export function DocumentsTab() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.DocumentsCard
@@ -189,7 +165,7 @@ export function DocumentsTab() {
 }
 
 export function ProfileEdit() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   const backToBasicDetails = () =>
     navigate(`/employees/${employeeId}/basic-details`);
@@ -209,7 +185,7 @@ export function ProfileEdit() {
 }
 
 export function HomeAddressEdit() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.HomeAddressEditForm
@@ -224,7 +200,7 @@ export function HomeAddressEdit() {
 }
 
 export function WorkAddressEdit() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.WorkAddressEditForm
@@ -239,7 +215,7 @@ export function WorkAddressEdit() {
 }
 
 export function FederalTaxesEdit() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.FederalTaxesEditForm
@@ -257,7 +233,7 @@ export function FederalTaxesEdit() {
 }
 
 export function StateTaxesEdit() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.StateTaxesEditForm
@@ -275,7 +251,7 @@ export function StateTaxesEdit() {
 }
 
 export function PaymentMethodAdd() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.PaymentMethodBankForm
@@ -293,7 +269,7 @@ export function PaymentMethodAdd() {
 }
 
 export function PaymentMethodSplit() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.PaymentMethodSplitForm
@@ -327,7 +303,7 @@ export function DocumentView() {
 }
 
 export function CompensationAdd() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.CompensationAddJobForm
@@ -345,7 +321,7 @@ export function CompensationAdd() {
 }
 
 export function CompensationAddAnother() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.CompensationAddAnotherJobForm
@@ -382,7 +358,7 @@ export function CompensationEdit() {
 }
 
 export function DeductionAdd() {
-  const employeeId = useRequiredEmployeeId();
+  const employeeId = useRequiredParams("employeeId");
   const navigate = useNavigate();
   return (
     <EmployeeManagement.DeductionsEditForm
