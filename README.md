@@ -191,27 +191,7 @@ If you already have a company you'd like to use with this demo, you can place it
 ### API Version Mismatch Error
 
 If you see API requests failing with HTTP 406 and an `invalid_api_version` error,
-the `X-Gusto-API-Version` header in your backend may not match the SDK's required
-minimum API version.
-
-The SDK's required API version is tied to the `@gusto/embedded-api-v-*` package
-it depends on. For example, SDK version 0.49.0 requires
-`@gusto/embedded-api-v-2025-11-15`, which means the API version must be
-`2025-11-15` or later.
-
-To fix this:
-
-1. Check the SDK's required version by inspecting
-   `frontend/node_modules/@gusto/embedded-react-sdk/package.json` and looking for
-   the `@gusto/embedded-api-v-*` dependency.
-
-2. Update the API version in `backend/src/tokenManager.ts` (the
-   `X-Gusto-API-Version` header) and `scripts/gusto-demo-lib.mjs` (the
-   `API_VERSION` constant) to match the SDK's minimum version.
-
-**Note for partners**: If you encounter API version mismatch errors in your own
-integration, you cannot update API versions yourself. Contact your Gusto solutions
-architect to have the correct version configured for your integration.
+reach out to your Gusto solutions architect to correct the API version.
 
 ## Contributing
 
