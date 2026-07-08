@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { EmployeeOnboarding, componentEvents } from "@gusto/embedded-react-sdk";
-import { useJobsAndCompensationsGetJobs } from "@gusto/embedded-api-v-2025-11-15/react-query/jobsAndCompensationsGetJobs";
+import { useJobsAndCompensationsGetJobs } from "@gusto/embedded-api/react-query/jobsAndCompensationsGetJobs";
 
 // Fine-grained rebuild of the compensation step from its two exported sub-blocks
 // (Compensation.JobsList + Compensation.EditCompensation), routed so each owns a
