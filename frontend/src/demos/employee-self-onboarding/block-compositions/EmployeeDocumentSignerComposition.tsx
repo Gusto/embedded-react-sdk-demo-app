@@ -4,8 +4,8 @@ import {
   componentEvents,
   I9_FORM_NAME,
 } from "@gusto/embedded-react-sdk";
-import { useEmployeesGet } from "@gusto/embedded-api-v-2025-11-15/react-query/employeesGet";
-import { useEmployeeFormsList } from "@gusto/embedded-api-v-2025-11-15/react-query/employeeFormsList";
+import { useEmployeesGet } from "@gusto/embedded-api/react-query/employeesGet";
+import { useEmployeeFormsList } from "@gusto/embedded-api/react-query/employeeFormsList";
 
 // Fine-grained rebuild of the employee document-signing step from its sub-blocks
 // (EmploymentEligibility -> DocumentList -> SignatureForm / I9SignatureForm),

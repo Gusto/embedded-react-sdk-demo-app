@@ -89,8 +89,6 @@ For even more customization, composite blocks broken into individually routed su
     splits the document-signing step into routed sub-steps: document list, assign
     signatory (create or invite), and sign a form. Also reused by the
     onboarded-company Documents settings page ([onboarded-company/pages/Documents.tsx](./frontend/src/demos/onboarded-company/pages/Documents.tsx)).
-- **Employee onboarding**
-  - Compensation - [CompensationComposition.tsx](./frontend/src/demos/employee-onboarding/block-compositions/CompensationComposition.tsx)
 - **Employee self-onboarding**
   - Document signer - [EmployeeDocumentSignerComposition.tsx](./frontend/src/demos/employee-self-onboarding/block-compositions/EmployeeDocumentSignerComposition.tsx)
 

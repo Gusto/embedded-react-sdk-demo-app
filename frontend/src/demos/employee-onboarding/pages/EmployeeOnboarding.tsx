@@ -6,7 +6,6 @@ import {
 } from "@gusto/embedded-react-sdk";
 import { createPersistedStore } from "../../../shared/persistedStore";
 import { COMPANY_ID } from "../../../config";
-import { CompensationComposition } from "../block-compositions/CompensationComposition";
 
 // This demo composes the individual SDK employee-onboarding blocks behind
 // react-router so each step owns a URL. For a turnkey integration, skip all of
@@ -126,11 +125,11 @@ export function ProfileEdit() {
   );
 }
 
-// Compensation is a composite block: it has smaller sub-steps (jobs list +
-// edit-compensation form) that we route individually here. That routed
-// implementation lives in block-compositions/. Render
-// <EmployeeOnboarding.Compensation .../> instead for the turnkey single-component
-// step.
+// Compensation step renders the turnkey EmployeeOnboarding.Compensation component.
+// Prior to SDK 0.51.0, this demo used a custom CompensationComposition that routed
+// the sub-components (JobsList + EditCompensation), but those sub-components were
+// removed when the SDK migrated to form-hook APIs. For custom compensation flows,
+// use useCompensationForm and useJobForm hooks instead.
 export function Compensation() {
   const { employeeId } = useParams<"employeeId">();
   const { startDate, onboardingStatus } =
@@ -138,16 +137,18 @@ export function Compensation() {
   const navigate = useNavigate();
   const isSelfOnboarding = SELF_ONBOARDING_STATUSES.has(onboardingStatus ?? "");
   return (
-    <CompensationComposition
+    <EmployeeOnboarding.Compensation
       employeeId={employeeId!}
       startDate={startDate!}
-      onComplete={() =>
-        navigate(
-          isSelfOnboarding
-            ? `/employee-onboarding/${employeeId}/deductions`
-            : `/employee-onboarding/${employeeId}/federal-taxes`,
-        )
-      }
+      onEvent={(type) => {
+        if (type === componentEvents.EMPLOYEE_COMPENSATION_DONE) {
+          navigate(
+            isSelfOnboarding
+              ? `/employee-onboarding/${employeeId}/deductions`
+              : `/employee-onboarding/${employeeId}/federal-taxes`,
+          );
+        }
+      }}
     />
   );
 }
