@@ -59,6 +59,8 @@ export const materialUiAdapter: ComponentsContextType = {
   DescriptionList: MuiDescriptionList,
   Dialog: MuiDialog,
   FileInput: MuiFileInput,
+  FormBox: MuiBox,
+  FormBoxHeader: MuiBoxHeader,
   Heading: MuiHeading,
   Link: MuiLink,
   LoadingSpinner: MuiLoadingSpinner,
