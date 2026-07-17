@@ -17,6 +17,8 @@ import { MuiDateRangePicker } from "./components/DateRangePicker";
 import { MuiDescriptionList } from "./components/DescriptionList";
 import { MuiDialog } from "./components/Dialog";
 import { MuiFileInput } from "./components/FileInput";
+import { MuiFormBox } from "./components/FormBox";
+import { MuiFormBoxHeader } from "./components/FormBoxHeader";
 import { MuiHeading } from "./components/Heading";
 import { MuiLink } from "./components/Link";
 import { MuiOrderedList, MuiUnorderedList } from "./components/List";
@@ -59,6 +61,8 @@ export const materialUiAdapter: ComponentsContextType = {
   DescriptionList: MuiDescriptionList,
   Dialog: MuiDialog,
   FileInput: MuiFileInput,
+  FormBox: MuiFormBox,
+  FormBoxHeader: MuiFormBoxHeader,
   Heading: MuiHeading,
   Link: MuiLink,
   LoadingSpinner: MuiLoadingSpinner,
