@@ -4,6 +4,8 @@ import { MuiBadge } from "./components/Badge";
 import { MuiBanner } from "./components/Banner";
 import { MuiBox } from "./components/Box";
 import { MuiBoxHeader } from "./components/BoxHeader";
+import { MuiFormBox } from "./components/FormBox";
+import { MuiFormBoxHeader } from "./components/FormBoxHeader";
 import { MuiBreadcrumbs } from "./components/Breadcrumbs";
 import { MuiButton } from "./components/Button";
 import { MuiButtonIcon } from "./components/ButtonIcon";
@@ -46,6 +48,8 @@ export const materialUiAdapter: ComponentsContextType = {
   Banner: MuiBanner,
   Box: MuiBox,
   BoxHeader: MuiBoxHeader,
+  FormBox: MuiFormBox,
+  FormBoxHeader: MuiFormBoxHeader,
   Breadcrumbs: MuiBreadcrumbs,
   Button: MuiButton,
   ButtonIcon: MuiButtonIcon,
