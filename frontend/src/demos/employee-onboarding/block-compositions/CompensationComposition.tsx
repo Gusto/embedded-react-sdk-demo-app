@@ -1,10 +1,10 @@
 import { Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { EmployeeOnboarding, componentEvents } from "@gusto/embedded-react-sdk";
-import { useJobsAndCompensationsGetJobs } from "@gusto/embedded-api-v-2025-11-15/react-query/jobsAndCompensationsGetJobs";
+import { useJobsAndCompensationsGetJobs } from "@gusto/embedded-api-v-2026-06-15/react-query/jobsAndCompensationsGetJobs";
 
 // Fine-grained rebuild of the compensation step from its two exported sub-blocks
-// (Compensation.JobsList + Compensation.EditCompensation), routed so each owns a
-// URL. If you don't need this control, render <EmployeeOnboarding.Compensation />
+// (EmployeeOnboarding.JobsList + EmployeeOnboarding.EditCompensation), routed so
+// each owns a URL. If you don't need this control, render <EmployeeOnboarding.Compensation />
 // instead - it composes these same sub-blocks behind its own internal flow.
 //
 // The entry route derives the start step from live data the same way the
@@ -47,7 +47,7 @@ export function CompensationComposition({
       <Route
         path="jobs"
         element={
-          <EmployeeOnboarding.Compensation.JobsList
+          <EmployeeOnboarding.JobsList
             employeeId={employeeId}
             onEvent={(type, payload) => {
               switch (type) {
@@ -126,7 +126,7 @@ function EditJob({
   const { jobId } = useParams<"jobId">();
   const navigate = useNavigate();
   return (
-    <EmployeeOnboarding.Compensation.EditCompensation
+    <EmployeeOnboarding.EditCompensation
       employeeId={employeeId}
       startDate={startDate}
       currentJobId={jobId}
