@@ -1,0 +1,32 @@
+version: 2
+# Vite 8 lists the lightningcss CSS toolchain (lightningcss + its per-platform
+# prebuilt binaries) as optional dependencies, all under MPL-2.0. In this app they
+# are build-time only: vite.config uses plain react() with no lightningcss CSS
+# transformer, so these packages stay in the lockfile and never enter the shipped
+# bundle. The scoped ignores below suppress the license scanner's block for that
+# build-only tooling; they do not change any global policy.
+issueRules:
+  - package: "npm/lightningcss@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-android-arm64@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-darwin-arm64@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-darwin-x64@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-freebsd-x64@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-linux-arm-gnueabihf@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-linux-arm64-gnu@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-linux-arm64-musl@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-linux-x64-gnu@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-linux-x64-musl@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-win32-arm64-msvc@1.33.0"
+    action: ignore
+  - package: "npm/lightningcss-win32-x64-msvc@1.33.0"
+    action: ignore
